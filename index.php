@@ -29,6 +29,10 @@
  * @link      http://github.com/thibaud-rohmer/PhotoShow-v2
  */
 
+ini_set('upload_max_filesize','200M');
+ini_set('post_max_size','200M');
+ini_set('max_execution_time', 60);
+
 /// Start session
 session_start();
 
@@ -53,8 +57,6 @@ function exception_handler($exception) {
   echo "<div class='exception'>" , $exception->getMessage(), "</div>\n";
 }
 set_exception_handler('exception_handler');
-
-ini_set('upload_max_filesize','10M');
 
 function protect_user_send_var($var){
 	if(is_array($var))

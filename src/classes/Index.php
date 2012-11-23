@@ -63,7 +63,7 @@ class Index
 		switch (CurrentUser::$action){
 
 			case "Judge":	// Same as page
-			case "Page":	$page = new MainPage();
+			case "Page":		$page = new MainPage();
 							$page->toHTML();
 							break;
 							
@@ -74,8 +74,12 @@ class Index
 			case "Reg":		$page = new RegisterPage();
 							$page->toHTML();
 							break;
+							
+			case "AddAcc":	$page = new RegisterPage();
+							$page->toHTML('AddAcc');
+							break;
 
-			case "JS":		$page = new JS();
+			case "JS":			$page = new JS();
 							break;
 
 			case "Img":		Provider::Image(CurrentUser::$path);
@@ -96,17 +100,41 @@ class Index
 			case "Zip":		Provider::Zip(CurrentUser::$path);
 							break;
 			
-			case "Acc":		if(CurrentUser::$admin && isset($_POST['login'])){
-								$acc = new Account($_POST['login']);
-							}else{
-								$acc = CurrentUser::$account;
-							}
+			//~ case "Acc":		if(CurrentUser::$admin && isset($_POST['login'])){
+								//~ $acc = new Account($_POST['login']);
+							//~ }else{
+								//~ $acc = CurrentUser::$account;
+							//~ }
+							//~ $acc->toHTML();
+							//~ break;
+							
+			case "MyA":		$acc = CurrentUser::$account;
 							$acc->toHTML();
-							break;
+							break;							
 			
 			case "Adm":		$page = new Admin();
 							$page->toHTML();
 							break;
+							
+			case "Com":		$page = new Comments(CurrentUser::$path);
+							$page->toHTML();
+							break;
+							
+			case "Rights":		$page = new Judge(CurrentUser::$path);
+							$page->toHTML();
+							break;
+
+			case "Token":		$page = new GuestToken(CurrentUser::$path);
+							$page->toHTML();
+							break;
+
+			case "Exif":		$page = new Exif(CurrentUser::$path);
+							$page->toHTML();
+							break;
+
+			case "JSon"	:	$page = new Json();
+							$page->toHTML();
+							return;
 		}
 	}
 }

@@ -54,7 +54,8 @@ class GuestToken extends Page
     /// Path this key allows access to
     public $path;
 
-    public function __construct(){
+    public function __construct($f=null){
+	$this->file 	=	$f;
     }
 
     /**
@@ -77,7 +78,10 @@ class GuestToken extends Page
         }
 
         if (self::exist($key)){
-            error_log("ERROR/GuestToken: Key ".$key." already exist, aborting creation");
+		//~ error_log("ERROR/GuestToken: Key ".$key." already exist, aborting creation");
+		Json::$json = array("action"=>"GuestToken",
+				"result"=>1,
+				"desc"=>"Error : GuestToken: Key ".$key." already exist, aborting creation");	    
             return false;
         }
 
@@ -96,6 +100,9 @@ class GuestToken extends Page
         $token->key     =   $key;
         $token->path	=	File::a2r($path);
         $token->save();
+	Json::$json = array("action"=>"GuestToken",
+				"result"=>0,
+				"desc"=>"GuestTokens Create ".$key);	
         return true;
     }
 
@@ -150,8 +157,14 @@ class GuestToken extends Page
         }
 
         if ($found && $xml->asXML(CurrentUser::$tokens_file)){
+	     Json::$json = array("action"=>"GuestToken",
+						"result"=>0,
+						"desc"=>"GuestToken delete successfull");
             return true;
         } else {
+	    Json::$json = array("action"=>"GuestToken",
+						"result"=>1,
+						"desc"=>"Error : Token not found");
             return false;
         }
     }
@@ -338,43 +351,25 @@ class GuestToken extends Page
      * Display a list of existing tokens
      * 
      */
-    public function toHTML(){
-        if (!CurrentUser::$admin){
-            // Only admin can see the tokens for now
-            return false;
-        }
-
-        echo "<div id='tokensblock' class='section'>";
-        echo "<h2>".Settings::_("token","tokens")."</h2>\n";
-        echo "<div>";
-        
-        // We still want to display the title so the page is not empty
-        if ( !file_exists(CurrentUser::$tokens_file)){
-            return false;
-        }
-
-        foreach(self::findAll() as $t){
-            echo "<table>";
-            echo "<tbody>";
-            echo "<tr>";
-            echo "<td>".$t['key']."</td>";
-            echo "<td>";
-            echo "<form action='?t=Adm&a=DTk' method='post'>\n";
-            echo "<input type='hidden' name='tokenkey' value='".$t['key']."' />";
-            echo "<input type='submit' class='button blue' value='".Settings::_("token","deletetoken")."' />";
-            echo "</form>";
-            echo "</td>";
-            echo "</tr>";
-
-            echo "<tr><td>".$t['path']."</td></tr>\n";
-            echo "<tr><td><a href='".self::get_url($t['key'])."' >".self::get_url($t['key'])."</a></td></tr>\n";
-
-        }
-        echo "</tbody>";
-        echo "</table>";
-        echo "</div>";
-        echo "</div>";
-    }
+	public function toHTML() {
+	
+	echo "<form id='admintokens-form' action='?f=".File::a2r($this->file)."&t=CTk' method='post'>\n
+		<fieldset>\n
+		<legend>".Settings::_("token","tokens")."</legend>\n";
+		$tokens = GuestToken::find_for_path($this->file);
+		if ($tokens && !empty($tokens)){
+			foreach($tokens as $token){
+			echo "<a href='".GuestToken::get_url($token['key'])."' >".$token['key']."</a><br />\n";
+			}
+		}
+	echo "<div class='controls controls-row'>\n
+		<input type='submit' class='btn btn-primary' value='".Settings::_("token","createtoken")."' />\n
+		</div>\n
+		<input type='hidden' name='token' value='create'/>\n
+		</fieldset>\n
+		</form>";	
+	echo"<div id='display_action' class='alert hide'></div>";		
+	}    
 
 }
 

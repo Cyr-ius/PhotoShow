@@ -70,7 +70,7 @@ class File
 		
 		/// Set variables
 		$this->path			=	$path;
-		$this->extension	=	self::Extension($path);
+		$this->extension		=	self::Extension($path);
 		$this->name			=	self::Name($path);	
 		$this->type			=	self::Type($path);
 		$this->root			=	self::Root();		
@@ -109,6 +109,21 @@ class File
 		return	basename($file,'.'.$info['extension']);
 	}
 	
+	public static function LastModified($file,$numberdays=null){
+		if (file_exists($file)) {
+			if (!$numberdays) {
+				return date ("F d Y", filemtime($file));
+			} else {
+				$fichier = filemtime($file);
+				$cejour = mktime();
+				$interval = $cejour-$fichier;
+				if ( date("d",$interval) <= $numberdays) {
+				return true;
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Return the type of $file
 	 *
@@ -143,6 +158,9 @@ class File
 		$types['Video'][]	=	"mts";		
 		$types['Video'][]	=	"3gp";		
 		$types['Video'][]	=	"webm";			
+		$types['Video'][]	=	"avi";			
+		$types['Video'][]	=	"wmv";			
+		$types['Video'][]	=	"mpeg";			
 		
 		
 		$types['File'][]	=	"xml";
@@ -166,19 +184,20 @@ class File
 	 * @author Thibaud Rohmer
 	 */
 	public static function a2r($file,$dir=NULL){
+
 		if(!isset($dir)){
 			$dir		=	Settings::$photos_dir;
 		}
-		
+				
 		$rf	=	realpath($file);
 		$rd =	realpath($dir);
 		
 		if($rf==$rd) return "";
-
+		
 		if( substr($rf,0,strlen($rd)) != $rd ){
-			throw new Exception("This file is not inside the photos folder !<br/>");
+			throw new Exception("This file $file is not inside the photos folder $dir !<br/>");
 		}
-
+		
 		return ( substr($rf,strlen($rd) + 1 ) );
 	}
 

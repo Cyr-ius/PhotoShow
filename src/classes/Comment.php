@@ -66,7 +66,7 @@ class Comment implements HTMLObject
 	public function __construct($login,$content,$date,$file=null){
 		$this->login	=	$login;
 		$this->content	=	$content;
-		$this->date		=	$date;
+		$this->date	=	$date;
 		$this->file 	=	$file;
 	}
 	
@@ -81,18 +81,16 @@ class Comment implements HTMLObject
 		$content	=	stripslashes(htmlentities( $this->content , ENT_QUOTES ,'UTF-8'));
 		$date		=	$this->date;
 
-		echo "<div class='comment'>\n";
+		echo "<div class='comment alert alert-info'>\n";
 		// Not implemented yet.
-		if(false && (CurrentUser::$admin || $login == CurrentUser::$account->login)){
-			echo "<div class='delete'>
-							<form action='?t=Adm&a=CDe' method='post'>
-								<input type='hidden' name='image' value='".htmlentities(File::a2r($this->file), ENT_QUOTES ,'UTF-8')."'>
-								<input type='hidden' name='date' value='$date'>
-								<input type='submit' value='x'>
-							</form>
-						</div>";
+		if(CurrentUser::$admin || $login == CurrentUser::$account->login){
+		echo "<form id='delcomment-form' action='?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Adm&a=CDe' method='post'>
+			<input type='hidden' id='path' name='path' value='".htmlentities(File::a2r($this->file), ENT_QUOTES ,'UTF-8')."'>
+			<input type='hidden' id='date' name='date' value='$date'>
+			<button type='submit' class='close'>x</button>
+			</form>";
 		}
-		echo "<div class='login name'>$login</div>\n";
+		echo "<h5>$login : </h5>\n";
 		echo "<div class='content'>$content</div>\n";
 		echo "</div>\n";
 	}

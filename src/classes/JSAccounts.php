@@ -60,69 +60,72 @@ class JSAccounts
 
 	public function toHTML(){
 		$groupaccounts = array();
-
-		echo "<div class='leftcolumn'>";
-		echo "<h1>".Settings::_("jsaccounts","accounts")."</h1>";
+		echo "<div class='row-fluid'>";
+		echo "<div class='span6'>";
+		echo "<h3>".Settings::_("jsaccounts","accounts")."</h3>";
 		
 		foreach($this->accounts as $acc){
-			echo "<div class='accountitem'>
-						<div class='delete'>
-							<form action='?t=Adm&a=ADe' method='post'>
-								<input type='hidden' name='name' value='".htmlentities($acc['login'], ENT_QUOTES ,'UTF-8')."'>
-								<input type='submit' value='x'>
-							</form>
-						</div>";
-			echo "<div class='name'>".$acc['login']."</div>";
+			echo "<div class='accountitem alert alert-info'>
+					<form class='removeacc form-inline' action='?t=Adm&a=ADe' method='post'>
+					<fieldset>
+						<input type='hidden' name='name' value='".htmlentities($acc['login'], ENT_QUOTES ,'UTF-8')."'>
+						<input class='btn btn-danger btn-mini' type='submit' value='x'>		
+						<span class='name'>".$acc['login']."</span>
+					</fieldset>
+					</form>";
+			echo "<div class='name hide'>".$acc['login']."</div>";					
 			foreach($acc['groups'] as $g){
 				$groupaccounts["$g"][] = $acc['login'];
-				echo "<div class='inlinedel'><span class='rmgroup'>x</span><span class='groupname'>".htmlentities($g, ENT_QUOTES ,'UTF-8')."</span></div>";
+				echo "<form id='rmgroup-form' style='display:inline;' method='post' action='?t=Adm&a=AGR'>
+					<button type='submit' class='btn btn-mini'>
+					<i class=' icon-trash'></i> <span class='groupname'>".htmlentities($g, ENT_QUOTES ,'UTF-8')."</span>
+					</button>
+					<input type='hidden' name='acc' value='".$acc['login']."'/>
+					<input type='hidden' name='group' value='$g'/>
+					</form>&nbsp;";				
 			}
 			echo "</div>";
 		}
 		echo "</div>";
 
-		echo "<div class='rightcolumn'>";
-		echo "<h1>".Settings::_("jsaccounts","groups")."</h1>";
-
-		echo "<div class='newgroup'>";
+		echo "<div class='span6'>";
+		echo "<h3>".Settings::_("jsaccounts","groups")."</h3>";
+		echo "<div class='newgroup well'>";
 		echo "
-		<div class='section'>
-		<h2>Create group</h2>
-		<form class='addgroup' method='post' action='?t=Adm&a=GC'>
-		
-			<fieldset>
-			<div class='fieldname'>Group Name</div>
-			<div class='fieldoptions'>
-			<span>".Settings::_("jsaccounts","groupname")."</span>
-			<div><input type='text' name='group' value='Group Name' /></div>
-			</div>
-			</fieldset>
-			
-			<fieldset class='alignright'><input type='submit' value='".Settings::_("jsaccounts","addgroup")."'></fieldset>
-			
-			</form>\n";
-		echo "</div></div>";
-
+		<form class='addgroup form-inline' method='post' action='?t=Adm&a=GC'>";
+		echo "<legend>".Settings::_("jsaccounts","addgroup")."</legend>\n";
+		echo "<fieldset>\n";				
+		echo "<label for='groupname' class='control-label'>".Settings::_("jsaccounts","groupname")."</label>";
+		echo "<input id='groupname' class='input-medium' type='text' name='group' placeholder='".Settings::_("jsaccounts","groupname")."'>\n";
+		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("jsaccounts","addgroup")."'>\n";
+		echo "</fieldset>\n";		
+		echo "</form>\n";
+		echo "</div>";
 		foreach($this->groups as $g){
 			$gn = $g['name'];
-			echo "<div class='groupitem'>
-						<div class='delete'>
-							<form action='?t=Adm&a=GDe' method='post'>
-								<input type='hidden' name='name' value='$gn'>
-								<input type='submit' value='x'>
-							</form>
-						</div>";
-			echo "<div class='name'>".$gn."</div>";
-
+			echo "<div class='groupitem alert alert-success'>
+					<form class='removegroup' action='?t=Adm&a=GDe' method='post'>
+						<input type='hidden' name='name' value='$gn'>
+						<input class='btn btn-danger btn-mini' type='submit' value='x'>
+						<span class='groupname'>".$gn."</span>
+					</form>";
+			echo "<div class='name hide'>".$gn."</div>";					
 			if(isset($groupaccounts["$gn"])){
 				foreach($groupaccounts["$gn"] as $g){
-					echo "<div class='inlinedel'><span class='rmacc'>x</span><span class='accname'>".htmlentities($g, ENT_QUOTES ,'UTF-8')."</span></div>";
+					echo "<form id='rmacc-form' style='display:inline;' method='post' action='?t=Adm&a=AGR'>
+						<button type='submit' class='btn btn-mini'>
+						<i class=' icon-trash'></i> <span class='accname'>".htmlentities($g, ENT_QUOTES ,'UTF-8')."</span>
+						</button>
+						<input type='hidden' name='acc' value='$g'/>
+						<input type='hidden' name='group' value='$gn'/>
+						</form>&nbsp;";
 				}
 			}
 			echo "</div>";
 		}
 		
-		echo "</div>";
+		echo "</div>\n";
+		echo "</div>\n";
 	}
 
 }

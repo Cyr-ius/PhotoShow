@@ -106,7 +106,7 @@ class TextInfo
 		$xml->addChild('contain',$contain);
 		
 		if(!file_exists(dirname($ti->path))){
-			@mkdir(dirname($ti->path),0750,true);
+			@mkdir(dirname($ti->path),0755,true);
 		}
 		/// Save xml
 		$xml->asXML($ti->path);
@@ -135,48 +135,31 @@ class TextInfo
 		$ti = new TextInfo($f);
 		if (!isset($ti->author)) { $ti->author = CurrentUser::$account->login; }
 		
-		echo "<script>
-		$(\"#button_clean\").click(function(){
-		$(\"#ti_delete\").submit();
-		});
-		</script>";
-		
-		echo "<div class='section'><h2>Information</h2>\n";
-		echo "<form action='?a=Tis&f=".File::a2r($f)."' method='post'>\n";
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("textinfo","title")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='text' name='title' value='$ti->title' />
-				</div>
-			</fieldset>\n";
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("textinfo","name")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='text' name='author' value='$ti->author' />
-				</div>
-			</fieldset>\n";
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("textinfo","explain")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<textarea style='border:0;' name='contain'>$ti->contain</textarea>
-				</div>
-			</fieldset>\n";
-		echo "<fieldset class='alignright'>\n
-				<input type='button' id='button_clean' class='button blue' value='".Settings::_("textinfo","delete")."' />
-				<input type='submit' class='button blue' value='".Settings::_("settings","submit")."' />
-			</fieldset>\n";
-		echo "<input type='hidden' name='f' value='$f' />\n";
-		echo "</form>";
-		echo "<form id='ti_delete' action='?a=Tid&f=".File::a2r($f)."' method='post'>\n";		
-		echo "<input type='hidden' name='f' value='$f' />\n";
-		echo "</form>";
-		echo "</div>\n";
+		echo "<form id='editti-form' class='form-horizontal' action='?a=Tis&f=".File::a2r($f)."' method='post'>\n";
+		echo "<fieldset>\n";
+		echo "<legend>Information</legend>\n
+			<div class='control-group'>\n
+			<label for='title' class='control-label'>".Settings::_("textinfo","title")."</label>\n
+			<div class='controls'><input id='title' class='input-large' type='text' name='title' value='$ti->title' placeholder='".Settings::_("textinfo","title")."' /></div>\n
+			</div>\n
+			<div class='control-group'>\n
+			<label for='author' class='control-label'>".Settings::_("textinfo","name")."</label>\n
+			<div class='controls'><input id='author' class='input-large' type='text' name='author' value='$ti->author' /></div>\n
+			</div>\n
+			<div class='control-group'>\n
+			<label for='contain' class='control-label'>".Settings::_("textinfo","explain")."</label>\n
+			<div class='controls'><textarea id='contain' class='span12'  rows='4' name='contain'>$ti->contain</textarea></div>\n
+			</div>\n
+			<div class='controls controls-row'>\n
+			<input id='button_submit' type='submit' class='btn btn-primary' data-loading-text='Posting...' value='".Settings::_("settings","submit")."' />\n
+			</div>\n
+			<input id='f' type='hidden' name='f' value='$f' />\n";
+		echo "</fieldset>\n";
+		echo "</form>\n";
+		echo "<form id='delti-form' class='form-horizontal' action='?a=Tid&f=".File::a2r($f)."' method='post'>\n
+			<input id='f' type='hidden' name='f' value='$f' />\n
+			<input id='button_clean'  type='submit'  class='btn btn-warning' value='".Settings::_("textinfo","delete")."' data-loading-text='Deleting...'/>
+			</form>\n";
 	}
 	
 	/**
@@ -184,13 +167,13 @@ class TextInfo
 	public function toHTML(){
 		
 		if(CurrentUser::$admin) {
-			echo "<div  class='textinfoadmin'>\n";
+			echo "<div  class='well textinfoadmin'>\n";
 			self::Edit_File($this->file);
 			echo "</div>\n";
 		}
 		
 		if (is_file($this->path) && !empty($this->contain) )  {
-			echo "<div  class='textinfo'>\n";
+			echo "<div  class='well textinfo'>\n";
 			echo "<span>".nl2br($this->contain)."<p style='font-size:12px;text-align:right'>$this->author</p></span>";
 			echo "</div>\n";
 		}

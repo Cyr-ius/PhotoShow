@@ -36,20 +36,42 @@ function run_slideshow(){
 }
 
 function start_slideshow(){
+	if (fullScreenApi.supportsFullScreen) {
+		$('#image_panel').requestFullScreen();
+	}
 	slideshow_status = 1;
 	timer = setInterval('run_slideshow()',3000);
+	 $(".image_panel").animate({height:'100%'},600);
+	 $(".image_panel").animate({width:'100%'},600);
 	$(".image_panel").css("position","fixed");
-	$(".image_panel").css("z-index",1000);
-	$(".image_panel").animate({bottom:'0'},200);
+	$(".image_panel").css("z-index",10000);
+	$(".image_panel").css( "background","none repeat scroll 0 0 black");
+	$(".image_panel").css( "height","100%");
+	$(".image_panel").css( "width","100%");
+	$(".image_panel").css( "left","0");
+	$(".image_panel").css( "top","0");	
+	$("#image_big").css( "height","100%");	
+	$(".center").css( "z-index",10000);
+	$('.menu,.menubar').hide();
 	hide_links();
 }
 
 function stop_slideshow(){
+	if (fullScreenApi.isFullScreen) {
+		fullScreenApi.cancelFullScreen();
+	}	
 	slideshow_status = 0;
 	clearInterval(timer);
-	$(".image_panel").animate({bottom:'120'},200);
-	$(".image_panel").css("position","absolute");
-	$(".image_panel").css("z-index",50);
+	$(".image_panel").css("position","");
+	$(".image_panel").css("z-index",0);
+	$(".image_panel").css( "background","");
+	$(".image_panel").css( "left","");
+	$(".image_panel").css( "top","");	
+	$(".image_panel").css( "height","");
+	$(".image_panel").css( "width","");	
+	$("#image_big").css( "height","100%");
+	$(".center").css( "z-index",'-1');
+	$('.menu,.menubar').show();	
 	$("#slideshow").unbind();
 	show_links();
 }
@@ -64,15 +86,15 @@ function toggle_slideshow(){
 
 function init_slideshow_panel(){
 	$("#slideshow").unbind();
-
+	
 	$("#slideshow").click(function(){
 		toggle_slideshow();
 		return false;
 	});
-
+	
 	$("#back").click(function(){
 		stop_slideshow();
-	});
+	}); 
 }
 
 function show_links(){

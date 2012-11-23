@@ -43,6 +43,7 @@
  */
 class JS extends Page
 {
+	
 	private $toPrint;
 
 	private $j;
@@ -55,38 +56,31 @@ class JS extends Page
 		if(isset($_GET['j'])){
 			switch($_GET['j']){
 
-				case "Pag":		$m = new Menu();
+				case "Pag":		/// Pag need load in div #content
+								$mb=new MenuBar();
+								$m = new Menu();
 								$p = new Board();
-								$ap = new AdminPanel();
-
-								echo "<div id='menu' class='menu'>\n";
-								
-								$m->toHTML();
-
-								if(CurrentUser::$admin){
-									echo "<div class='bin'><img src='inc/bin.png'>".Settings::_("bin","delete")."</div>";
-								}
-								echo "</div>\n";
-								echo "<div class='panel'>\n";
-								$p->toHTML();
-								echo "</div>\n";
-
-								echo "<div class='image_panel hidden'>\n";
-								echo "</div>\n";
-
-								if(CurrentUser::$admin){
-									echo "<div class='infos'>\n";
-									$ap->toHTML();
+								$ap = new Infos();
+								$mt = new ModalTemplate();
+								$ma = new ModalAdmin();
+								echo "<div class='row-fluid'>";
+									echo "<div id='menu' class='well span2 menu'>";
+									$m->toHTML();
 									echo "</div>\n";
-								}
-								break;
-
-				case "Log":		$p = new LoginPage();
-								$p->toHTML();
-								break;
-				
-				case "Reg":		$p = new RegisterPage();
-								$p->toHTML();
+									echo "<div class='span10 center'>";
+										/// ImagePanel
+										echo "<div class='image_panel hide'>\n";
+										echo "</div>\n";									
+										///Linear_panel
+										echo "<div id='linear_panel' class='linear_panel hide'><ul class='thumbnails'></ul></div>";						
+										///Panel (include boardheader(title+button) , album , images , videos , comments)
+										echo "<div class='panel'>\n";
+										$p->toHTML();
+										echo "</div>\n";					
+									echo "</div>\n";
+								echo "</div>\n";
+								$mt->toHTML();
+								$ma->toHTML();
 								break;
 
 				case "Pan":		if(is_file(CurrentUser::$path)){
@@ -100,33 +94,19 @@ class JS extends Page
 
 				case "Men":		$m = new Menu();
 								$m->toHTML();
-
-								if(CurrentUser::$admin){
-									echo "<div class='bin'><img src='inc/bin.png'>".Settings::_("bin","delete")."</div>";
-								}
+								break;								
 								
+				case "MkD":		$f = new AdminPanel(CurrentUser::$path);
+								$f->CreateDir_toHTML();
 								break;
-
-
-				case "Pan":		$f = new AdminPanel();
+								
+				case "MvD":		$f = new AdminPanel(CurrentUser::$path);
+								$f->RenameDir_toHTML();
+								break;
+								
+				case "JSon"	:	$f = new Json();
 								$f->toHTML();
-								break;
-
-				case "Inf":		$f = new Infos();
-								$f->toHTML();
-								break;
-
-				case "Jud":		$j = new Judge(CurrentUser::$path);
-								$j->toHTML();
-								break;
-				
-				case "Acc": 	$f = new JSAccounts();
-								$f->toHTML();
-								break;
-				
-				case "Comm":	$f = new Comments(CurrentUser::$path);
-								$f->toHTML();
-								break;
+								break;								
 
 				default:		break;
 			}
@@ -134,7 +114,7 @@ class JS extends Page
 	}
 
 	public function toHTML(){
-		
+
 	}
 }
 

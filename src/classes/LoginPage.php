@@ -62,43 +62,23 @@ class LoginPage extends Page
 	 */
 	public function toHTML(){
 
-        if (Settings::$forcehttps && !$_SERVER["HTTPS"]){
-            header("HTTP/1.1 301 Moved Permanently");
-            header("Location: https://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]);
-            exit();
-        }else{
-            $this->header();
-            echo "<div class='center'>\n";
-            echo "<form method='post' action='?t=Log' class='niceform'>\n";
-
-            echo "<div class='section'><h2>Login</h2>";
-
-            /// Login
-            echo "<fieldset>
-                <div class='fieldname'>
-                    <span>".Settings::_("login","login")."</span>
-                </div>
-                <div class='fieldoptions'>
-                    <input type='text' name='login' value=''>
-                </div>
-            </fieldset>\n";
-
-
-            /// Password
-            echo "<fieldset>
-                <div class='fieldname'>
-                    <span>".Settings::_("login","pass")."</span>
-                </div>
-                <div class='fieldoptions'>
-                    <input type='password' name='password' value=''>
-                </div>
-            </fieldset>\n";
-
-            echo "<fieldset class='alignright'><input type='submit' value='".Settings::_("login","submit")."' > ".Settings::_("login","or")." <a class='inline' href='?t=Reg'>".Settings::_("login","register")."</a> ".Settings::_("login","or")." <a class='inline' href='.'>".Settings::_("login","back")."</a>";
-            echo "</fieldset></form>\n";
-            echo "</div>\n";
-
-        }
-    }
+		echo "<form id='logins-form' class='form-horizontal'  method='post' action='?t=Log'>\n";
+		echo "<fieldset>\n";		
+		/// Login
+		echo "<div class='control-group'>\n";
+		echo "<label for='login' class='control-label'>".Settings::_("login","login")."</label>";
+		echo "<div class='controls'><input id='login' class='input-large' type='text' name='login' value=''></div>\n";
+		echo "</div>\n";
+		/// Password
+		echo "<div class='control-group'>\n";
+                 echo "<label for='password' class='control-label'>".Settings::_("login","pass")."</label>";
+		echo "<div class='controls'><input id='password' class='input-large' type='password' name='password' value=''></div>\n";
+		echo "</div>\n";		
+		echo "<div class='controls controls-row'>\n";
+		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("login","submit")."'>\n";
+		echo "</div>\n";
+		echo "</fieldset>\n";	
+		echo "</form>\n";	
+    }    
 }
 ?>

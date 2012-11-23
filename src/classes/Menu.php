@@ -55,6 +55,7 @@ class Menu implements HTMLObject
 	
 	/// Array of Menu instances, one per directory inside $dir
 	private $items=array();
+	private $categories=array();
 
 	/// Relative path to file
 	private $path = "";
@@ -68,10 +69,26 @@ class Menu implements HTMLObject
 	 */
 	public function __construct($dir=null,$level=0){
 		
+	}
+	
+
+	/**
+	 * Display Menu in website
+	 *
+	 * @return void
+	 * @author Thibaud Rohmer
+	 */
+	public function toHTML(){
+		$a = self::CsMenu();
+		//print_r($a);
+		echo self::ListFolder('',0,$a);	
+	}
+	
+	public function CsMenu($dir=null,$level=0,$item_prec=null){	
 		/// Init Menu 
 		if($dir == null)
 			$dir = Settings::$photos_dir;
-			
+		
 		/// Check rights
 		if(!(Judge::view($dir) || Judge::searchDir($dir))){
 			return;
@@ -80,62 +97,51 @@ class Menu implements HTMLObject
 		if(!CurrentUser::$admin && !CurrentUser::$uploader && sizeof($this->list_files($dir,true,false,true)) == 0){
 			return;
 		}
-
+		
 		/// Set variables
-		$this->title = basename($dir);
-		$this->webdir= urlencode(File::a2r($dir));
-		$this->path  = File::a2r($dir);
+		$title = basename($dir);
+		$webdir= urlencode(File::a2r($dir));
+		$apath  = File::a2r($dir);			
 
 		try{
-
 			/// Check if selected dir is in $dir
 			File::a2r(CurrentUser::$path,$dir);
-
-			$this->selected			=	true;
-			$this->class 			=	"level-$level selected";
-
+			$selected 			="selected";
+			
 		}catch(Exception $e){
-
 			/// Selected dir not in $dir, or nothing is selected			
-			$this->selected			=	false;
-			$this->class 			=	"level-$level";
-			
+			$selected 			="";
 		}
-
-		/// Create Menu for each directory
-		$subdirs = $this->list_dirs($dir);
-
-		if(Settings::$reverse_menu){
-			$subdirs = array_reverse($subdirs);
-		}
-
-		foreach($subdirs as $d){
-			$this->items[]	=	new Menu($d,$level+1);
-		}
-	}
 	
-	/**
-	 * Display Menu in website
-	 *
-	 * @return void
-	 * @author Thibaud Rohmer
-	 */
-	public function toHTML(){
-		if(isset($this->webdir) && isset($this->title)){
-			echo 	"<div class='menu_item $this->class'>\n";
-			
-			echo 	"<div class='menu_title'>\n";
-
-			echo 	"<span class='name hidden'>".htmlentities($this->title, ENT_QUOTES ,'UTF-8')."</span>";
-			echo 	"<span class='path hidden'>".htmlentities($this->path, ENT_QUOTES ,'UTF-8')."</span>";
-			echo 	"<a href='?f=$this->webdir'>".htmlentities($this->title, ENT_QUOTES ,'UTF-8')."</a>";
-			echo 	"</div>\n";
-
-			foreach($this->items as $item)
-				$item->toHTML();
-
-			echo 	"</div>\n";
-		}	
+		$this->categories[$level][] = array('title'=>$title,'categorie_id'=>$title,'parent_id'=>$item_prec,'path' => $apath ,'selected' => $selected);
+		$item_prec = $title;
+		$subdirs = $this->list_dirs($dir);
+		foreach($subdirs as $d){
+				self::CsMenu($d,$level+1,$item_prec);
+		}
+		return $this->categories;
+	}	
+	
+	public function ListFolder($parent, $niveau, $array) {
+			$html = "";
+			$niveau_precedent = 0;
+			if (!$niveau && !$niveau_precedent) $html .= "\n<ul class='nav root' style='margin-bottom:0px;'>\n";
+			if (!is_array($array[$niveau])) {return $html;} //Cette ligne corrige le fait qu'un répertoire fils peut avoir le même nom que son père
+			foreach($array[$niveau] as $item) {
+				if ($parent == $item['parent_id']) {
+					if ($niveau_precedent < $niveau) $html .= "\n<ul class='nav' style='margin-bottom:0px;'>\n";
+					$html .= "<li class='submenu menu_title ".$item['selected']."'>";
+					$html .= "<span class='name hidden'>".htmlentities($item['title'], ENT_QUOTES ,'UTF-8')."</span>";
+					$html .= "<span class='path hidden'>".htmlentities($item['path'], ENT_QUOTES ,'UTF-8')."</span>";
+					$html .= "<a href='?f=".urlencode($item['path'])."'>".htmlentities($item['title'], ENT_QUOTES ,'UTF-8')."</a>";					
+					$niveau_precedent = $niveau;
+					$html .= self::ListFolder($item['categorie_id'], ($niveau + 1), $array);
+				}
+			}
+			if (($niveau_precedent == $niveau) && ($niveau_precedent != 0)) $html .= "</ul>\n</li>\n";
+			else if ($niveau_precedent == $niveau) $html .= "</ul>\n";
+			else $html .= "</li>\n";	
+			return $html;
 	}
 	
 	/**

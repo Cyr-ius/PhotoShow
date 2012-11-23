@@ -77,7 +77,7 @@ class Comments implements HTMLObject
 				
 		/// Set variables
 		$this->file	=	$file;
-		$settings	=	new Settings();
+		//~ $settings	=	new Settings();
 		$basefile	= 	new File($file);
 		$basepath	=	File::a2r($file);
 
@@ -111,6 +111,11 @@ class Comments implements HTMLObject
 	public static function add($file,$content,$login=""){
 		
 		if($content == ""){
+			Json::$json = array("action"=>"Comments",
+				"result"=>1,
+				"desc"=>"Comment is empty",
+				"url"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)),
+				"js"=>"&j=Com");		
 			return;
 		}
 
@@ -144,25 +149,27 @@ class Comments implements HTMLObject
 	 * @return void
 	 * @author Thibaud Rohmer
 	 */
-	public static function delete($date){
-		$c 			=	new Comments(CurrentUser::$path);
+	public static function delete($path,$date){
+		$c 		=	new Comments($path);
 		$xml		=	simplexml_load_file($c->commentsfile);
-
 		$i=-1;
 		$found=false;
 		foreach( $xml as $comment ){
 			$i++;
 			if((string)$comment->date == $date){
 				$found = true;
-				continue;
+				break;
 			}
 		}
-		
-		if($found){
-			unset($xml->group[$i]);
-		}
 
+		if($found){
+			unset($xml->comment[$i]);
+		}
+		/// Write xml
 		$xml->asXML($c->commentsfile);
+		Json::$json = array("action"=>"Comments",
+			"result"=>0,
+			"desc"=>"Delete comment successfull");			
 	}
 
 	public function save(){
@@ -178,10 +185,13 @@ class Comments implements HTMLObject
 		}
 
 		if(!file_exists(dirname($this->commentsfile))){
-			@mkdir(dirname($this->commentsfile),0750,true);
+			@mkdir(dirname($this->commentsfile),0755,true);
 		}
 		/// Write xml
 		$xml->asXML($this->commentsfile);
+		Json::$json = array("action"=>"Comments",
+			"result"=>0,
+			"desc"=>"Save comment successfull");		
 	}
 
 
@@ -232,25 +242,40 @@ class Comments implements HTMLObject
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){	
-		echo '<h2>'.Settings::_("comments","comments").'</h2>';
-
-		echo "<div class='display_comments'>";	
-		/// Display each comment
-		foreach($this->comments as $com){
-			$com->toHTML();
-		}
-		echo "</div>";
-		
-		echo "<form action='?t=Com&f=".$this->webfile."' id='comments_form' method='post'><fieldset class='transparent'>\n";
-			if(isset(CurrentUser::$account)){
-				echo "<fieldset><input type='text' class='visible' name='login' id='login' value='".htmlentities(CurrentUser::$account->login, ENT_QUOTES ,'UTF-8')."' readonly></fieldset>\n";			
-			}else{
-				echo "<fieldset><input type='text' class='visible' name='login' id='login' value='".Settings::_("comments","anonymous")."'></fieldset>\n";					
+		echo "<div id='comments'>";
+			/// Display each comment
+			foreach($this->comments as $com){
+				$com->toHTML();
 			}
-			echo "<textarea name='content' id='content'></textarea>\n";
-			echo "<input type='submit' value='".Settings::_("comments","submit")."'></fieldset>\n";
-		echo "</form>\n";	
-		
+			if(!Settings::$nocomments){
+			echo "<div class='well'>";
+				echo "<form id='comments-form' action='?f=$this->webfile&t=Com' method='post'>\n";
+				echo "<fieldset>\n";
+				echo '<legend>'.Settings::_("comments","comments").'</legend>';
+					if(isset(CurrentUser::$account)){
+						echo "<div class='controls'>
+							<div class='input-prepend'>
+							<span class='add-on'>@</span><input type='text' class='span3' size='16' name='login' id='login' value='".htmlentities(CurrentUser::$account->login, ENT_QUOTES ,'UTF-8')."' readonly/>
+							</div>\n
+							</div>\n";			
+					}else{
+						echo "<div class='controls'>
+							<div class='input-prepend'>
+							<input type='text' class='span3' name='login' id='login' value='".Settings::_("comments","anonymous")."'/>
+							</div>\n
+							</div>\n";	
+					}
+				echo "<div class='control-group'>\n
+					<div class='controls'><textarea id='content'  rows='2' name='content'></textarea></div>\n
+					</div>\n
+					<div class='controls controls-row'>\n
+					<input class='btn btn-primary' type='submit'  value='".Settings::_("settings","submit")."' />\n
+					</div>\n";
+				echo "</fieldset>\n";	
+				echo "</form>\n";	
+			echo "</div>\n";
+			}
+		echo "</div>\n";
 	}
 }
 

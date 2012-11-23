@@ -99,9 +99,6 @@ class Settings extends Page
 	// Hidden Menu
 	static public $hide_menu = false;
 	
-	//Hidden Infos Bar
-	static public $hide_infos = false;
-
 	/// Fixed width for thumbs
 	static public $thumbs_fixed_width		=	false;
 
@@ -161,7 +158,7 @@ class Settings extends Page
 		/// Settings already created
 		if(Settings::$photos_dir !== NULL && !$forced) return;
 
-	$config = new stdClass();
+	$config = (object)null;
         /// Set default values for $config
         $config->timezone = "Europe/Paris";
 
@@ -184,19 +181,19 @@ class Settings extends Page
 
 		// Now, check that this stuff exists.
 		if(!file_exists(Settings::$photos_dir)){
-			if(! @mkdir(Settings::$photos_dir,0750,true)){	
+			if(! @mkdir(Settings::$photos_dir,0755,true)){	
 				throw new Exception("PHOTOS dir '".Settings::$photos_dir."' doesn't exist and couldn't be created !");
 			}
 		}
 
 		if(!file_exists(Settings::$thumbs_dir)){
-			if(! @mkdir(Settings::$thumbs_dir,0750,true)){
+			if(! @mkdir(Settings::$thumbs_dir,0755,true)){
 				throw new Exception("PS_GENERATED dir '".Settings::$thumbs_dir."' doesn't exist or doesn't have the good rights.");
 			}
 		}
 
 		if(!file_exists(Settings::$conf_dir)){
-			if(! @mkdir(Settings::$conf_dir,0750,true)){
+			if(! @mkdir(Settings::$conf_dir,0755,true)){
 				throw new Exception("PS_GENERATED dir '".Settings::$conf_dir."' doesn't exist or doesn't have the good rights.");
 			}
 		}
@@ -233,7 +230,6 @@ class Settings extends Page
 			Settings::$l33t 		=	isset($admin_settings['l33t']);
 			Settings::$reverse_menu	=	isset($admin_settings['reverse_menu']);
 			Settings::$hide_menu    =   isset($admin_settings['hide_menu']);
-			Settings::$hide_infos	=	isset($admin_settings['hide_infos']);			
 			Settings::$thumbs_fixed_width	=	isset($admin_settings['thumbs_fixed_width']);			
 
 
@@ -341,12 +337,11 @@ class Settings extends Page
             "nocomments",
             "nodownload",
             "max_img_dir",
-			"thumbs_fixed_width",
+	    "thumbs_fixed_width",
             "loc",
             "l33t",
             "reverse_menu",
             "hide_menu",
-            "hide_infos",
 	    "encode_video",
 	    "ffmpeg_path",
 	    "ffmpeg_option"
@@ -359,7 +354,10 @@ class Settings extends Page
 			}
 		}
 		fclose($f);
-		Settings::init(true);
+		Settings::init(true);	
+		Json::$json = array("action"=>"Settings",
+					"result"=>0,
+					"desc"=>"Save settings");				
 	}
 
 	/**
@@ -382,234 +380,202 @@ class Settings extends Page
 			/// Generate webimg
 			Provider::image($file,false,false,false);
 		}
+		Json::$json = array("action"=>"Settings",
+					"result"=>0,
+					"desc"=>"Generate Thumbnails finished");				
 	}
+	
+	
+	public static function cleanthumbs($folder){
+		$files = Menu::list_files(Settings::$thumbs_dir.File::a2r($folder),true);
+
+		if( !ini_get('safe_mode') ){ 
+			set_time_limit(1200); 
+		}
+
+		foreach($files as $file){
+			@unlink($file);
+		}	
+		Json::$json = array("action"=>"Settings",
+			"result"=>0,
+			"desc"=>"Cleanup Thumbnails finished");	
+	}	
 
 	/**
 	 * Display settings page
 	 */
 	public function toHTML(){
 
-	//	echo "<h1>".Settings::_("settings","settings")."</h1>";
+		echo "<h3>".Settings::_("settings","settings")."</h3>\n";
 
-		echo "<div class='section'><h2>Global</h2>";
+		echo "<div class='well'>\n";
 
+		echo "<form id='setting-form' class='form-horizontal' action='?t=Adm&a=Set' method='post'>\n";
+		echo "<legend>Global</legend>\n";
+		echo "<fieldset>\n";
 		/// Site Title
-		echo "<form action='?t=Adm&a=Set' method='post'>\n";
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("settings","title")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='text' name='name' value=\"".htmlentities(Settings::$name, ENT_QUOTES ,'UTF-8')."\">
-				</div>
-			</fieldset>\n";
-
+		echo "<div class='control-group'>\n";
+		echo "<label for='title' class='control-label'>".Settings::_("settings","title")."</label>\n";
+		echo "<div class='controls'><input id='title' class='input-large' type='text' name='name' value='".htmlentities(Settings::$name, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";
 		/// Language
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("settings","language")."</span>
-				</div>
-				<div class='fieldoptions'>";
-		echo "<select name='loc'>";
+		echo "<div class='control-group'>\n";
+		echo "<label for='language' class='control-label'>".Settings::_("settings","language")."</label>\n";
+		echo "<div class='controls'>\n";
+		echo "<select name='loc'>\n";
 		foreach(Settings::$ava_loc as $l){
 			$p = htmlentities($l, ENT_QUOTES ,'UTF-8');
 			echo "<option value=\"".addslashes($p)."\"";
 			if($p == Settings::$loc){
 				echo " selected ";
 			}
-			echo ">".substr($p,0,-4)."</option>";
+			echo ">".substr($p,0,-4)."</option>\n";
 		}
-		echo "</select>";			
-		
-		echo "	</div>
-			</fieldset>\n";
-
+		echo "</select>\n";
+		echo "</div>\n";
+		echo "</div>\n";		
 		/// Site Address
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("settings","site_address")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='text' name='site_address' value=\"".htmlentities(Settings::$site_address, ENT_QUOTES ,'UTF-8')."\">
-				</div>
-			</fieldset>\n";
+		echo "<div class='control-group'>\n";
+		echo "<label for='site_address' class='control-label'>".Settings::_("settings","site_address")."</label>";
+		echo "<div class='controls'><input id='site_address' class='input-large' type='text' name='site_address' value='".htmlentities(Settings::$site_address, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";		
+		echo "<div class='controls controls-row'>\n";
+		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("settings","submit")."'>\n";
+		echo "</div>\n";
+		echo "</fieldset>\n";		
 
-		echo "<fieldset class='alignright'><input type='submit' value='".Settings::_("settings","submit")."'/></fieldset>\n";
-		echo "</div>";
-		echo "<div class='section'><h2>Options</h2>";
-
-		if(Settings::$noregister){
-			echo "<label><input type='checkbox' name='noregister' checked>".Settings::_("settings","noregister")."</label>\n";
-		}else{
-			echo "<label><input type='checkbox' name='noregister'>".Settings::_("settings","noregister")."</label>\n";
-		}
-		echo "</br>";
-
-		if(Settings::$forcehttps){
-			echo "<label><input type='checkbox' name='forcehttps' checked>".Settings::_("settings","forcehttps")."</label>\n";
-		}else{
-			echo "<label><input type='checkbox' name='forcehttps'>".Settings::_("settings","forcehttps")."</label>\n";
-        }
-        echo "</br>";
-
-		if(Settings::$nocomments){
-			echo "<label><input type='checkbox' name='nocomments' checked>".Settings::_("settings","nocomment")."</label>\n";
-		}else{
-			echo "<label><input type='checkbox' name='nocomments'>".Settings::_("settings","nocomment")."</label>\n";
-		}
-		echo "</br>";
-
-		if(Settings::$nodownload){
-			echo "<label><input type='checkbox' name='nodownload' checked>".Settings::_("settings","nodownload")."</label>\n";
-		}else{
-			echo "<label><input type='checkbox' name='nodownload'>".Settings::_("settings","nodownload")."</label>\n";
-		}
-		echo "</br>";
-
-		if(Settings::$reverse_menu){
-			echo "<label><input type='checkbox' name='reverse_menu' checked>Reverse menu order</label>\n";
-		}else{
-			echo "<label><input type='checkbox' name='reverse_menu'>Reverse menu order</label>\n";
-		}
-		echo "</br>";
-		if(Settings::$hide_menu){
-			echo "<label><input type='checkbox' name='hide_menu' checked>Hide Menu</label>\n";
-		}else{
-			echo "<label><input type='checkbox' name='hide_menu'>Hide menu</label>\n";
-		}
-		echo "</br>";
-
-		if(Settings::$hide_infos){
-			echo "<label><input type='checkbox' name='hide_infos' checked>Hide Infos Bar</label>\n";
-		}else{
-			echo "<label><input type='checkbox' name='hide_infos'>Hide Infos Bar</label>\n";
-		}
-		echo "</br>";
-		
-		if(Settings::$thumbs_fixed_width){
-			echo "<label><input type='checkbox' name='thumbs_fixed_width' checked>Fix thumbs width</label>\n";
-		}else{
-			echo "<label><input type='checkbox' name='thumbs_fixed_width'>Fix thumbs width</label>\n";
-		}
-		echo "</br>";
-
-		if(Settings::$l33t){
-			echo "<label><input type='checkbox' name='l33t' checked>l337</label>\n";
-		}else{
-			echo "<label><input type='checkbox' name='l33t'>l337</label>\n";
-		}
-		echo "</br>";
-
+		echo "<legend>Options</legend>\n";
+		echo "<fieldset>\n";
+		echo "<div class='control-group'>\n";
+		echo "<label class='checkbox'>\n";
+		if(Settings::$noregister){echo "<input type='checkbox' name='noregister' checked>";}else{echo "<input type='checkbox' name='noregister'>";}		
+		echo Settings::_("settings","noregister")."</label>\n";
+		echo "<label class='checkbox'>\n";
+		if(Settings::$forcehttps){echo "<input type='checkbox' name='forcehttps' checked>";}else{echo "<input type='checkbox' name='forcehttps'>";}		
+		echo Settings::_("settings","forcehttps")."</label>\n";	
+		echo "<label class='checkbox'>\n";
+		if(Settings::$nocomments){echo "<input type='checkbox' name='nocomments' checked>";}else{echo "<input type='checkbox' name='nocomments'>";}		
+		echo Settings::_("settings","nocomment")."</label>\n";				
+		echo "<label class='checkbox'>\n";
+		if(Settings::$nodownload){echo "<input type='checkbox' name='nodownload' checked>";}else{echo "<input type='checkbox' name='nodownload'>";}		
+		echo Settings::_("settings","nodownload")."</label>\n";		
+		echo "<label  class='checkbox'>\n";
+		if(Settings::$reverse_menu){echo "<input type='checkbox' name='reverse_menu' checked>";}else{echo "<input type='checkbox' name='reverse_menu'>";}		
+		echo Settings::_("settings","reverse_menu")."</label>\n";				
+		echo "<label  class='checkbox'>";
+		if(Settings::$hide_menu){echo "<input type='checkbox' name='hide_menu' checked>";}else{echo "<input type='checkbox' name='hide_menu'>";}		
+		echo Settings::_("settings","hide_menu")."</label>\n";		
+		echo "<label  class='checkbox'>";
+		if(Settings::$thumbs_fixed_width){echo "<input type='checkbox' name='thumbs_fixed_width' checked>";}else{echo "<input type='checkbox' name='thumbs_fixed_width'>";}		
+		echo Settings::_("settings","thumbs_fixed_width")."</label>\n";	
+		echo "<label  class='checkbox'>\n";
+		if(Settings::$l33t){echo "<input type='checkbox' name='l33t' checked>";}else{echo "<input type='checkbox' name='l33t'>";}		
+		echo Settings::_("settings","l33t")."</label>\n";	
+		echo "</div>\n";		
 		/// Max Comments
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("settings","numcomments")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='text' name='max_comments' value=\"".htmlentities(Settings::$max_comments, ENT_QUOTES ,'UTF-8')."\">
-				</div>
-			</fieldset>\n";
-
+		echo "<div class='control-group'>\n";		
+		echo "<label for='numcomments' class='control-label'>".Settings::_("settings","numcomments")."</label>";
+		echo "<div class='controls'><input id='numcomments' class='input-large' type='text' name='max_comments' value='".htmlentities(Settings::$max_comments, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";
 		/// Max Img Dir
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("settings","sens")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='text' name='max_img_dir' value=\"".htmlentities(Settings::$max_img_dir, ENT_QUOTES ,'UTF-8')."\">
-				</div>
-			</fieldset>\n";
+		echo "<div class='control-group'>\n";		
+		echo "<label for='sens' class='control-label'>".Settings::_("settings","sens")."</label>";
+		echo "<div class='controls'><input id='sens' class='input-large' type='text' name='max_img_dir' value='".htmlentities(Settings::$max_img_dir, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";
+		echo "<div class='controls controls-row'>\n";
+		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("settings","submit")."'>\n";
+		echo "</div>\n";		
+		echo "</fieldset>\n";		
 
-
-		echo "<fieldset class='alignright'><input type='submit' value='".Settings::_("settings","submit")."'/></fieldset>\n";
-		echo "</div>";
-		echo "<div class='section'><h2>Social Networks</h2>";
-
-		/// Facebook Button
-		echo "<fieldset>
-				<div class='fieldoptions'>
-				";
-		if(Settings::$like){
-			echo "<label><input type='checkbox' name='like' checked>".Settings::_("settings","fb")."</label>\n";
-		}else{
-			echo "<label><input type='checkbox' name='like'>".Settings::_("settings","fb")."</label>\n";
-		}
-		echo "</div>
-			</fieldset>\n";
-
-
+		echo "<legend>Social Networks</legend>\n";
+		echo "<fieldset>\n";
+		///FaceBook enable
+		echo "<div class='control-group'>\n";
+		echo "<label class='checkbox'>\n";
+		if(Settings::$like){echo "<input type='checkbox' name='like' checked>";}else{echo "<input type='checkbox' name='like'>";}		
+		echo Settings::_("settings","fb")."</label>\n";
+		echo "</div>\n";
 		/// Facebook App ID
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("settings","facebook_appid")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='text' name='fbappid' value=\"".htmlentities(Settings::$fbappid, ENT_QUOTES ,'UTF-8')."\">
-				</div>
-			</fieldset>\n";
-
-		echo "<fieldset class='alignright'><input type='submit' value='".Settings::_("settings","submit")."'/></fieldset>\n";
-		echo "</div>";
-		echo "<div class='section'><h2>Video</h2>";
-
-
+		echo "<div class='control-group'>\n";		
+		echo "<label for='fbappid' class='control-label'>".Settings::_("settings","facebook_appid")."</label>";
+		echo "<div class='controls'><input id='fbappid' class='input-large' type='text' name='fbappid' value='".htmlentities(Settings::$fbappid, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";		
+		echo "<div class='controls controls-row'>\n";
+		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("settings","submit")."'>\n";
+		echo "</div>\n";		
+		echo "</fieldset>\n";		
+		
+		echo "<legend>Video</legend>\n";
+		echo "<fieldset>\n";
 		/// Encode Video
-		echo "<label>".Settings::_("settings","video_comment")."</label>";
-		echo "<fieldset>
-				<div class='fieldoptions'>
-				";
-		if(Settings::$encode_video){
-			echo "<label><input type='checkbox' name='encode_video' checked>Encode Video</label>\n";
-		}else{
-			echo "<label><input type='checkbox' name='encode_video'>Encode Video</label>\n";
-		}
-		echo "</div>
-			</fieldset>\n";
-
+		echo "<div class='control-group'>\n";
+		echo "<label class='checkbox'>";
+		if(Settings::$encode_video){echo "<input type='checkbox' name='encode_video' checked>";}else{echo "<input type='checkbox' name='encode_video'>";}		
+		echo Settings::_("settings","video_comment")."</label>\n";
+		echo "</div>\n";
 		/// FFmpeg Path
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("settings","ffmpeg_path")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='text' name='ffmpeg_path' value=\"".htmlentities(Settings::$ffmpeg_path, ENT_QUOTES ,'UTF-8')."\">
-				</div>
-			</fieldset>\n";
-
+		echo "<div class='control-group'>\n";		
+		echo "<label for='ffmpeg_path' class='control-label'>".Settings::_("settings","ffmpeg_path")."</label>";
+		echo "<div class='controls'><input id='ffmpeg_path' class='input-xxlarge' type='text' name='ffmpeg_path' value='".htmlentities(Settings::$ffmpeg_path, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";	
 		/// FFmpeg command line
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("settings","ffmpeg_option")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='text' name='ffmpeg_option' value=\"".htmlentities(Settings::$ffmpeg_option, ENT_QUOTES ,'UTF-8')."\">
-				</div>
-			</fieldset>\n";
+		echo "<div class='control-group'>\n";		
+		echo "<label for='ffmpeg_option' class='control-label'>".Settings::_("settings","ffmpeg_option")."</label>";
+		echo "<div class='controls'><input id='ffmpeg_option' class='input-xxlarge' type='text' name='ffmpeg_option' value='".htmlentities(Settings::$ffmpeg_option, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";
+		echo "<div class='controls controls-row'>\n";
+		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("settings","submit")."'>\n";
+		echo "</div>\n";		
+		echo "</fieldset>\n";		
+		echo "</form>\n";			
+		echo "</div>\n";
 
 
-		echo "<fieldset class='alignright'><input type='submit' value='".Settings::_("settings","submit")."'/></fieldset>\n";
+		echo "<h3>".Settings::_("settings","generate")."</h3>\n";
+		echo "<div class='well'>\n";
+		echo "<form id='gthumb-form' class='form-horizontal' action='?t=Adm&a=GAl' method='post'>\n";
+			echo "<fieldset>\n";
+				echo "<div class='control-group'>\n";		
+					echo "<label for='ffmpeg_path' class='control-label'>".Settings::_("settings","folder")."</label>";
+					echo "<div class='controls'>";
+						echo "<select name='path' class='input-xxlarge'>";
+						echo "<option value='.'>".Settings::_("settings","all")."</option>";
+							foreach($this->folders as $f){
+								$p = htmlentities(File::a2r($f), ENT_QUOTES ,'UTF-8');
+								echo "<option value=\"".addslashes($p)."\">".basename($p)."</option>";
+							}
+						echo "</select>";		
+					echo "</div>\n";
+				echo "</div>\n";
+				echo "<div class='controls controls-row'>\n";
+					echo "<input class='btn btn-primary' type='submit' value='".Settings::_("settings","Generate")."' data-loading-text='Generating...'>\n";
+				echo "</div>\n";		
+			echo "</fieldset>\n";
+		echo "</form>";		
 		echo "</div>";
-
-		echo "</form>\n";
-
-
-		echo "<div class='section'><h2>".Settings::_("settings","generate")."</h2>";
-
-		echo "<form action='?t=Adm&a=GAl' method='post'>\n";
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("settings","folder")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<select name='path'>";
-		echo "<option value='.'>".Settings::_("settings","all")."</option>";
-		foreach($this->folders as $f){
-			$p = htmlentities(File::a2r($f), ENT_QUOTES ,'UTF-8');
-			echo "<option value=\"".addslashes($p)."\">".basename($p)."</option>";
-		}
-		echo "</select></div></fieldset>";
-		echo "<fieldset class='alignright'><input type='submit' value='Generate '/></fieldset>";
+		
+		echo "<h3>".Settings::_("settings","cleanthumbs")."</h3>\n";
+		echo "<div class='well'>\n";
+		echo "<form id='delthumb-form' class='form-horizontal' action='?t=Adm&a=DAl' method='post'>\n";
+			echo "<fieldset>\n";
+				echo "<div class='control-group'>\n";		
+					echo "<label for='cleanpath' class='control-label'>".Settings::_("settings","folder")."</label>";
+					echo "<div class='controls'>";
+						echo "<select id='cleanpath' name='cleanpath' class='input-xxlarge'>";
+						echo "<option value='.'>".Settings::_("settings","all")."</option>";
+							foreach($this->folders as $f){
+								$p = htmlentities(File::a2r($f), ENT_QUOTES ,'UTF-8');
+								echo "<option value=\"".addslashes($p)."\">".basename($p)."</option>";
+							}
+						echo "</select>";		
+					echo "</div>\n";
+				echo "</div>\n";
+				echo "<div class='controls controls-row'>\n";
+					echo "<input class='btn btn-primary' type='submit' value='".Settings::_("settings","delete_thumb")."' data-loading-text='Cleaning...'>\n";
+				echo "</div>\n";		
+			echo "</fieldset>\n";
 		echo "</form>";
+		echo"<div id='display_action' class='alert hide'></div>";				
 		echo "</div>";
 	}
 }

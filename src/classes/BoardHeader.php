@@ -62,6 +62,7 @@ class BoardHeader{
 		$this->path 	=	urlencode(File::a2r($path));
 		$this->title 	=	$title;
 		$this->textinfo 	=	new TextInfo($path);
+		$this->upload	=	new AdminUpload();
 	}
 	
 	/**
@@ -71,30 +72,30 @@ class BoardHeader{
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){
-		echo 	"<div class='header'>";
-		/// Title
-		if ($this->textinfo->title) { 
-			echo 	"<h1>".$this->textinfo->title."</h1>";
-		} else { 
-			echo 	"<h1>".(htmlentities($this->title, ENT_QUOTES ,'UTF-8'))."</h1>";	
-		}
-		
-			if(CurrentUser::$admin){
-			/// Edit button
-			echo 	"<span>\n";
-			echo 	"<div id='edit_textinfo'><a href='#' class='button'>".Settings::_("textinfo","edit")."</a></div>\n";
-			echo 	"</span>\n";
-		}		
-		
-		if(!Settings::$nodownload){
-			/// Zip button
-			echo 	"<span>\n";
-			echo 	"<a href='?t=Zip&f=$this->path' class='button'>".Settings::_("boardheader","download")."</a>\n";
-			echo 	"</span>\n";
-		}
-		
-		echo 	"</div>\n";
+		echo "<div class='page-header header'>\n";
+			/// Title
+			if ($this->textinfo->title) { 
+				echo 	"<h1 class='album-title'>".$this->textinfo->title."</h1>\n";
+			} else { 
+				echo 	"<h1 class='album-title'>".(htmlentities($this->title, ENT_QUOTES ,'UTF-8'))."</h1>\n";	
+			}
+		echo "</div>\n";
+		echo "<div id='textinfo'>\n";
 		$this->textinfo->toHTML();
+		echo "</div>\n";
+		if(CurrentUser::$admin || CurrentUser::$uploader){				
+			$this->upload->toHTML();
+			echo "
+			<div id='view_style' class='btn-group' data-toggle='buttons-radio'>\n
+				<button id='view-thumb' class='btn btn-mini active' type='button'><i class='icon-th'></i></button>\n
+				<button id='view-list' class='btn btn-mini' type='button'><i class='icon-th-list'></i></button>\n
+			</div>\n";			
+		}
+
+			
+			
+			
+			
 	}
 }
 

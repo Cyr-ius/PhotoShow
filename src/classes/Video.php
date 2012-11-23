@@ -81,11 +81,11 @@ class Video implements HTMLObject
 	 */	
 	public function ExecInBackground($cmd) {	
 		error_log('DEBUG/Video: Background Execution : '.$cmd,0);
-        $pid = 0;
+		$pid = 0;
 		if (substr(php_uname(), 0, 7) == "Windows"){
 		   $valti = rand();
 		   exec("wmic process call create '".$cmd."','".File::root()."'",$output);
-		   $out = split('=',$output[5]);
+		   $out = explode('=',$output[5]);
 		   $pid = intval($out[1]);
 		} else {
 		   exec($cmd . " > /dev/null 2>&1 & echo $!", $output);   
@@ -113,7 +113,7 @@ class Video implements HTMLObject
 	
         $duration = $output[0];
 
-        $duration_array = split(':', $duration);
+        $duration_array = explode(':', $duration);
         $duration = intval($duration_array[1]) * 3600 + intval($duration_array[2]) * 60 + intval($duration_array[3]);
 
         //error_log('DEBUG/Video: duration of '.$file.' is '.$duration.' seconds');
@@ -142,7 +142,7 @@ class Video implements HTMLObject
         $match = $matches[0];
 
 
-        $dimensions_array = split('x', $match);
+        $dimensions_array = explode('x', $match);
         $orig_x = intval($dimensions_array[0]);
         $orig_y = intval($dimensions_array[1]);
         //error_log('DEBUG/Video: dimension of '.$file.' is '.$orig_x.'x'.$orig_y);
@@ -207,7 +207,7 @@ class Video implements HTMLObject
             $dimensions = self::GetScaledDimension($file, 320);
             
             $u=Settings::$ffmpeg_path.' -itsoffset -'.$offset.'  -i "'.$file.'" -vcodec mjpeg -vframes 1 -an -f rawvideo -s '.$dimensions['x'].'x'.$dimensions['y'].' -y "'.$thumb_path_jpg.'"';
-            self::ExecInBackground($u);
+            exec($u);
         }
 
         if (self::NoJob($file))// We check that first to allow the clean of old job files

@@ -53,45 +53,25 @@ abstract class Page implements HTMLObject
 		 * @author Thibaud Rohmer
 		 */
 		public function header($head_content=NULL){
-			echo "<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>\n";
-			echo "<html>";
+			echo "<!DOCTYPE html>\n";
+			echo "<html lang='fr'>";
 			echo "<head>\n";
 			echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>\n";
+			echo "<meta name='viewport' content='width=device-width, initial-scale=1.0'>\n";
 			echo "<title>".Settings::$name."</title>\n";
-			echo "<meta name='author' content='Thibaud Rohmer'>\n";
 			echo "<link rel='icon' type='image/ico' href='inc/favico.ico'>";
 
 			/// CSS
+			echo "<link rel='stylesheet' href='src/stylesheets/normalize.css' type='text/css' media='screen' charset='utf-8'>";
+			echo "<link rel='stylesheet' href='bootstrap/css/bootstrap.css'>";
+			echo "<link rel='stylesheet' href='bootstrap/css/bootstrap-responsive.css'>";
+			echo "<link rel='stylesheet' href='src/stylesheets/jquery.plupload.queue.css'>";
+			echo "<link rel='stylesheet' href='inc/jquery.scroll.css'>";					
+			echo "<link rel='stylesheet' href='src/stylesheets/perso.css'>";
 
-			echo "<link rel='stylesheet' href='src/stylesheets/main.css' type='text/css' media='screen' charset='utf-8'>\n";
-			echo "<link rel='stylesheet' href='src/stylesheets/page.css' type='text/css' media='screen' charset='utf-8'>\n";
-			echo "<link rel='stylesheet' href='src/stylesheets/panels.css' type='text/css' media='screen' charset='utf-8'>\n";
-			echo "<link rel='stylesheet' href='src/stylesheets/forms.css' type='text/css' media='screen' charset='utf-8'>\n";
 
 			/// Trick to hide "only-script" parts
 	 		echo "<noscript><style>.noscript_hidden { display: none; }</style></noscript>";
-
-			/// JS
-			echo "<script src='inc/jquery.js'></script>\n";
-			echo "<script src='inc/jquery-ui.js'></script>\n";
-			echo "<script src='inc/mousewheel.js'></script>\n";
-			echo "<script src='inc/jquery.scrollTo.js'></script>\n";
-			echo "<script src='inc/jquery.fileupload.js'></script>\n";
-
-
-			echo "<script src='src/js/menu.js'></script>\n";
-			echo "<script src='src/js/panel.js'></script>\n";
-			echo "<script src='src/js/slideshow.js'></script>\n";
-			echo "<script src='src/js/image_panel.js'></script>\n";
-			echo "<script src='src/js/keyboard.js'></script>\n";
-			
-			if(CurrentUser::$admin || CurrentUser::$uploader){
-				echo "<link rel='stylesheet' href='inc/fileupload-ui.css' type='text/css' media='screen' charset='utf-8'>\n";
-				echo "<link rel='stylesheet' href='src/stylesheets/admin.css' type='text/css' media='screen' charset='utf-8'>\n";
-
-				echo "<script src='inc/jquery.fileupload-ui.js'></script>\n";
-				echo "<script src='src/js/admin.js'></script>\n";
-			}
 
             // Add specific head content if needed
             if ($head_content)

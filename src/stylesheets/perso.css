@@ -1,0 +1,344 @@
+body {
+	background: none repeat scroll 0 0 #DDDDDD;
+}
+
+a {
+	color:inherit;
+}
+
+.center {
+	padding-right:20px;
+	right:0px;
+	bottom:0;
+	top:40px;
+	position:absolute;
+	overflow-x:hidden;
+	min-width:300px;
+	z-index:-1;
+}
+
+.page {
+	left:0;
+	right:0;
+	bottom:0;
+	top:42px;
+	position:absolute;
+	overflow:hidden;
+}
+
+.infos {
+	top:100px;
+	position: fixed;
+	padding:0;
+	right: 50px;
+}
+
+.menu {
+	box-shadow:		0px 2px 5px #111;	
+	top:42px;
+	bottom:0;
+    font-size: 10pt;
+    left: 0;
+    padding-top: 10px;
+	padding-left: 0;
+    padding-right: 0;	
+    margin-bottom: 2px;	
+    word-wrap: break-word;
+	position:absolute;
+	overflow-x:hidden;
+	overflow-y:auto;
+	z-index:-1;
+	
+}
+
+.exif {
+	display: none;
+    box-shadow: 0 2px 5px #111111;
+    height: 60px;
+	bottom: 30px;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.66;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    width: 600px;	
+}
+
+.textinfoadmin {
+    display: none;
+    margin-bottom: 5px;
+}
+
+.ui-draggable {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	z-index:1070;
+}
+
+.loading {
+  display: none;
+  background: url('../../inc/loading.gif') no-repeat center center;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+}
+
+.item.selected,  .item:hover, .item-video.selected, .item-video:hover {
+    border-color: #0088E8;
+}
+
+/* Corbeille */	
+.bin{
+	text-align:		center;
+	width:50px;
+}
+
+.bin.hovered{
+	background:		red;
+}
+/* Menu Bar */
+.navbar .btn {
+	margin-top:0;
+}
+
+.navbar .container {
+	width:100%;
+}
+
+.navbar .container .nav > li > a {
+	padding-left:5px;
+	padding-right:5px;
+}
+	
+/* Thumbnails */
+.thumbnail > img {
+	 height : 120px;
+	 width : 120px;	 
+}
+
+li.selected > a.thumbnail {
+	border-color : #0088CC;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+}
+
+.directory {
+	box-shadow: 0 2px 5px #333333;
+}
+
+.album > img {
+	 height : 120px;
+	 width : 120px;
+	 opacity:0;
+}
+
+.dirname {
+	padding-top: 5px;
+    position: absolute;
+    text-align: center;
+    text-shadow: 0 2px 5px #ffffff;
+    width: 120px;
+	height:40px;
+    word-wrap: break-word;
+	overflow:auto;
+}
+
+/* Linear_Panel */
+
+.linear_panel {
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
+	bottom:0px;
+	position:absolute;
+	left:0;
+	right:0;
+	margin-right:20px;
+	}
+
+.linear_panel ul li {
+
+        display: -moz-inline-stack;
+        display: inline-block;
+        vertical-align: top;
+        margin: 5px;
+        zoom: 1;
+        *display: inline;
+		float: none;
+}
+
+.linear_panel ul {
+ 	margin:0;
+	padding:0;
+	display:inline-block;
+}
+
+.linear_panel .thumbnail > img {
+	height : 90px;
+ 	min-width : 90px;
+}
+
+/* Image Panel */
+.image_panel {
+	position:absolute;
+	bottom:120px;
+	left:0;
+	right:0;
+	top:0;
+}
+
+.image_panel ul {
+ 	margin:0;
+	padding:0;
+}
+
+.image_panel li {
+ 	margin:0;
+	padding:0;
+	float:none;
+}
+
+
+
+/* BigImage */
+#image_big {
+    height: auto;
+    width: auto;
+}
+
+/* Image_Bar */
+.image_bar {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+}
+
+.image_bar li {
+display:inline-block;
+padding-left : 5px;
+}
+
+.bigimage, .bigvideo {
+    bottom: 25px;
+    overflow: hidden;
+    position: absolute;
+    text-align: center;
+    top: 10px;
+	left:0px;
+	right:0px;
+}
+
+/* Menu */
+
+li.submenu {
+	 margin: 0 0 0 5px;
+	 padding-left: 5px;
+}
+
+li.submenu > ul  {
+    display: none;
+}
+
+li.submenu.hovered >a {
+	background-color: red !important;
+}
+
+li.submenu.selected > ul  {
+    display: inherit;
+}
+
+
+
+li.submenu.selected > a  {
+    border-left: 2px solid #0088E8;
+    padding-left: 3px;
+	background-color:#eeeeee;
+}
+
+/* Modal */
+
+.modaladmin {
+   background-clip: padding-box;
+    background: none repeat scroll 0 0 #DDDDDD;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 6px 6px 6px 6px;
+    bottom: 40px;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    left: 20px;
+	right:20px;
+	bottom:40px;
+	top:40px;
+    overflow: auto;
+    position: fixed;
+    z-index: 1050;
+}
+
+.modal-header {
+	background: -moz-linear-gradient(-90deg, #A0E800, #64C800) repeat scroll 0 0 transparent;
+	background: -o-linear-gradient(-90deg, #A0E800, #64C800) repeat scroll 0 0 transparent;
+	background: -webkit-linear-gradient(-90deg, #A0E800, #64C800) repeat scroll 0 0 transparent;
+	background: -ms-linear-gradient(-90deg, #A0E800, #64C800) repeat scroll 0 0 transparent;
+	background: linear-gradient(-90deg, #A0E800, #64C800) repeat scroll 0 0 transparent;
+	
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 2px 2px black;
+    color: white;
+    font-style: normal;
+    padding: 6px 6px 6px 15px;
+    text-shadow: 1px 1px 3px black;
+	height:25px;	
+	border-bottom:none;
+}
+
+.modal-body {
+    height: 100%;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+	margin-top:15px;
+	padding-top: 5px;
+    max-height: 85%;
+}
+
+.modal-footer {
+    bottom: 0;
+    left: 0;
+    right: 0;	
+    position: absolute;
+	padding-top : 5px;
+	padding-bottom : 5px;
+}
+
+.modal-infos {
+	text-align : center;
+	margin:0;
+	padding:0;
+}
+
+/* Preference */
+
+#AdminTab {
+	list-style: none outside none;
+}
+
+#AdminTab > li {
+	float: left;
+    margin-left: 10px;
+    margin-top: 2px;	
+}
+
+/* Account and Group */
+.accountitem:hover {
+    background: none repeat scroll 0 0 #0088E8;
+    color: white;
+}
+
+.groupitem , .accountitem {
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 2px 2px black;	
+}

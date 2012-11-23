@@ -57,8 +57,6 @@ class Infos implements HTMLObject
 		if(CurrentUser::$admin || CurrentUser::$uploader){
 			$this->info = new AdminPanel();
 		}
-		
-		$this->exif = new Exif(CurrentUser::$path);
 
 		if(!Settings::$nocomments){
 			$this->comments	=	new Comments(CurrentUser::$path);
@@ -67,17 +65,6 @@ class Infos implements HTMLObject
 	}
 
 	public function toHTML(){
-		if(CurrentUser::$admin || CurrentUser::$uploader ){
-		$this->info->toHTML();
-		}
-		
-		$this->exif->toHTML();
-
-		echo "<div id='comments' class='box'>\n";
-		if(!Settings::$nocomments){
-			$this->comments->toHTML();
-		}
-		echo "</div>\n";
 
 		echo "<div id='share'>\n";
 		

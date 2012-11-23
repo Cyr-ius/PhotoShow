@@ -83,9 +83,12 @@ class Account extends Page
 	 * @author Thibaud Rohmer
 	 */
 	public function __construct($login=NULL,$key=NULL){
-		if(!isset($login) && !isset($key))
+		if(!isset($login) && !isset($key)) {
+			Json::$json = array("action"=>"Account",
+				"result"=>1,
+				"desc"=>"Login not found");			
 			return false;
-		
+		}
 		$xml_infos	=	CurrentUser::$accounts_file;
 		$xml		=	simplexml_load_file($xml_infos);
 
@@ -103,12 +106,17 @@ class Account extends Page
 
 				foreach($account->groups->children() as $group){
 					$this->groups[] = (string)$group;
-				}
-
+				}	
+				Json::$json = array("action"=>"Account",
+					"result"=>0,
+					"desc"=>"Operation on ".$login." account sucessfull");					
 				return true;
 			}
 		}
-		//throw new Exception("Login $login not found");
+		//throw new Exception("Login $login not found");		
+		Json::$json = array("action"=>"Account",
+			"result"=>1,
+			"desc"=>"Login not found");				
 		return false;
 	}
 	
@@ -120,14 +128,16 @@ class Account extends Page
 	 * @author Thibaud Rohmer
 	 */ 
 	public static function create($login, $password, $verif, $groups=array(),$name='',$email=''){
-		
 		// Check if login already exists
-		if(Account::exists($login) || (!CurrentUser::$admin && Settings::$noregister) || $password != $verif)
+		if(Account::exists($login) || (!CurrentUser::$admin && Settings::$noregister) || $password != $verif) {
+			Json::$json = array("action"=>"Account",
+				"result"=>1,
+				"desc"=>"Error : No Rights or Syntax error");
 			return false;
-
+		}
 		// All users belong to the "user" group
 		$groups[]="user";
-		
+
 		$xml_infos=CurrentUser::$accounts_file;
 		
 		if(!file_exists($xml_infos) || sizeof(Account::findAll()) == 0 ){
@@ -143,18 +153,24 @@ class Account extends Page
 
 
 		if( preg_match("/[^a-z0-9]/i", $login) || strlen($password) < 6){
+			Json::$json = array("action"=>"Account",
+				"result"=>1,
+				"desc"=>"Error : Account (a-z et 0-9) or password inccorect (length > 6)");				
 			return false;
 		}
 
 		$acc			=	new Account();
 		$acc->login		=	$login;
 		$acc->password	=	Account::password($password);
-		$acc->groups	=	$groups;
+		$acc->groups		=	$groups;
 		$acc->name		=	$name;
 		$acc->email		=	$email;
 		$acc->language 	=	"";
 		$acc->key 		=	"";
 		$acc->save();
+		Json::$json = array("action"=>"Account",
+			"result"=>0,
+			"desc"=>"Create Account for ".$login." sucessfull");					
 		return true;
 	}
 	
@@ -256,6 +272,7 @@ class Account extends Page
 			$account->addChild(		'language' ,		$this->language);
 			$account->addChild(		'key' ,		$this->key);
 		}
+		
 		// Create the groups
 		$groups = $account->addChild('groups');
 		foreach($this->groups as $group){
@@ -285,17 +302,23 @@ class Account extends Page
 	public static function edit($login=NULL, $old_password=NULL, $password=NULL, $name=NULL, $email=NULL, $groups=array(), $language=NULL){
 		/// Only the admin can modify other accounts
 		if( !CurrentUser::$admin && $login != CurrentUser::$account->login ){
+			Json::$json = array("action"=>"Account",
+				"result"=>1,
+				"desc"=>"Error : No Rights for ".$login);	
 			return;
 		}
 
-		if(isset($login) && (preg_match("/^[A-Z][a-zA-Z -]+$/", $login) === 0) ){
+		if(isset($login) && (preg_match("/[^a-z0-9]/i", $login) === 0) ){
 			$acc = new Account($login);
 		}else{
 			$acc = CurrentUser::$account;
 		}
-
+		
 		/// Check password
-		if( !CurrentUser::$admin && Account::password($old_password) != $acc->password ){
+		if (!CurrentUser::$admin && Account::password($old_password) != $acc->password )  {
+			Json::$json = array("action"=>"Account",
+				"result"=>1,
+				"desc"=>"Error : New and old password required ");	
 			return;
 		}
 
@@ -314,7 +337,7 @@ class Account extends Page
 
 
 		if(isset($language)){
-			echo "woot";
+			//~ echo "woot";
 			$acc->language = $language;
 		}
 
@@ -324,6 +347,10 @@ class Account extends Page
 
 		/// Save account
 		$acc->save();
+		Json::$json = array("action"=>"Account",
+			"result"=>0,
+			"desc"=>"Save Account for ".$login." sucessfull");			
+		return;				
 	}
 	
 	/**
@@ -340,12 +367,11 @@ class Account extends Page
 		$i=0;
 		foreach( $xml as $acc ){
 			if((string)$acc->login == $login){
-                unset($xml->account[$i]);
-                break;
+				unset($xml->account[$i]);
+				break;
 			}
-            $i++;
+		$i++;
 		}
-		
 		$xml->asXML($xml_infos);
 	}
 
@@ -442,132 +468,74 @@ class Account extends Page
 
 		return $rights;
 	}
-
-	/**
-	 * Display a form to edit account
-	 * 
-	 * 
-	 */
-	 public function toHTML(){
-	 	$this->header();
-	 	echo "<div class='center'>\n";
-
-		if(CurrentUser::$admin){
-
-			$r = new RegisterPage(false,true);
-			$r->toHTML();
-
-			echo "<div class='section'><h2>".Settings::_("account","account")."</h2>";
-			echo "<form method='post' action='#'>";
-			echo "<fieldset><div class='fieldname'><span>".Settings::_("account","editing")."</span></div><div><select name='login'>";
-			foreach(Account::findall() as $a){
-				echo "<option value=\"".addslashes($a['login'])."\"";
-				if($this->login == $a['login']){
-					echo " selected ";
-				}
-				echo ">".$a['login']."</option>";
-
-			}
-	 		echo "</select></div></fieldset>\n";
-	 		echo "<fieldset class='alignright'><input type='submit' class='button blue'></fieldset>\n";
-
-			echo "</form>";
-			echo "</div>";
+	 
+	 public function toHTML($addUser=null) {
+	 
+		if ($addUser) {
+			echo "<form id='adminaccount-form' class='form-horizontal' method='post' action='?t=Adm&a=Acc'>\n";
 		}else{
-			echo Settings::_("account","editing").htmlentities($this->login, ENT_QUOTES ,'UTF-8');		
-		}
-
-		echo "<div class='section'><h2>".Settings::_("account","account")."</h2>";
-
-	 	echo "<form method='post' action='#'>\n";
-
+			echo "<form id='account-form' class='form-horizontal' method='post' action='?t=MyA'>\n";
+		}	 
+		echo "<legend>".Settings::_("account","account")."</legend>\n";		
+		echo "<fieldset>\n";			
 		/// Login
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("account","Login")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='text' name='login' readonly='readonly' value=\"".htmlentities($this->login, ENT_QUOTES ,'UTF-8')."\">
-				</div>
-			</fieldset>\n";
-
+		echo "<div class='control-group'>\n";
+		echo "<label for='login' class='control-label'>".Settings::_("account","Login")."</label>";
+		echo "<div class='controls'><input id='login' class='input-large' type='text' name='login' readonly='readonly' value='".htmlentities($this->login, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";
 		/// Name
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("account","name")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='text' name='name' value=\"".htmlentities($this->name, ENT_QUOTES ,'UTF-8')."\">
-				</div>
-			</fieldset>\n";
-
+		echo "<div class='control-group'>\n";
+		echo "<label for='name' class='control-label'>".Settings::_("account","name")."</label>";
+		echo "<div class='controls'><input id='name' class='input-large' type='text' name='name' value='".htmlentities($this->name, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";		
 		/// Email
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("account","email")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='text' name='email' value=\"".htmlentities($this->email, ENT_QUOTES ,'UTF-8')."\">
-				</div>
-			</fieldset>\n";
-
-
+		echo "<div class='control-group'>\n";
+		echo "<label for='email' class='control-label'>".Settings::_("account","email")."</label>";
+		echo "<div class='controls'><input id='email' class='input-large' type='text' name='email'  value='".htmlentities($this->email, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";			
 		/// Language
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("settings","language")."</span>
-				</div>
-				<div class='fieldoptions'><select>
-				";
-		foreach(Settings::$ava_loc as $l){
-			$p = substr(htmlentities($l, ENT_QUOTES ,'UTF-8'),0,-4);
-			echo "<option value=\"".addslashes($p)."\"";
-			if($p == $this->language){
-				echo " selected ";
-			}
-			echo ">".$p."</option>";
+		echo "<div class='control-group'>\n";
+		echo "<label for='language' class='control-label'>".Settings::_("account","language")."</label>";
+		echo "<div class='controls'><select id='language' name='language' class='input-large'>";
+			foreach(Settings::$ava_loc as $l){
+				$p = substr(htmlentities($l, ENT_QUOTES ,'UTF-8'),0,-4);
+				echo "<option value=\"".addslashes($p)."\"";
+				if($p == $this->language){
+					echo " selected='selected' ";
+				}
+				echo ">".$p."</option>";
+			}			
+		echo "</select></div>\n";
+		echo "</div>\n";	
+		/// Key
+		echo "<div class='control-group'>\n";
+		echo "<label for='Key' class='control-label'>".Settings::_("account","key")."</label>";
+		if ($addUser) {
+			echo "<div class='controls'><input id='Key' class='input-large' type='text' name='key' readonly='readonly' value='".htmlentities($this->key, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		} else {
+			echo "<div class='controls'><input id='Key' class='input-large' type='text' name='key' readonly='readonly' value='".htmlentities($this->get_key(), ENT_QUOTES ,'UTF-8')."'></div>\n";
 		}
-		echo	"</select></div>
-			</fieldset>\n";
-
-		/// Login
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("account","Key")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='text' name='key' readonly='readonly' value=\"".htmlentities($this->get_key(), ENT_QUOTES ,'UTF-8')."\">
-				</div>
-			</fieldset>\n";
-
+		echo "</div>\n";			
 		/// Password
-		echo "<fieldset>
-				<div class='fieldname'>
-					<span>".Settings::_("account","password")."</span>
-				</div>
-				<div class='fieldoptions'>
-					<input type='password' name='password' value=''>
-				</div>
-			</fieldset>\n";
-
+		echo "<div class='control-group'>\n";
+		echo "<label for='password' class='control-label'>".Settings::_("account","password")."</label>";
+		echo "<div class='controls'><input id='password' class='input-large' type='password' name='password'  value='".htmlentities($this->password, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";
 	 	if(CurrentUser::$admin){
 	 		echo "<input type='hidden' value='plip' name='edit'>";
  		}else{
 	 		/// Old Pass
-			echo "<fieldset>
-					<div class='fieldname'>
-						<span>".Settings::_("account","oldpass")."</span>
-					</div>
-					<div class='fieldoptions'>
-						<input type='password' name='old_password' value=''>
-					</div>
-				</fieldset>\n";
+			echo "<div class='control-group'>\n";
+			echo "<label for='old_password' class='control-label'>".Settings::_("account","oldpass")."</label>";
+			echo "<div class='controls'><input id='old_password' class='input-large' type='password' name='old_password'  value=''></div>\n";
+			echo "</div>\n";				
  		}
-
-	 	echo "<fieldset class='alignright'><input type='submit' class='button blue' value='".Settings::_("account","submit")."'>\n";
-	 	echo "</fieldset></form>\n";
-	 	echo "</div>\n";
-	 }
+		echo "<div class='controls controls-row'>\n";
+		echo "<input  class='btn btn-primary' type='submit' value='".Settings::_("account","submit")."'>\n";
+		echo "</div>\n";
+		echo "</fieldset>\n";		
+		echo "</form>\n";		
+	 }	 
 
 }
 

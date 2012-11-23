@@ -79,56 +79,46 @@ class BoardDir implements HTMLObject
 	public function toHTML(){
 		
 		if(sizeof($this->images) > 0){
-			$getfile =	"t=Thb&f=".urlencode(File::a2r($this->images[0]));
+			$getfile =	"?t=Thb&f=".urlencode(File::a2r($this->images[0]));
+			$getafile =	urlencode(File::a2r($this->images[0]));
+			
 		}else{
-			$getfile = 	"";
-		}			
-		
-		/// We display the image as a background
-		echo 	"<div class='directory'>";
+			$getfile = 	"./inc/img.png";
+			$getafile=	"";
+		}	
 
-		echo 	"<span class='name hidden'>".htmlentities(basename($this->path), ENT_QUOTES ,'UTF-8')."</span>";
-		echo 	"<span class='path hidden'>".htmlentities(File::a2r($this->path), ENT_QUOTES ,'UTF-8')."</span>";
-
-		echo 	"<div class='dir_img'";
-		echo 	" style='";
-		echo 	" background: 		url(\"?$getfile\") no-repeat center center;";
-		echo 	" -webkit-background-size: cover;";
-		echo 	" -moz-background-size: cover;";
-		echo 	" -o-background-size: cover;";
-		echo 	" background-size: 	cover;";
-		echo 	"'>\n";
-		echo 	"<span class='img_bg hidden'></span>";
-
+		echo "\t<li class='dir_img img-rounded ui-draggable ui-droppable directory' style='
+				margin-bottom:50px;
+				background: 		url(\"$getfile\") no-repeat center center;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: 	cover;				
+				'>\n";
+		if (File::LastModified($this->path,14)) {echo "<i class='icon-star icon-white' style='position:absolute;'></i>";}
+		echo "\t\t<a id='album' class='album' href='?f=".$this->url."'>";
+		echo 	"<img src='./inc/img.png' width='100%' height='100%'>";
+		echo "</a>\n";	
+		echo	"<div class='dirname'>".substr(htmlentities(basename($this->path), ENT_QUOTES ,'UTF-8'),0,26)."</div>";	
+		echo 	"\t\t<span class='name hide'>".htmlentities(basename($this->path), ENT_QUOTES ,'UTF-8')."</span>\n";
+		echo 	"\t\t<span class='path hide'>".htmlentities(File::a2r($this->path), ENT_QUOTES ,'UTF-8')."</span>\n";
+		echo 	"\t\t<span class='img_bg hide'>".$getafile."</span>\n";
 		/// Images in the directory
 		if( sizeof($this->images) > Settings::$max_img_dir ){
 			for($i=0;$i < Settings::$max_img_dir;$i++){
-				
 				$pos = floor(sizeof($this->images) *  $i / Settings::$max_img_dir );
-				
 				if(Judge::view($this->images[$pos])){
-					echo "<div class='alt_dir_img hidden'>".urlencode(File::a2r($this->images[$pos]))."</div>";
+					echo "\t\t<span class='alt_dir_img hide'>".urlencode(File::a2r($this->images[$pos]))."</span>\n";
 				}
-
 			}
 		}else{
 			foreach($this->images as $img){
 				if(Judge::view($img)){
-					echo 	"<div class='alt_dir_img hidden'>".urlencode(File::a2r($img))."</div>";
+					echo 	"\t\t<span class='alt_dir_img hide'>".urlencode(File::a2r($img))."</span>\n";
 				}
 			}
 		}
-		echo 	"<a href='?f=$this->url'>";
-		echo 	"<img src='./inc/img.png' width='100%' height='100%'>";
-		echo 	"</a>\n";
-		echo 	"</div>\n";
-		echo 	"<div class='dirname'>";
-
-		echo 	htmlentities(basename($this->path), ENT_QUOTES ,'UTF-8');			
-
-
-		echo 	"</div>\n";
-		echo 	"</div>\n";
+		echo "\t</li>\n";
 	}
 }
 

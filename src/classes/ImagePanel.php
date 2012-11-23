@@ -77,39 +77,31 @@ class ImagePanel implements HTMLObject
 			return;
 		}
 
-        $file_type = File::Type($file);
+		$file_type = File::Type($file);
 
-        if($file_type == "Image"){
-            /// Create Image object
-            $this->image	=	new Image($file);
-        }
-        elseif($file_type == "Video"){
-            /// Create Video object
-            $this->video	=	new Video($file);		
-        }		
+		if($file_type == "Image"){
+		    /// Create Image object
+		    $this->image	=	new Image($file);
+		}
+		elseif($file_type == "Video"){
+		    /// Create Video object
+		    $this->video	=	new Video($file);		
+		}		
 		
 		/// Create Image object
 		$this->imagebar	=	new ImageBar($file);
 
-		/// Create EXIF object
-		$this->exif		=	new Exif($file);
+		$pageURL = Settings::$site_address."/?f=".urlencode(File::a2r($file));
 		
-		if(!Settings::$nocomments){
-			/// Create Comments object
-			$this->comments	=	new Comments($file);
+		// generate the header - opengraph metatags for facebook
+		$this->page_header = "<meta property=\"og:url\" content=\"".$pageURL."\"/>\n"
+		    ."<meta property=\"og:site_name\" content=\"".Settings::$name."\"/>\n"
+		    ."<meta property=\"og:type\" content=\"website\"/>\n"
+		    ."<meta property=\"og:title\" content=\"".Settings::$name.": ".File::a2r($file)."\"/>\n"
+		    ."<meta property=\"og:image\" content=\"".Settings::$site_address."/?t=Thb&f=".urlencode(File::a2r($file))."\"/>\n";
+		if (Settings::$fbappid){
+		    $this->page_header .= "<meta property=\"fb:app_id\" content=\"".Settings::$fbappid."\"/>\n";
 		}
-
-        $pageURL = Settings::$site_address."/?f=".urlencode(File::a2r($file));
-        
-        // generate the header - opengraph metatags for facebook
-        $this->page_header = "<meta property=\"og:url\" content=\"".$pageURL."\"/>\n"
-            ."<meta property=\"og:site_name\" content=\"".Settings::$name."\"/>\n"
-            ."<meta property=\"og:type\" content=\"website\"/>\n"
-            ."<meta property=\"og:title\" content=\"".Settings::$name.": ".File::a2r($file)."\"/>\n"
-            ."<meta property=\"og:image\" content=\"".Settings::$site_address."/?t=Thb&f=".urlencode(File::a2r($file))."\"/>\n";
-        if (Settings::$fbappid){
-            $this->page_header .= "<meta property=\"fb:app_id\" content=\"".Settings::$fbappid."\"/>\n";
-        }
 
 		/// Set the Judge
 		$this->judge 	=	new Judge($file);
@@ -122,35 +114,24 @@ class ImagePanel implements HTMLObject
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){
-        if (!isset($this->image) && !isset($this->video)){
-            return;
-        }
-        /*
-		echo "<div id='exif' class='box'>\n";
-		$this->exif->toHTML();
-         */
-
+		if (!isset($this->image) && !isset($this->video)){
+			echo "<ul><li class='span12'><a href='' class='thumbnail'><img id='image_big' src=''></a></li></ul>";
+			return;
+		}
 		if(isset($this->image)){
-			echo "<div id='bigimage'>\n";
+			echo "<div class='bigimage'>\n";
 			$this->image->toHTML();
 			echo "</div>\n";
-		}
-        elseif(isset($this->video)){
-			echo "<div id='bigvideo'>\n";
+		}	
+		elseif(isset($this->video)){
+			echo "<div class='bigvideo'>\n";
 			$this->video->toHTML();
 			echo "</div>\n";
 		}		
-
-		echo "<div id='image_bar'>\n";
+		echo "<div class='well exif '></div>";
+		echo "<ul class='image_bar' id='image_bar'>\n";
 		$this->imagebar->toHTML();
-		echo "</div>\n";
-/*
-		echo "<div id='comments' class='box'>\n";
-		if(!Settings::$nocomments){
-			$this->comments->toHTML();
-		}
-		echo "</div>\n";
-*/
+		echo "</ul>\n";
 	}
 	
 }

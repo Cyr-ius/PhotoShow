@@ -69,6 +69,7 @@ class Exif implements HTMLObject
 			return;
 		}
 		
+		
 		/// No right to view
 		if(!Judge::view($file))
 			return;
@@ -120,16 +121,21 @@ class Exif implements HTMLObject
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){
-		if($this->exif){
-			echo "<div class='section'>";
-			echo '<h2>Exif</h2>';
-			echo "<table>";		
-			foreach($this->exif as $name=>$value){
-				echo "<tr><td class='td_data'>".htmlentities($name, ENT_QUOTES ,'UTF-8')."</td>";
-				echo "<td class='td_value'>".htmlentities($value, ENT_QUOTES ,'UTF-8')."</td></tr>\n";
-			}
-			echo "</table>\n";
-			echo "</div>";
+		if($this->exif){	
+				echo "<div class='row-fluid'>";	
+				echo "<span class='span6' style='min-height:0px;'>Name : ".$this->exif['Name']."</span>";
+				echo "<span class='span6'  style='min-height:0px;'>Make : ".$this->exif['Make']."</span>";				
+				echo "</div>\n";
+				echo "<div class='row-fluid'>";	
+				echo "<span class='span6'  style='min-height:0px;'>Model : ".$this->exif['Model']."</span>";
+				echo "<span class='span6'  style='min-height:0px;'>Original Date : ".$this->exif['Original Date']."</span>";					
+				echo "</div>\n";				
+				echo "<div class='row-fluid'>";		
+				echo "<span class='span2'>Expo : ".$this->exif['Expo']."</span>";				
+				echo "<span class='span4'>Focal Length : ".$this->exif['Focal Length']."</span>";				
+				echo "<span class='span4'>ApertureValue : ".$this->exif['Aperture']."</span>";				
+				echo "<span class='span2'>ISO : ".$this->exif['ISO']."</span>";				
+				echo "</div>\n";					
 		}
 	}
 	
@@ -169,8 +175,7 @@ class Exif implements HTMLObject
 	private function parse_exif($d,$raw_exif){
 		
 		/// Values that don't need to be processed
-        $untouched=array('FileName','Model','Make','ISOSpeedRatings',
-            'DateTimeOriginal', 'DateTimeDigitized', 'DateTime');
+		$untouched=array('FileName','Model','Make','ISOSpeedRatings','DateTimeOriginal', 'DateTimeDigitized', 'DateTime');
 		
 		/// If value doesn't need to be processed, return it
 		if(in_array($d,$untouched)) 

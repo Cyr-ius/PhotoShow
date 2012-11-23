@@ -98,19 +98,21 @@ class Image implements HTMLObject
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){
-		echo 	"<div id='image_big' ";
-		echo 	"style='";
-		echo 		" max-width:".$this->x."px;";
-		echo 		" background: black url(\"?t=".$this->t."&f=$this->fileweb\") no-repeat center center;";
-		echo 		" background-size: contain;";
-		echo 		" -moz-background-size: contain;";
-		echo 		" height:100%;";
-		echo 	"';>";
+	
+		echo "<div style='    
+		background-attachment: scroll;
+		background-clip: border-box;
+		background-origin: padding-box;
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: contain;
+		height: 100%;		
+		max-width: 2048px;
+		background-image:url(\"?t=".$this->t."&f=".$this->fileweb."\");
+		'>\n";
+		echo "<a href='?f=".$this->dir."'><img width='100%' height='100%' style='opacity:0;' src='inc/loading.gif' alt=''></a>\n";
+		echo "</div>\n";
 
-		echo 	"<a href='?f=$this->dir'>"; 
-		echo 	"<img src='inc/img.png' height='100%' width='100%' style='opacity:0;'>";
-		echo 	"</a>";
-		echo	"</div>";
 	}
 }
 

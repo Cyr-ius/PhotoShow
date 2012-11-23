@@ -89,15 +89,38 @@
 
  		/// Just to be really sure... 
  		if( !(CurrentUser::$admin || CurrentUser::$uploader) ){
- 			return;
+			$json_array = array("action"=>"delete","result"=>1,"desc"=>"No rights","reload"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)));					
+ 			return $json_array;
+ 		}
+		
+		$del 	=	File::r2a(stripslashes($_POST['del']));
+		
+		if($del == Settings::$photos_dir || empty($_POST['del'])){
+			$json_array = array("action"=>"delete","result"=>1,"desc"=>"No rights on".$del,"reload"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)));				
+ 			return $json_array;
  		}
 
- 		$del 	=	File::r2a(stripslashes($_POST['del']));
- 		if($del == Settings::$photos_dir){
- 			return;
- 		}
+		$file_file	       = new File($del);
+		$thumb_path_no_ext = File::r2a(Settings::$thumbs_dir.dirname(File::a2r($del))."/".$file_file->name,File::Root());		
 
- 		return 	AdminDelete::rec_del($del);
+		switch($file_file->type){
+			case "Image":
+				$del_thumb_small   = $thumb_path_no_ext.'_small.'.$file_file->extension;	
+				$del_thumb    = $thumb_path_no_ext.'.'.$file_file->extension;
+			case "Video":
+				$del_thumb_small   = $thumb_path_no_ext.'.webm';	
+				$del_thumb    = $thumb_path_no_ext.'.jpg';
+		}			
+		
+		if(is_file($del_thumb)){
+		AdminDelete::rec_del($del_thumb);
+		}
+		if(is_file($del_thumb_small)){
+		AdminDelete::rec_del($del_thumb_small);
+		}
+		AdminDelete::rec_del($del);
+		$json_array = array("action"=>"delete","result"=>0,"desc"=>"Delete Sucessfull for".$del,"reload"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)));				
+		return $json_array;
 	}
 
 	/**

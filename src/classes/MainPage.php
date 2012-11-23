@@ -71,6 +71,13 @@ class MainPage extends Page
 
 	/// Infos
 	private $infos;
+	
+	///Modal
+	private $mt;
+	private $ma;
+	
+	///Script
+	private $scripts;
 
 	/**
 	 * Creates the page
@@ -88,20 +95,16 @@ class MainPage extends Page
 			exit;
 		}
 		
+		$this->pageURL = "?f=".urlencode(File::a2r(CurrentUser::$path));
 		/// Check how to display current file
 		if(is_file(CurrentUser::$path)){
 			$this->image_panel			=	new ImagePanel(CurrentUser::$path);
-			$this->image_panel_class 	=	"image_panel";
 			$this->panel				=	new Board(dirname(CurrentUser::$path));
-			$this->panel_class			=	"linear_panel";
-            $this->header_content       =   $this->image_panel->page_header;
+			$this->header_content       =   $this->image_panel->page_header;
 		}else{
-            $this->image_div            =   false;
 			$this->image_panel			=	new ImagePanel();
-			$this->image_panel_class	=	"image_panel hidden";
 			$this->panel				=	new Board(CurrentUser::$path);
-			$this->panel_class			=	"panel";
-            $this->header_content       =   $this->panel->page_header;
+			$this->header_content       =   $this->panel->page_header;
 		}
 
 		/// Create MenuBar
@@ -109,9 +112,16 @@ class MainPage extends Page
 
 		/// Menu
 		$this->menu			=	new Menu();
-
+		
+		/// Right Menu
 		$this->infos 		= 	new Infos();
 		
+		///Modal
+		$this->mt = new ModalTemplate();
+		$this->ma = new ModalAdmin();		
+		
+		///Scripts
+		$this->scripts	= new Scripts();
 	}
 	
 	/**
@@ -123,67 +133,36 @@ class MainPage extends Page
 	public function toHTML(){
 		$this->header($this->header_content);
 		echo "<body>";
-
-		echo "<div id='container'>\n";		
-
+		//Navbar
 		$this->menubar->toHTML();
+		echo "<div id='content' class='container-fluid'>";
+			echo "<div class='row-fluid'>";
+				/// Start menu
+				echo "<div id='menu' class='span2 well menu'>";
+				$this->menu->toHTML();
+				echo "</div>\n";
+				/// Stop menu		
+				echo "<div class='span10 center'>";
+					echo "<div class='loading'></div>";
+					/// ImagePanel
+					echo "<div id='image_panel' class='image_panel hide'>\n";
+					$this->image_panel->toHTML();
+					echo "</div>\n";
+					///Linear_panel
+					echo "<div id='linear_panel' class='linear_panel hide'><ul class='thumbnails'></ul></div>";						
+					///Panel (include boardheader(title+button) , album , images , videos , comments)
+					echo "<div class='panel'>\n";
+					$this->panel->toHTML();
+					echo "</div>\n";					
+				echo "</div>\n";	
+			echo "</div>\n";					
+			$this->mt->toHTML();
+			$this->ma->toHTML();	
+		echo "</div>";
+		$this->scripts->toHTML();		
+		echo "</body>\n";		
 
-		echo "<div id='page'>\n";
 
-		/// Start menu
-		echo "<div id='menu' class='menu'>\n";
-
-		$this->menu->toHTML();
-
-		echo "</div>\n";
-		if(CurrentUser::$admin || CurrentUser::$uploader){
-			echo "<div class='bin'><img src='inc/bin.png'>".Settings::_("bin","delete")."</div>";
-		}
-		/// Stop menu
-
-
-		echo "<div id='menu_hide'></div>";
-
-		echo "<div class='center'>";
-		/// Start Panel
-		echo "<div class='$this->panel_class'>\n";
-		$this->panel->toHTML();
-		echo "</div>\n";
-		/// Stop Panel
-
-		/// Start ImagePanel
-		echo "<div class='$this->image_panel_class'>\n";
-		$this->image_panel->toHTML();
-		echo "</div>\n";
-		/// Stop ImagePanel
-		echo "</div>\n";
-
-		echo "<div id='infos_hide'></div>";
-
-		echo "<div class='infos'>\n";
-		$this->infos->toHTML();
-		echo "</div>\n";
-
-		echo "</div>\n";
-		
-		echo "</div>\n";
-
-		if (Settings::$hide_menu){
-		echo '
-		<script language="javascript" type="text/javascript">
-		menu_hide();
-		</script>
-		';
-		}
-		if (Settings::$hide_infos){
-		echo '
-		<script language="javascript" type="text/javascript">
-		info_hide();
-		</script>
-		';
-		}
-		
-		echo "</body>";
 	}
 }
 

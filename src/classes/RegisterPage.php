@@ -68,76 +68,36 @@ class RegisterPage extends Page
 	 * @return void
 	 * @author Thibaud Rohmer
 	 */
-    public function toHTML(){
+    public function toHTML($addUser=null){
 
-        if (Settings::$forcehttps && !$_SERVER["HTTPS"]){
-            header("HTTP/1.1 301 Moved Permanently");
-            header("Location: https://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]);
-            exit();
-        }else{
-
-            if(!$this->included){
-                echo "<div class='center'>\n";
-
-                $this->header();
-
-
-                if($this->admin_account){
-                    echo "<h1>".Settings::_("register","mainacc")."</h1>";						
-                }else{
-                    echo "<h1>".Settings::_("register","register")."</h1>";
-                }
-
-                echo "<form method='post' action='?t=Reg'>\n";
-            }else{
-                echo "<form class='adduser' method='post' action='?t=Adm&a=AAc'>\n";
-            }
-            echo "<div class='section'><h2>".Settings::_("account","createaccount")."</h2>";
-
+		if ($addUser) {
+			echo "<form id='adminregister-form' class='form-horizontal adduser' method='post' action='?t=Adm&a=AAc'>\n";
+		}else{
+			echo "<form id='register-form' class='form-horizontal' method='post' action='?t=Reg'>\n";
+		}
+		echo "<fieldset>\n";
+		echo "<legend>".Settings::_("account","createaccount")."</legend>\n";
             /// Login
-            echo "<fieldset>
-                <div class='fieldname'>
-                    <span>".Settings::_("register","logintxt")."</span>
-                </div>
-                <div class='fieldoptions'>
-                    <input type='text' name='login' value=''>
-                </div>
-            </fieldset>\n";
-
+		echo "<div class='control-group'>\n";
+		echo "<label for='login' class='control-label'>".Settings::_("register","logintxt")."</label>";
+		echo "<div class='controls'><input id='login' class='input-large' type='text' name='login' value=''></div>\n";
+		echo "</div>\n";
 
             /// Password
-            echo "<fieldset>
-                <div class='fieldname'>
-                    <span>".Settings::_("register","passtxt")."</span>
-                </div>
-                <div class='fieldoptions'>
-                    <input type='password' name='password' value=''>
-                </div>
-            </fieldset>\n";
-
+		echo "<div class='control-group'>\n";
+                 echo "<label for='password' class='control-label'>".Settings::_("register","passtxt")."</label>";
+		echo "<div class='controls'><input id='password' class='input-large' type='password' name='password' value=''></div>\n";
+		echo "</div>\n";
             /// Verif
-            echo "<fieldset>
-                <div class='fieldname'>
-                    <span>".Settings::_("register","veriftxt")."</span>
-                </div>
-                <div class='fieldoptions'>
-                    <input type='password' name='verif' value=''>
-                </div>
-            </fieldset>\n";
-
-
-            echo "<fieldset class='alignright'><input type='submit' value='".Settings::_("register","submit")."'> ";
-
-            if(!$this->included){
-                echo Settings::_("register","or")." <a class='inline' href='.'>".Settings::_("register","back")."</a>";
-            }
-            echo "</fieldset></form>\n";
-            echo "</div>";
-
-            if(!$this->included){
-                echo "</div>\n";
-            }
-        }
+		echo "<div class='control-group'>\n";
+		echo "<label for='verif' class='control-label'>".Settings::_("register","veriftxt")."</label>";
+		echo "<div class='controls'><input id='verif' class='input-large' type='password' name='verif' value=''></div>\n";
+		echo "</div>\n";
+		echo "<div class='controls controls-row'>\n";
+		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("register","submit")."'>\n";
+		echo "</div>\n";
+		echo "</fieldset>\n";
+		echo "</form>\n";	
     }
 }
 ?>

@@ -83,27 +83,20 @@ class BoardItem implements HTMLObject
 					: "t=Thb&f=$this->file";
 				
 		/// We display the image as a background
-		echo 	"<div class='item";
-		if(CurrentUser::$path == $this->path){
+		echo "\t<li class='item' ";
+			if(CurrentUser::$path == $this->path){
 			echo " selected ";
-		}
-		echo 	" '";
-		echo 	" style='";
-		echo 	" width: 			$this->width%;";
-		echo 	" background: 		url(\"?$getfile\") no-repeat center center;";
-		echo 	" -webkit-background-size: cover;";
-		echo 	" -moz-background-size: cover;";
-		echo 	" -o-background-size: cover;";
-		echo 	" background-size: 	cover;";
-		echo 	"'>\n";
+			}
+		echo ">\n";
+		echo "\t\t<a class='thumbnail' href='?f=".$this->file."'>";
+		//~ echo "<img class='loadimg' src='./inc/spacer.gif' style='background: url(\"?".$getfile."\") no-repeat center center; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;'>";
+		echo "<img class='lazy' src='./inc/spacer.gif' data-original='?".$getfile."' width='100%' height='100%'>";
+		echo "</a>\n";
+		echo 	"\t\t<span class='name hide'>".htmlentities(basename($this->path), ENT_QUOTES ,'UTF-8')."</span>\n";
+		echo 	"\t\t<span class='path hide'>".htmlentities(File::a2r($this->path), ENT_QUOTES ,'UTF-8')."</span>\n";
+		echo 	"\t\t<span class='pathd hide'>".$getfile."</span>\n";
+		echo "\t</li>\n";
 
-		echo 	"<span class='name hidden'>".htmlentities(basename($this->path), ENT_QUOTES ,'UTF-8')."</span>";
-		echo 	"<span class='path hidden'>".htmlentities(File::a2r($this->path), ENT_QUOTES ,'UTF-8')."</span>";
-		
-		echo 	"<a href='?f=$this->file'>";
-		echo 	"<img src='./inc/img.png' width='100%' height='100%'>";
-		echo 	"</a>\n";
-		echo 	"</div>\n";
 	}
 	
 	/**

@@ -89,54 +89,44 @@
 
  	public function toHTML(){
 		self::Calculate() ;
- 		echo "<div class='adminblock'>";
- 		echo "<h3>Stats</h3>";
- 		echo "<div>";
- 		echo "<table>";
- 		echo "<tbody>";
- 		foreach($this->stats as $name=>$val){
- 			echo "<tr><td>".htmlentities($name, ENT_QUOTES ,'UTF-8')."</td><td>".htmlentities($val, ENT_QUOTES ,'UTF-8')."</td></tr>"; 			
- 		}
- 		echo "</tbody>";
- 		echo "</table>";
- 		echo "</div>";
- 		echo "</div>";
-
- 		echo "<div class='adminblock'>";
- 		echo "<h3>Accounts (by age)</h3>";
- 		echo "<div>";
- 		echo "<table>";
- 		echo "<tbody>";
- 		foreach($this->accounts as $acc){
- 			echo "<tr><td>".htmlentities($acc['login'], ENT_QUOTES ,'UTF-8')."</td></tr>"; 			
- 		}
- 		echo "</tbody>";
- 		echo "</table>";
- 		echo "</div>";
- 		echo "</div>";
-
-
- 		echo "<div id='commentsblock' class='adminblock'>";
- 		echo "<h3>Comments (by age)</h3>";
- 		echo "<div>";
- 		echo "<table>";
- 		echo "<tbody>";
-
-		$len = sizeof($this->comments);
-
-		for($i=$len - 1;$i >= 0; $i--){
-			$c = $this->comments[$i];
- 			echo "<tr>
- 					<td><a href=\"?f=".htmlentities($c->webfile)."\">".htmlentities($c->path, ENT_QUOTES ,'UTF-8')."</a></td>
- 					<td>".htmlentities($c->login, ENT_QUOTES ,'UTF-8')."</td>
- 					<td>".htmlentities($c->content, ENT_QUOTES ,'UTF-8')."</td>
- 				</tr>";
- 		}
-
- 		echo "</tbody>";
- 		echo "</table>";
- 		echo "</div>";
- 		echo "</div>";
+		echo "<div class='row-fluid'>";
+			echo "<div class='span6'>";
+			echo "<h3>Stats</h3>";
+			echo "<table class='table table-striped' style='background-color:white;'>";
+			echo "<tbody>";
+			foreach($this->stats as $name=>$val){
+				echo "<tr><td>".htmlentities($name, ENT_QUOTES ,'UTF-8')."</td><td>".htmlentities($val, ENT_QUOTES ,'UTF-8')."</td></tr>"; 			
+			}
+			echo "</tbody>";
+			echo "</table>";
+			echo "</div>\n";
+			echo "<div class='span6'>";
+			echo "<h3>Accounts (by age)</h3>";
+			echo "<table class='table table-striped' style='background-color:white;'>";
+			echo "<tbody>";
+			foreach($this->accounts as $acc){
+				echo "<tr><td>".htmlentities($acc['login'], ENT_QUOTES ,'UTF-8')."</td></tr>"; 			
+			}
+			echo "</tbody>";
+			echo "</table>";
+			echo "</div>\n";
+			echo "<div class='span11'>";
+			echo "<h3>Comments (by age)</h3>";
+			echo "<table class='table table-striped' style='background-color:white;'>";
+			echo "<tbody>";
+			$len = sizeof($this->comments);
+			for($i=$len - 1;$i >= 0; $i--){
+				$c = $this->comments[$i];
+				echo "<tr>
+						<td><a href=\"?f=".htmlentities($c->webfile)."\">".htmlentities($c->path, ENT_QUOTES ,'UTF-8')."</a></td>
+						<td>".htmlentities($c->login, ENT_QUOTES ,'UTF-8')."</td>
+						<td>".htmlentities($c->content, ENT_QUOTES ,'UTF-8')."</td>
+					</tr>";
+			}
+			echo "</tbody>";
+			echo "</table>";
+			echo "</div>\n";		
+		echo "</div>\n";
 
  	}
  }

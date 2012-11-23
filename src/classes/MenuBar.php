@@ -67,35 +67,66 @@ class MenuBar implements HTMLObject{
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){
-		echo "<div id='menubar'>\n";
-
-		echo "<div class='align_left'>\n";
-		echo "<a href='.'>PhotoShow</a>\n";
-		if(isset(CurrentUser::$account)){
-			// User logged in
-			echo "<div class='menubar-button'>- ".Settings::_("menubar","logged")." <a href='?t=Acc'>".htmlentities(CurrentUser::$account->login, ENT_QUOTES ,'UTF-8')."</a></div>\n";
-			echo "</div><div class='align_right'>\n";
-			echo "<a href='?t=Log'>".Settings::_("menubar","logout")."</a>\n";
-			
-			if(CurrentUser::$admin){
-				echo "<a href='?t=Adm'>".Settings::_("menubar","admin")."</a>\n";
-			}
-			
-		}else{
-			// User not logged in
-			echo "</div><div class='align_right'>\n";
-			echo "<a class='login' href='?t=Log'>".Settings::_("menubar","login")."</a>\n";
-			if(!Settings::$noregister){
-				echo "<a class='register' href='?t=Reg'>".Settings::_("menubar","register")."</a>\n";
-			}
+	
+		echo "
+		<div class='navbar navbar-fixed-top menubar'>
+			<div class='navbar-inner'>
+				<div class='container-fluid'><!--/.nav-collapse -->
+					<a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'>
+					<span class='icon-bar'></span>
+					<span class='icon-bar'></span>
+					<span class='icon-bar'></span>
+					</a>
+					<div class='nav-collapse collapse'>
+						<ul class='nav pull-left'>
+						<li><a id='menu_hide' href='#'><i class='icon-backward'></i></a></li>";
+						if(isset(CurrentUser::$account)){
+							echo "<li><a href='#' data-href='?t=MyA' data-toggle='modal' data-target='#myModal' data-title='".CurrentUser::$account->login."'><i class='icon-user'></i> ".CurrentUser::$account->login."</a></li>";
+							echo "<li><a href='#' id='logout'><i class='icon-off'></i> ".Settings::_("menubar","logout")."</a></li>";
+							if(CurrentUser::$admin){
+							echo "<li><a  href='#' data-href='?t=Adm&a=Set' data-toggle='modal' data-target='#ModalAdmin' ><i class='icon-wrench'></i> ".Settings::_("menubar","admin")."</a></li>";
+							}
+						} else {
+							echo "<li><a href='#' data-href='?t=Log' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","login")."'><i class='icon-globe'></i> ".Settings::_("menubar","login")."</a></li>";
+							if(!Settings::$noregister){
+							echo "<li><a href='#' data-href='?t=Reg' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","register")."'><i class='icon-pencil'></i> ".Settings::_("menubar","register")."</a></li>";
+							}
+						}
+						echo "</ul>";
+						echo "<ul class='nav pull-right'>";
+							echo "<li class='drowpdown'>
+									<a id='menu-actions' data-toggle='dropdown' class='dropdown-toggle' href='#'><i class='icon-tasks'></i> Action <b class='caret'></b></a>
+									<ul class='dropdown-menu'>";
+									if(CurrentUser::$admin){
+									echo "<li><a id='button_createdir' href='#' data-href='?f=".urlencode(File::a2r(CurrentUser::$path))."&j=MkD' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("adminpanel","create")."'><i class='icon-folder-open'></i> ".Settings::_("adminpanel","create")."</a></li>\n";				
+									echo "<li><a id='button_renamedir' href='#' data-href='?f=".urlencode(File::a2r(CurrentUser::$path))."&j=MvD' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("adminpanel","rename")."'><i class='icon-pencil'></i> ".Settings::_("adminpanel","rename")."</a></li>\n";
+									echo "<li><a id='button_rights' href='#' data-href='?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Rights' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","rightsset")."'><i class='icon-screenshot'></i> ".Settings::_("menubar","rightsset")."</a></li>\n";
+									echo "<li><a id='button_token' href='#' data-href='?f=".urlencode(File::a2r(CurrentUser::$path))."&j=Tokens' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("token","tokens")."'><i class='icon-share'></i> ".Settings::_("token","tokens")."</a></li>\n";
+									echo "<li><a id='button_thb' href='#' ><i class='icon-picture'></i> ".Settings::_("adminpanel","createthumbnails")."</a></li>\n";
+									echo "<li><a id='edit_textinfo' href='#'><i class='icon-edit'></i> ".Settings::_("textinfo","edit")."</a></li>\n";
+									}
+									if(!Settings::$nodownload){
+									echo "<li><a id='button_download' href='?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Zip'><i class='icon-download'></i> ".Settings::_("boardheader","download")."</a></li>";
+									}	
+									if(!Settings::$nocomments){
+									echo "<li><a id='button_comm' href='#' data-href='?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Com' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("comments","comments")."'><i class='icon-comment'></i> ".Settings::_("comments","comments")."</a></li>\n";						
+									}	
+									echo "<li><a id='button_exif' href='#'><i class='icon-info-sign'></i> Exif</a></li>\n";						
+								echo "</ul>";
+							echo "</li>";
+						echo "</ul>";
+						echo "<ul class='nav pull-right'>";
+							if(CurrentUser::$admin || CurrentUser::$uploader){
+							echo "<li class='hide uploadbtn'><a id='button_upload' href='#' ><i class='icon-upload'></i> ".Settings::_("adminpanel","uploadfiles")."</a></li>\n";	
+							echo "<li><a id='bin' class='btn btn-small btn-disabled bin ui-droppable' disabled='disabled'><i class=' icon-trash'></i></a></li>\n";							
+							}
+						echo "</ul>";
+						echo"
+				        </div><!--/.nav-collapse -->
+				</div>
+			</div>
+		</div>";
 		}
-		
 		//echo "<a href='?a=rss'>RSS <img src='./inc/rss.png' height='11px'></a>\n";
-		echo "</div>\n";
-
-		echo "<span>".Settings::_("menubar","powered")." <a href='http://www.photoshow-gallery.com'>PhotoShow</a> - © 2011 Thibaud Rohmer</span>";
-
-		echo "</div>\n";
-	}
 }
 ?>

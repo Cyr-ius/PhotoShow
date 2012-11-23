@@ -44,7 +44,7 @@
  class AdminMenu
  {
  	/// Menu options
- 	public $options=array();
+ 	public $options=array(); 	
 
  	/**
  	 * Build AdminMenu
@@ -66,23 +66,12 @@
  	 * @author Thibaud Rohmer
  	 */
  	public function toHTML(){
-
+	
+		echo "\n\t<ul  id='AdminTab'>\n";
 		foreach($this->options as $op=>$val){
-			if( $_GET['a'] == $op){
-				$class = "menu_item selected";
-			}else{
-				$class = "menu_item";
-			}
- 			echo "<div class='$class'>\n";
-			echo "<div class='menu_title'>\n";
-			echo "<a href='?t=Adm&a=$op'>$val</a>";
-			echo "</div>\n</div>\n";
+		echo "\t\t<li ><a style='text-decoration:none' id='$op' href='?t=Adm&a=$op'>$val</a></li>\n";
  		}
-		echo "<div class='menu_item'>\n";
-		echo "<div class='menu_title'>\n";
-		echo "<a href='.'>".Settings::_("adminmenu","back")."</a>";
-		echo "</div>\n</div>\n";
-
+		echo "\t</ul>\n";
  	}
 
  }

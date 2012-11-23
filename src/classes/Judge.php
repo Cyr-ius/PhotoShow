@@ -180,22 +180,39 @@ class Judge
 		$rightsfiles=glob($rightsdir."/.*ights.xml");
 
 		// Check files
-		foreach($rightsfiles as $rf){
-			$f = Judge::associated_file($rf);
-            if(($public_search and Judge::is_public($f))
-                or (!$public_search and Judge::view($f))){
-                    if(is_file($f)){
-                        return $f;
-                    }else{
-                        foreach(Menu::list_files($f,true) as $p){
-                            if(($public_search and Judge::is_public($p))
-                                or (!$public_search and Judge::view($p))){
-                                    return $p;
-                                }
-                        }
-                    }
-                }
-        }
+		//~ foreach($rightsfiles as $rf){
+				//~ $f = Judge::associated_file($rf);
+				//~ if(($public_search and Judge::is_public($f))
+				     //~ or (!$public_search and Judge::view($f))){
+					    //~ if(is_file($f)){
+						//~ return $f;
+					    //~ }else{
+						//~ foreach(Menu::list_files($f,true) as $p){
+						    //~ if(($public_search and Judge::is_public($p))
+							//~ or (!$public_search and Judge::view($p))){
+							    //~ return $p;
+							//~ }
+						//~ }
+					    //~ }
+					//~ }
+		//~ }
+		if(isset($rightsfiles) && count($rightsfiles) > 0){
+			foreach($rightsfiles as $rf){
+				$f = Judge::associated_file($rf);
+				if(($public_search and Judge::is_public($f)) or (!$public_search and Judge::view($f))){
+					if(is_file($f)){
+						return $f;
+					}else{
+						foreach(Menu::list_files($f,true) as $p){
+							if(($public_search and Judge::is_public($p)) or (!$public_search and Judge::view($p))){
+								return $p;
+							}
+						}
+					}
+				}
+			}
+		$rightsfiles = NULL;
+		}		
 
 		// Check subdirs
 		foreach(Menu::list_dirs($dir) as $d){
@@ -230,10 +247,13 @@ class Judge
 			$xml_groups->addChild("group",$group);
 		
 		if(!file_exists(dirname($this->path))){
-			@mkdir(dirname($this->path),0750,true);
+			@mkdir(dirname($this->path),0755,true);
 		}
 		/// Save xml
 		$xml->asXML($this->path);
+		Json::$json = array("action"=>"Judge",
+			"result"=>0,
+			"desc"=>"Save permissions succesfull");		
 	}
 	
 	/**
@@ -248,8 +268,12 @@ class Judge
 	public static function edit($f,$users=array(),$groups=array(),$private=false){
 
 		/// Just to be sure, check that user is admin
-		if(!CurrentUser::$admin)
+		if(!CurrentUser::$admin) {
+			Json::$json = array("action"=>"Judge",
+				"result"=>1,
+				"desc"=>"Error : No Rights");			
 			return;
+		}
 
 		// Create new Judge, no need to read its rights
 		$rights			=	new Judge($f,false);
@@ -267,6 +291,8 @@ class Judge
 		
 		// Save the Judge
 		$rights->save();
+
+		return;
 	}
 	
 	/**
@@ -339,7 +365,6 @@ class Judge
                 return true;
             }
         }
-        
 		return false;
 	}
 
@@ -355,40 +380,31 @@ class Judge
         return($judge->public);
     }
 
-	/**
-	 * Display the rights on website, and let
-	 * the admin edit them.
-	 * 
-	 * @author Thibaud Rohmer
-	 */
-	public function toHTML(){
-		
-		echo "<div class='adminrights'>\n";
-		echo "<div class='section'>";
-
-		echo "<h2>".htmlentities($this->filename, ENT_QUOTES ,'UTF-8')."</h2>\n";
-
+	public function toHTML() {
 
 		if($this->public){
 
-			echo "<form action='?t=Pri&f=$this->webpath' method='post'>\n";
+			echo "<form id='admintype-form' class='form-inline' action='?f=$this->webpath&t=Adm&a=RTy' method='post'>\n";
 			echo Settings::_("judge","public");
-			echo "<fieldset><input type='submit' class='button blue' value='".Settings::_("judge","gopriv")."' /></fieldset>";
+			echo "<fieldset><input type='submit' class='btn btn-primary' value='".Settings::_("judge","gopriv")."' /></fieldset>";
+			echo "<input type='hidden' name='type' value='Pri' /></fieldset>";
 			echo "</form>";
-			echo "</div>";
+			echo"<div id='display_action' class='alert hide'></div>";			
 			return;
 
 		}else{
 
-			echo "<form action='?t=Pub&f=$this->webpath' method='post'>\n";
+			echo "<form id='admintype-form'  class='form-inline' action='?f=$this->webpath&t=Adm&a=RTy' method='post'>\n";
 			echo Settings::_("judge","priv");
-			echo "<fieldset><input type='submit' class='button blue' value='".Settings::_("judge","gopub")."' /></fieldset>";
+			echo "<fieldset><input type='submit' class='btn btn-primary' value='".Settings::_("judge","gopub")."' /></fieldset>";
+			echo "<input type='hidden' name='type' value='Pub' /></fieldset>";
 			echo "</form>";
 
 		}
 
-		echo "<form action='?t=Rig&f=$this->webpath' method='post'>\n";
-		echo "<h2>".Settings::_("judge","accounts")."</h2>";
+		echo "<form id='adminrights-form' class='form-horizontal' action='?f=$this->webpath&t=Adm&a=Rig' method='post'>\n";
+		echo "<fieldset>\n";
+		echo "<legend>".Settings::_("judge","accounts")."</legend>\n";
 
 		foreach(Account::findAll() as $account){
 			
@@ -400,8 +416,8 @@ class Judge
 
 			echo "<div><label><input type='checkbox' value='".$account['login']."' name='users[]' $checked >".htmlentities($account['login'], ENT_QUOTES ,'UTF-8')."</label></div>";
 		}
-
-		echo "<h2>".Settings::_("judge","groups")."</h2>";
+		
+		echo "<legend>".Settings::_("judge","groups")."</legend>\n";		
 
 		foreach(Group::findAll() as $group){
 			if($group['name'] == "root"){
@@ -415,25 +431,13 @@ class Judge
 
 			echo "<div><label><input type='checkbox' value='".$group['name']."' name='groups[]' $checked > ".htmlentities($group['name'], ENT_QUOTES ,'UTF-8')." </label></div>";
 		}
-
-		echo "<fieldset><input type='submit' class='button blue' value='".Settings::_("judge","set")."'></fieldset>\n";
-		echo "</form>\n";
-        
-        // Token creation
-        echo "<h2>".Settings::_("token","tokens")."</h2>\n";
-        $tokens = GuestToken::find_for_path($this->file);
-        if ($tokens && !empty($tokens)){
-            foreach($tokens as $token){
-                echo "<a href='".GuestToken::get_url($token['key'])."' >".$token['key']."<\a><br />\n";
-            }
-        }
-        echo "<form action='?t=CTk&f=$this->webpath' method='post'>\n";
-        echo "<fieldset><input type='submit' class='button blue' value='".Settings::_("token","createtoken")."' /></fieldset>";
-        echo "</form>";
-		echo "</div>";
-
-        echo "</div>\n";
-    }
+		echo "<div class='controls controls-row'>\n
+			<input type='submit' class='btn btn-primary' value='".Settings::_("judge","set")."' />\n
+			</div>\n
+			<fieldset>\n
+			</form>\n";			
+	}
+	
 
 
 }

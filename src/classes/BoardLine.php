@@ -69,13 +69,13 @@ class BoardLine implements HTMLObject
 	 */
 	public function toHTML(){
 
-		echo "<div class='line'>\n";
+		//~ echo "<div class='line'>\n";
 		
 		/// Output all items of the board
 		foreach($this->items as $item)
 			$item->toHTML();
 		
-		echo "</div>\n";
+		//~ echo "</div>\n";
 
 	}
 	

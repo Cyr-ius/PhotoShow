@@ -69,6 +69,9 @@ class Board implements HTMLObject
 
 	/// Array of the folders
 	private $boardfolders=array();
+	
+	/// Comments
+	private $comm;
 
 	/**
 	 * Board constructor
@@ -93,9 +96,9 @@ class Board implements HTMLObject
 		$this->title	=	basename($this->path);
 		$this->header	=	new BoardHeader($this->title,$this->path);
 		$this->files	=	Menu::list_files($this->path);
-		$this->dirs		=	Menu::list_dirs($this->path);
-
-        $pageURL = Settings::$site_address."/?f=".urlencode(File::a2r($this->path));
+		$this->dirs	=	Menu::list_dirs($this->path);
+		$pageURL 	=	Settings::$site_address."/?f=".urlencode(File::a2r($this->path));
+		//~ $this->comm	=	new Comments($this->path);
         
         // generate the header - opengraph metatags for facebook
         $this->page_header = "<meta property=\"og:url\" content=\"".$pageURL."\"/>\n"
@@ -134,11 +137,6 @@ class Board implements HTMLObject
                 }
             }
         }
-		
-		// Generate the grid
-		//~ $this->grid();
-
-
 		$this->foldergrid();
 	}
 	
@@ -151,30 +149,49 @@ class Board implements HTMLObject
 	public function toHTML(){		
 		// Output header
 		$this->header->toHTML();
-		
+		echo "<span class='currentpath hide'>".File::a2r(CurrentUser::$path)."</span>";
+
+		//Display album
 		if(sizeof($this->boardfolders)>0){
-			echo "<h2>".Settings::_("board","albums")."</h2>";
+			echo "<div class='well albums'>\n";
+			echo "<legend><h4>".Settings::_("board","albums")."</h4></legend>\n";
+			echo "<ul class='thumbnails'>\n";
 			foreach($this->boardfolders as $boardfolder){
 				$boardfolder->toHTML();
 			}
+			echo "</ul>\n";
+			echo "</div>\n";
 		}
-		$this->grid("Image");
-		if(sizeof($this->boardlines)>0){
-			echo "<h2>".Settings::_("board","images")."</h2>";
-		}
-		// Output grid
-		foreach($this->boardlines as $boardline){
-			$boardline->toHTML();
-		}
-		$this->boardlines = array();
-		$this->grid("Video");
-		if(sizeof($this->boardlines)>0){
-			echo "<h2>".Settings::_("board","videos")."</h2>";
-		}
-		// Output grid
-		foreach($this->boardlines as $boardline){
-			$boardline->toHTML();
-		}
+		
+		///Display BoardLine (content images + videos)
+		echo "<div class='boardlines'>\n";
+			$this->grid("Image");
+			if(sizeof($this->boardlines)>0){
+				echo "<div class='well images'>\n";
+				echo "<legend><h4>".Settings::_("board","images")."</h4></legend>\n";
+				echo "<ul class='thumbnails'>\n";			
+				// Output grid
+				foreach($this->boardlines as $boardline){
+					$boardline->toHTML();
+				}
+				echo "</ul>\n";
+				echo "</div>\n";
+			}
+
+			$this->boardlines = array();
+			$this->grid("Video");
+			if(sizeof($this->boardlines)>0){
+				echo "<div class='well videos'>\n";
+				echo "<legend><h4>".Settings::_("board","videos")."</h4></legend>";
+				echo "<ul class='thumbnails'>\n";
+				// Output grid
+				foreach($this->boardlines as $boardline){
+					$boardline->toHTML();
+				}
+				echo "</ul>\n";			
+				echo "</div>\n";
+			}
+		echo "</div>\n";
 	}
 	
 	/**

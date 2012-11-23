@@ -28,68 +28,96 @@
  * @link	  http://github.com/thibaud-rohmer/PhotoShow
  */
  function init_admin(){
-	// Dummy function
+// Dummy function
+//Json with reload page
+$('#logins-form').unbind();
+$('#logins-form').submit(function(){
+	$('#myModal .modal-footer .modal-infos').hide();
+	$('#myModal .modal-footer .modal-infos').removeClass('alert-info');
+	$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data){
+		if (data.result ==0) {
+			$('#myModal .modal-footer .modal-infos').removeClass('alert-error').addClass('alert-info');
+			url = data.url+data.js;
+			window.location.replace(data.url);
+		}
+		$('#myModal .modal-footer .modal-infos').text(data.desc).show();
+	});
+return false;	
+});
+}
+
+ function init_plupload(){
+// Dummy function
 }
 
 function init_infos(){
-	// Dummy function
+// Dummy function
+$('#button_download').attr('href',$(location).attr('search')+"&t=Zip");
+$('#button_comm').attr('data-href',$(location).attr('search')+"&t=Com");
 }
 
+ function init_list(){
+// Dummy function
+}
 
+ function init_textinfo(){
+// Dummy function
+}
 
 function init_menu(){
-		/**
-	 * Clicking on an item in the menu
-	 */
-	$("#menu a").click(function(){
-
-		// Change selected item
-		$(".menu .selected").removeClass("selected");
-		$(this).parents(".menu_item").addClass("selected");			
-
-		hr = $(this).attr("href");
-		// Load page
-		if ($(".infos").length > 0){
-			$(".infos").load(hr+"&j=Inf",function(){
-				init_infos();
-				$(".panel").load(hr+"&j=Pan",init_panel);
-			}); 
-		}else{
-			$(".panel").load(hr+"&j=Pan",init_panel);
-		}
-
-
-		update_url($(this).attr("href"),$(this).text());
-		return false;
-	});
-	init_menubar();
+/**
+* Clicking on an item in the menu
+*/
+$(".submenu a").unbind();
+$(".submenu a").click(function(){
+// Change selected item
+if ($(this).parent().parent().hasClass('root')) {
+	$(".submenu .selected").find('li').removeClass("selected");
 }
-
-
-function init_menubar(){
-	$("#menubar a").unbind();
-
-	$("#menubar a.login").click(function(){
-		$(".panel").load("?j=Log",function(){
-			$(".inline").first().click(function(){
-				$(".panel").load("?j=Reg");
-				return false;
-			});
-		});
-		return false;
+$(this).parent().parent('ul').find('li').removeClass("selected");
+$(this).parent().addClass("selected");	
+url = $(this).attr("href");
+//~ update_url(hr,$(this).text());	
+$('.panel').hide();
+$('.loading').show();
+$.get(url+"&j=Pan",function(data) {
+	$(".panel").html(data);
+		update_url(url);	
+		init_panel();
+		$('.loading').hide();
+		$('.panel').show();
+		$('.center').scroll();
 	});
 
-	$("#menubar a.register").click(function(){
-		$(".panel").load("?j=Reg");
-		return false;
+return false;
+});
+
+$(".albums a").unbind();
+$(".albums a").click(function(){
+// Change selected item
+$(".panel .selected").removeClass("selected");
+$(this).parent().addClass("selected");		
+url = $(this).attr("href");
+//update_url(hr,$(this).text());	
+$('.loading').show();
+$('.panel').hide();
+$.get(url+"&j=Pag",function(data) {
+	update_url(url);
+	$('#content').html(data);
+	init_panel();
+	$('.menu').mCustomScrollbar({scrollButtons:{enable:true}});
+	$('.loading').hide();
+	$('.panel').show();
+	$('.center').scroll();
 	});
+return false;
+});
+
 }
-
+ 
 function update_url(url,name){
 	if(typeof history.pushState == 'function') { 
 		var stateObj = { foo: "bar" };
 		history.pushState(stateObj, "PhotoShow - " + name, url);
 	}
 }
-
-

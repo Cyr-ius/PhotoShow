@@ -161,7 +161,7 @@ class Provider
 
             /// Create directories
             if(!file_exists(dirname($path))){
-                @mkdir(dirname($path),0750,true);
+                @mkdir(dirname($path),0775,true);
             }
 
             /// Create thumbnail
@@ -192,7 +192,7 @@ class Provider
 		if(!file_exists($path) || filectime($file) > filectime($path)  ){
 			/// Create smaller image
 			if(!file_exists(dirname($path))){
-				@mkdir(dirname($path),0755,true);
+				@mkdir(dirname($path),0775,true);
 			}
 			$thumb = PhpThumbFactory::create($file);
 			$thumb->resize(800, 800);
