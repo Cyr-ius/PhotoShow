@@ -4,6 +4,7 @@
 ## Overview
 
 **PhotoShow**, *your* web gallery. **PhotoShow** is a *free* and *open source* web gallery, that you can very easily install on your web server. It doesn't even require a database !
+Multi format supported : images (library GD required) and videos (binary ffmpeg or avconv)
 
 ## Installation
 
