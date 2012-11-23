@@ -59,17 +59,15 @@
  	 * @author Thibaud Rohmer
  	 */
  	public function toHTML(){
- 		echo "<h3>PhotoShow</h3>";
 		echo "<div class='row-fluid'>";
+ 		echo "<h3>PhotoShow</h3>";
  		echo "<ul class='breadcrumb'>";
  		echo "<li><a href='http://www.photoshow-gallery.com'>PhotoShow-Gallery.com</a></li>\n";
  		echo "<li><a href='https://github.com/thibaud-rohmer/PhotoShow'>PhotoShow on GitHub</a></li>\n";
  		echo "<li><a href='https://github.com/thibaud-rohmer/PhotoShow/wiki/Tips'>Tips !</a></li>\n";
  		echo "</ul>\n";
-		echo "</div>\n";
 
  		echo "<h3>Me</h3>";
-		echo "<div class='row-fluid'>";
  		echo "<div style='text-align:center;'><img src='inc/me.jpg' width='150px' align='center' style='border-radius:5px; -moz-border-radius:5px;'>";
  		echo "<ul class='breadcrumb'>";
  		echo "<li><a href='mailto:thibaud.rohmer@gmail.com'>Email</a></li>\n";
@@ -77,10 +75,9 @@
  		echo "<li><a href='https://github.com/thibaud-rohmer/'>GitHub</a></li>\n";
  		echo "<li><a href='https://plus.google.com/114933352963292387937/about'>Google Profile</a></li>\n";
  		echo "</ul>\n";
-		echo "</div>\n</div>\n";		
+		echo "</div>\n";		
 
  		echo "<h3>If you like PhotoShow ... </h3>";
-
  		echo "<ul class='breadcrumb'>";
  		echo "<li>Spread the word ! Tell it to your friends :)</li>\n";
  		echo "<li>Tweet/Post/Blog/Whatever about it (#photoshow)</li>\n";
@@ -94,6 +91,7 @@
 		<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
 		</form>';
 		echo "</ul>\n";
+		echo "</div>\n";
 
  	}
 

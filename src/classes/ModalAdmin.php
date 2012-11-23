@@ -13,16 +13,18 @@ class ModalAdmin
 		echo "
 		<!-- Modal Template
 		================================================== -->
-		<div class='modaladmin fade hide' id='ModalAdmin' tabindex='-1' role='dialog' aria-labelledby='ModalAdminLabel' aria-hidden='true'>
+		<div  id='ModalAdmin' class='modal container fade hide' tabindex='-1' data-backdrop='static' data-keyboard='false'>
 		<div class='modal-header'>
 		<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>x</button>";
 		$p = new AdminMenu();
 		$p->toHTML();
 		echo "		
-		<h3 id='ModalAdminLabel'></h3>
+		<h3></h3>
 		</div>
 		<div class='modal-body'></div>
-		<div class='modal-footer'><div class='alert alert-error modal-infos hide'></div></div>
+		<div class='modal-footer'>
+		<span class='alert alert-error modal-infos hide'></span>
+		</div>
 		</div>";
 	}	
 	

@@ -119,6 +119,7 @@ class MainPage extends Page
 		///Modal
 		$this->mt = new ModalTemplate();
 		$this->ma = new ModalAdmin();		
+		$this->m = new Modal();		
 		
 		///Scripts
 		$this->scripts	= new Scripts();
@@ -143,7 +144,7 @@ class MainPage extends Page
 				echo "</div>\n";
 				/// Stop menu		
 				echo "<div class='span10 center'>";
-					echo "<div class='loading'></div>";
+					echo "<div class='loading hide'></div>";
 					/// ImagePanel
 					echo "<div id='image_panel' class='image_panel hide'>\n";
 					$this->image_panel->toHTML();
@@ -157,7 +158,7 @@ class MainPage extends Page
 				echo "</div>\n";	
 			echo "</div>\n";					
 			$this->mt->toHTML();
-			$this->ma->toHTML();	
+			$this->ma->toHTML();		
 		echo "</div>";
 		$this->scripts->toHTML();		
 		echo "</body>\n";		

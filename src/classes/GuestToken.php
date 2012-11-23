@@ -353,6 +353,7 @@ class GuestToken extends Page
      */
 	public function toHTML() {
 	
+	echo "<div class='row-fluid'>\n";
 	echo "<form id='admintokens-form' action='?f=".File::a2r($this->file)."&t=CTk' method='post'>\n
 		<fieldset>\n
 		<legend>".Settings::_("token","tokens")."</legend>\n";
@@ -368,7 +369,8 @@ class GuestToken extends Page
 		<input type='hidden' name='token' value='create'/>\n
 		</fieldset>\n
 		</form>";	
-	echo"<div id='display_action' class='alert hide'></div>";		
+	echo "</div>\n";
+		
 	}    
 
 }

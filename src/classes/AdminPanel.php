@@ -61,7 +61,8 @@ class AdminPanel
 	public function RenameDir_toHTML(){
 		$w 	= File::a2r($this->file);
 		/// Folder name
-		$ret =	"<form id='renamefolder-form' class='form-horizontal' action='?f=".urlencode(File::a2r(CurrentUser::$path))."&a=Mov' method='post'>\n
+		$ret =	"<div class='row-fluid'> \n
+				<form id='renamefolder-form' class='form-horizontal' action='?f=".urlencode(File::a2r(CurrentUser::$path))."&a=Mov' method='post'>\n
 				<fieldset>\n
 				<div class='control-group'>\n
 				<label for='folderrename' class='control-label'>".Settings::_("adminpanel","name")."</label>\n
@@ -73,7 +74,8 @@ class AdminPanel
 				<input type='hidden' name='move' value='rename'>
 				<input type='hidden' name='pathFrom' value=\"".htmlentities($w, ENT_QUOTES ,'UTF-8')."\">	
 				</fieldset>\n
-				</form>\n";
+				</form>\n
+				</div>\n";
 		if(CurrentUser::$admin){
 			echo $ret;
 		}
@@ -81,7 +83,9 @@ class AdminPanel
 	
 	public function CreateDir_toHTML() {
 		$w 	= File::a2r($this->file);
-		$ret =	"<form id='createfolder-form' class='form-horizontal' action='?a=Upl&f=".urlencode(File::a2r(CurrentUser::$path))."' method='post'>\n
+		$ret =	"
+				<div class='row-fluid'>\n
+				<form id='createfolder-form' class='form-horizontal' action='?a=Upl&f=".urlencode(File::a2r(CurrentUser::$path))."' method='post'>\n
 				<fieldset>\n
 				<div class='control-group'>\n
 				<label for='foldername' class='control-label'>".Settings::_("adminpanel","name")."</label>\n
@@ -92,7 +96,8 @@ class AdminPanel
 				</div>\n				
 				<input type='hidden' name='path' value=\"".htmlentities($w, ENT_QUOTES ,'UTF-8')."\">
 				</fieldset>
-				</form>";
+				</form>
+				</div>";
 		if(CurrentUser::$admin){
 			echo $ret;
 		}

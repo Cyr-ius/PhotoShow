@@ -470,7 +470,7 @@ class Account extends Page
 	}
 	 
 	 public function toHTML($addUser=null) {
-	 
+		echo "<div class='row-fluid'>\n";
 		if ($addUser) {
 			echo "<form id='adminaccount-form' class='form-horizontal' method='post' action='?t=Adm&a=Acc'>\n";
 		}else{
@@ -535,6 +535,7 @@ class Account extends Page
 		echo "</div>\n";
 		echo "</fieldset>\n";		
 		echo "</form>\n";		
+		echo "</div>\n";		
 	 }	 
 
 }

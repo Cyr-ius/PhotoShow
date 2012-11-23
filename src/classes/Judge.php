@@ -381,7 +381,7 @@ class Judge
     }
 
 	public function toHTML() {
-
+		echo "<div class='row-fluid'>";
 		if($this->public){
 
 			echo "<form id='admintype-form' class='form-inline' action='?f=$this->webpath&t=Adm&a=RTy' method='post'>\n";
@@ -435,7 +435,8 @@ class Judge
 			<input type='submit' class='btn btn-primary' value='".Settings::_("judge","set")."' />\n
 			</div>\n
 			<fieldset>\n
-			</form>\n";			
+			</form>\n
+			</div>\n";			
 	}
 	
 

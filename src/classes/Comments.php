@@ -242,7 +242,7 @@ class Comments implements HTMLObject
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){	
-		echo "<div id='comments'>";
+		echo "<div id='comments' class='row-fluid'>";
 			/// Display each comment
 			foreach($this->comments as $com){
 				$com->toHTML();
@@ -266,7 +266,7 @@ class Comments implements HTMLObject
 							</div>\n";	
 					}
 				echo "<div class='control-group'>\n
-					<div class='controls'><textarea id='content'  rows='2' name='content'></textarea></div>\n
+					<div class='controls'><textarea id='content'  class='input-large' rows='2' name='content'></textarea></div>\n
 					</div>\n
 					<div class='controls controls-row'>\n
 					<input class='btn btn-primary' type='submit'  value='".Settings::_("settings","submit")."' />\n

@@ -68,7 +68,7 @@
 					echo "<div class='control-group'>\n";
 					echo "<label for='login' class='control-label'>".Settings::_("account","editing")."</label>";
 					echo "<div class='controls'>
-							<select name='login'>";
+							<select name='login' class='span12'>";
 							foreach(Account::findall() as $a){
 								echo "<option value=\"".addslashes($a['login'])."\"";
 								if($this->login == $a['login']){

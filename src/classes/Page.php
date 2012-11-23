@@ -63,8 +63,9 @@ abstract class Page implements HTMLObject
 
 			/// CSS
 			echo "<link rel='stylesheet' href='src/stylesheets/normalize.css' type='text/css' media='screen' charset='utf-8'>";
-			echo "<link rel='stylesheet' href='bootstrap/css/bootstrap.css'>";
-			echo "<link rel='stylesheet' href='bootstrap/css/bootstrap-responsive.css'>";
+			echo "<link rel='stylesheet' href='bootstrap/css/bootstrap.min.css'>";
+			echo "<link rel='stylesheet' href='bootstrap/css/bootstrap-responsive.min.css'>";
+			echo "<link rel='stylesheet' href='bootstrap/css/bootstrap-modal.css'>";
 			echo "<link rel='stylesheet' href='src/stylesheets/jquery.plupload.queue.css'>";
 			echo "<link rel='stylesheet' href='inc/jquery.scroll.css'>";					
 			echo "<link rel='stylesheet' href='src/stylesheets/perso.css'>";

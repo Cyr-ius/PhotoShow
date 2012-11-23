@@ -406,10 +406,9 @@ class Settings extends Page
 	 */
 	public function toHTML(){
 
+	echo "<div class='row-fluid'>\n";
 		echo "<h3>".Settings::_("settings","settings")."</h3>\n";
-
 		echo "<div class='well'>\n";
-
 		echo "<form id='setting-form' class='form-horizontal' action='?t=Adm&a=Set' method='post'>\n";
 		echo "<legend>Global</legend>\n";
 		echo "<fieldset>\n";
@@ -576,7 +575,9 @@ class Settings extends Page
 			echo "</fieldset>\n";
 		echo "</form>";
 		echo"<div id='display_action' class='alert hide'></div>";				
-		echo "</div>";
+		echo "</div>\n";
+	echo "</div>\n";
+		
 	}
 }
 ?>
