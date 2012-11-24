@@ -109,18 +109,22 @@ class File
 		return	basename($file,'.'.$info['extension']);
 	}
 	
+	/**
+	 * Return True/False Datediff lastmodified file and number days
+	 *
+	 * @param string $file 
+	 * @param string $numberdays 
+	 * @return void
+	 * @author Cédric Levasseur
+	 */
 	public static function LastModified($file,$numberdays=null){
 		if (file_exists($file)) {
-			if (!$numberdays) {
-				return date ("F d Y", filemtime($file));
-			} else {
-				$fichier = filemtime($file);
-				$cejour = mktime();
-				$interval = $cejour-$fichier;
-				if ( date("d",$interval) <= $numberdays) {
+			$ajd = new DateTime(date('F d Y'));
+			$aj = new DateTime(date("F d Y",filemtime($file)));
+			if ( $ajd->diff($aj)->format('%a') <= $numberdays) {
 				return true;
-				}
 			}
+			return false;
 		}
 	}
 	

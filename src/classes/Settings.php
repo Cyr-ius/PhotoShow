@@ -56,6 +56,8 @@ class Settings extends Page
 
 	/// File where the admin settings are stored
 	static public $admin_settings_file;
+	
+	static public $timezone;
 
 
 	/**** Admin Settings ****/
@@ -158,14 +160,12 @@ class Settings extends Page
 		/// Settings already created
 		if(Settings::$photos_dir !== NULL && !$forced) return;
 
-	$config = (object)null;
-        /// Set default values for $config
-        $config->timezone = "Europe/Paris";
+		
 
 		/// Load config.php file 
-        if (!isset($config_file)){
-            $config_file		=	realpath(dirname(__FILE__)."/../../config.php");
-        }
+		if (!isset($config_file)){
+		    $config_file		=	realpath(dirname(__FILE__)."/../../config.php");
+		}
 		if(!include($config_file)){
 			throw new Exception("You need to create a configuration file.");
 		}
@@ -175,9 +175,10 @@ class Settings extends Page
 		Settings::$thumbs_dir	=	$config->ps_generated."/Thumbs/";
 		Settings::$conf_dir		=	$config->ps_generated."/Conf/";
 		Settings::$admin_settings_file = $config->ps_generated."/Conf/admin_settings.ini";
+		Settings::$timezone = $config->timezone;
 
 		/// Set TimeZone
-		date_default_timezone_set($config->timezone);
+		date_default_timezone_set(Settings::$timezone);
 
 		// Now, check that this stuff exists.
 		if(!file_exists(Settings::$photos_dir)){
