@@ -118,8 +118,7 @@ class MainPage extends Page
 		
 		///Modal
 		$this->mt = new ModalTemplate();
-		$this->ma = new ModalAdmin();		
-		$this->m = new Modal();		
+		$this->ma = new ModalAdmin();			
 		
 		///Scripts
 		$this->scripts	= new Scripts();
