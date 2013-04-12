@@ -92,7 +92,9 @@ class AdminMove {
             return;
         }
         if ($type == "rename") {
+            $thumbsDir = Settings::$thumbs_dir . "/" . stripslashes($_POST['pathFrom']);
             @rename($from, dirname($from) . "/" . stripslashes($_POST['pathTo']));
+            @rename($thumbsDir, dirname($thumbsDir) . "/" . stripslashes($_POST['pathTo']));
             return;
         }
         if (is_file($from) || $type == "directory") {
