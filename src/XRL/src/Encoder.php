@@ -16,42 +16,28 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-class       XRL_Encoder
-implements  XRL_EncoderInterface
-{
+class XRL_Encoder implements XRL_EncoderInterface {
     /// Make the output compact.
-    const OUTPUT_COMPACT    = 0;
-
+    const OUTPUT_COMPACT = 0;
     /// Make the output pretty.
-    const OUTPUT_PRETTY     = 1;
-
+    const OUTPUT_PRETTY = 1;
     protected $_format;
-
-    public function __construct($format = self::OUTPUT_COMPACT)
-    {
-        if ($format != self::OUTPUT_PRETTY &&
-            $format != self::OUTPUT_COMPACT)
-            throw new InvalidArgumentException('Invalid format');
-
+    public function __construct($format = self::OUTPUT_COMPACT) {
+        if ($format != self::OUTPUT_PRETTY && $format != self::OUTPUT_COMPACT) throw new InvalidArgumentException('Invalid format');
         $this->_format = $format;
     }
-
-    protected function _getWriter()
-    {
+    protected function _getWriter() {
         $writer = new XMLWriter();
         $writer->openMemory();
         if ($this->_format == self::OUTPUT_PRETTY) {
-             $writer->setIndent(TRUE);
+            $writer->setIndent(TRUE);
             $writer->startDocument('1.0', 'UTF-8');
-        }
-        else {
+        } else {
             $writer->setIndent(FALSE);
             $writer->startDocument();
         }
         return $writer;
     }
-
     /**
      * Can be used to determine if a string contains a sequence
      * of valid UTF-8 encoded codepoints.
@@ -63,12 +49,10 @@ implements  XRL_EncoderInterface
      *      TRUE if the $text contains a valid UTF-8 sequence,
      *      FALSE otherwise.
      */
-    static protected function _isUTF8($text)
-    {
+    static protected function _isUTF8($text) {
         // From http://w3.org/International/questions/qa-forms-utf-8.html
         // Pointed out by bitseeker on http://php.net/utf8_encode
-        return (bool) preg_match(
-            '%^(?:
+        return (bool)preg_match('%^(?:
                   [\x09\x0A\x0D\x20-\x7E]            # ASCII
                 | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
                 |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
@@ -77,46 +61,30 @@ implements  XRL_EncoderInterface
                 |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
                 | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
                 |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
-            )*$%SDxs', $text
-        );
+            )*$%SDxs', $text);
     }
-
-    static protected function _writeValue(XMLWriter $writer, $value)
-    {
+    static protected function _writeValue(XMLWriter $writer, $value) {
         // Support for the <nil> extension
         // (http://ontosys.com/xml-rpc/extensions.php)
-        if (is_null($value))
-            return $writer->writeElement('nil');
-
-        if (is_int($value))
-            return $writer->writeElement('int', $value);
-
-        if (is_bool($value))
-            return $writer->writeElement('boolean', (int) $value);
-
+        if (is_null($value)) return $writer->writeElement('nil');
+        if (is_int($value)) return $writer->writeElement('int', $value);
+        if (is_bool($value)) return $writer->writeElement('boolean', (int)$value);
         if (is_string($value)) {
             // Encode as a regular string if possible.
-            if (self::_isUTF8($value))
-                return $writer->text($value);
+            if (self::_isUTF8($value)) return $writer->text($value);
             // Otherwise, use a base64-encoded string.
             return $writer->writeElement('base64', base64_encode($value));
         }
-
-        if (is_double($value))
-            return $writer->writeElement('double', $value);
-
+        if (is_double($value)) return $writer->writeElement('double', $value);
         if (is_array($value)) {
-            $keys       = array_keys($value);
-            $length     = count($value);
-
+            $keys = array_keys($value);
+            $length = count($value);
             // Empty arrays must be handled with care.
-            if (!$length)
-                $numeric = array();
+            if (!$length) $numeric = array();
             else {
                 $numeric = range(0, $length - 1);
                 sort($keys);
             }
-
             // Hash / associative array.
             if ($keys != $numeric) {
                 $writer->startElement('struct');
@@ -125,7 +93,6 @@ implements  XRL_EncoderInterface
                     $writer->startElement('name');
                     self::_writeValue($writer, $key);
                     $writer->endElement();
-
                     $writer->startElement('value');
                     self::_writeValue($writer, $val);
                     $writer->endElement();
@@ -134,7 +101,6 @@ implements  XRL_EncoderInterface
                 $writer->endElement();
                 return;
             }
-
             // List / numerically-indexed array.
             $writer->startElement('array');
             $writer->startElement('data');
@@ -147,41 +113,27 @@ implements  XRL_EncoderInterface
             $writer->endElement();
             return;
         }
-
-        if (!is_object($value))
-            throw new InvalidArgumentException('Unsupported type');
-
+        if (!is_object($value)) throw new InvalidArgumentException('Unsupported type');
         /// @TODO: special support for DateTime objects.
-
-        if (($value instanceof Serializable) ||
-            method_exists($value, '__sleep'))
-            return $this->_writeValue($writer, serialize($value));
-
+        if (($value instanceof Serializable) || method_exists($value, '__sleep')) return $this->_writeValue($writer, serialize($value));
         throw new InvalidArgumentException('Could not serialize object');
     }
-
-    protected function _finalizeWrite(XMLWriter $writer)
-    {
+    protected function _finalizeWrite(XMLWriter $writer) {
         $writer->endDocument();
         $result = $writer->outputMemory(TRUE);
-
         if ($this->_format == self::OUTPUT_COMPACT) {
             // Remove the XML declaration for an even
             // more compact result.
-            if (!strncmp($result, '<'.'?xml', 5)) {
-                $pos    = strpos($result, '?'.'>');
-                if ($pos !== FALSE)
-                    $result = (string) substr($result, $pos + 2);
+            if (!strncmp($result, '<' . '?xml', 5)) {
+                $pos = strpos($result, '?' . '>');
+                if ($pos !== FALSE) $result = (string)substr($result, $pos + 2);
             }
             // Remove leading & trailing whitespace.
             $result = trim($result);
         }
-
         return $result;
     }
-
-    public function encodeRequest(XRL_Request $request)
-    {
+    public function encodeRequest(XRL_Request $request) {
         $writer = $this->_getWriter();
         $writer->startElement('methodCall');
         $writer->writeElement('methodName', $request->getProcedure());
@@ -200,29 +152,19 @@ implements  XRL_EncoderInterface
         $result = $this->_finalizeWrite($writer);
         return $result;
     }
-
-    public function encodeError(Exception $error)
-    {
+    public function encodeError(Exception $error) {
         $writer = $this->_getWriter();
         $writer->startElement('methodResponse');
         $writer->startElement('fault');
         $writer->startElement('value');
-        self::_writeValue(
-            $writer,
-            array(
-                'faultCode'     => $error->getCode(),
-                'faultString'   => get_class($error).': '.$error->getMessage(),
-            )
-        );
+        self::_writeValue($writer, array('faultCode' => $error->getCode(), 'faultString' => get_class($error) . ': ' . $error->getMessage(),));
         $writer->endElement();
         $writer->endElement();
         $writer->endElement();
         $result = $this->_finalizeWrite($writer);
         return $result;
     }
-
-    public function encodeResponse($response)
-    {
+    public function encodeResponse($response) {
         $writer = $this->_getWriter();
         $writer->startElement('methodResponse');
         $writer->startElement('params');
@@ -237,4 +179,3 @@ implements  XRL_EncoderInterface
         return $result;
     }
 }
-

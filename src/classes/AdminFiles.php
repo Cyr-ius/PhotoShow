@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class AdminFiles.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -28,7 +28,6 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
 /**
  * Admin Files
  *
@@ -41,46 +40,36 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-class AdminFiles
-{
-	/// Delete form
-	private $delete;
-
-	/// Move form
-	private $move;
-
-	/// Upload form
-	private $upload;
-
-	/// Awesome JS form
-	private $JS;
-
-
- 	/**
- 	 * Initialise variables
- 	 * 
- 	 * @author Thibaud Rohmer
- 	 */
- 	public function __construct(){
- 		$this->delete 	= new AdminDelete();
- 		$this->move 	= new AdminMove();
- 		$this->upload 	= new AdminUpload();
- 		$this->JS 		= new JSFiles();
- 	}
-
-
- 	public function toHTML(){
- 		echo "<noscript>";
- 		echo "<div class='panel'>";
- 		$this->upload->toHTML();
- 		$this->move->toHTML();
- 		$this->delete->toHTML();
- 		echo "</div>";
- 		echo "</noscript>";
- 		echo "<div class='noscript_hidden'>";
- 		$this->JS->toHTML();
- 		echo "</div>";
- 	}
-
-
+class AdminFiles {
+    /// Delete form
+    private $delete;
+    /// Move form
+    private $move;
+    /// Upload form
+    private $upload;
+    /// Awesome JS form
+    private $JS;
+    /**
+     * Initialise variables
+     *
+     * @author Thibaud Rohmer
+     */
+    public function __construct() {
+        $this->delete = new AdminDelete();
+        $this->move = new AdminMove();
+        $this->upload = new AdminUpload();
+        $this->JS = new JSFiles();
+    }
+    public function toHTML() {
+        echo "<noscript>";
+        echo "<div class='panel'>";
+        $this->upload->toHTML();
+        $this->move->toHTML();
+        $this->delete->toHTML();
+        echo "</div>";
+        echo "</noscript>";
+        echo "<div class='noscript_hidden'>";
+        $this->JS->toHTML();
+        echo "</div>";
+    }
 }

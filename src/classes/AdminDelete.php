@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class AdminDelete.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -28,7 +28,6 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
 /**
  * AdminDelete
  *
@@ -41,122 +40,96 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
- class AdminDelete
- {
-
- 	/// Directories where we can upload
- 	public $files = array();
-
- 	/// What have we done ?
- 	public $done;
-
- 	/// Currently selected dir/file
- 	private $selected;
-
- 	/**
- 	 * Create upload page
- 	 * 
- 	 * @author Thibaud Rohmer
- 	 */
- 	public function __construct(){
-
- 		/// Get all subdirs
- 		$list_dirs = Menu::list_dirs(Settings::$photos_dir,true);
-
- 		/// Get all subfiles
- 		$list_files = Menu::list_files(Settings::$photos_dir,true);
-
-
- 		foreach ($list_dirs as $dir){
- 			$this->files[] 	= File::a2r($dir);
- 		}
-
- 		foreach ($list_files as $file){
- 			$this->files[] = File::a2r($file);
- 		}
-
- 		if(isset(CurrentUser::$path)){
- 			$this->selected = File::a2r(CurrentUser::$path);
- 		}
- 	}
-
- 	/**
- 	 * Delete files on the server
- 	 * 
- 	 * @author Thibaud Rohmer
- 	 */
- 	public function delete(){
-
- 		/// Just to be really sure... 
- 		if( !(CurrentUser::$admin || CurrentUser::$uploader) ){
- 			return;
- 		}
-
- 		if(!is_array($_POST['del'])){
-	 		$del 	=	File::r2a(stripslashes($_POST['del']));
-	 		return 	AdminDelete::rec_del($del);
- 		}else{
- 			foreach($_POST['del'] as $todel){
-		 		$del 	=	File::r2a(stripslashes($todel));
-		 		AdminDelete::rec_del($del);
- 			}
- 		}
-	}
-
-	/**
-	 * Reccursively delete all files in $dir
-	 * 
-	 * @param string $dir
-	 * @author Thibaud Rohmer
-	 */
-	public function rec_del($dir){
- 		if($dir == Settings::$photos_dir){
- 			return;
- 		}
-
-		if(is_file($dir)){
-			return unlink($dir);
-		}
-
-		$dirs 	=	Menu::list_dirs($dir);
-		$files 	= 	Menu::list_files($dir,false,true);
-
-		foreach($dirs as $d){
-			AdminDelete::rec_del($d);
-		}
-		
-		foreach($files as $f){
-			unlink($f);
-		}
-
-		return rmdir($dir);
-	}
-
-
- 	/**
- 	 * Display upload page on website
- 	 * 
- 	 * @author Thibaud Rohmer
- 	 */
- 	public function toHTML(){
- 		echo 	"<h1>".Settings::_("delete","delete")."</h1>";
- 		echo 	"<form action='?t=Adm&a=Del' method='post' enctype='multipart/form-data'>";
- 		echo 	"<fieldset><span>".Settings::_("delete","path")."</span><div><select name='del'>";
-		foreach($this->files as $file){
- 				if($file == $this->selected){
- 					$selected = "selected";
- 				}else{
- 					$selected = "";
- 				}
- 				echo "<option value='".htmlentities($file, ENT_QUOTES ,'UTF-8')."' $selected>".htmlentities($file, ENT_QUOTES ,'UTF-8')."</option>\n";
- 		}
-
- 		echo 	"</select></div></fieldset>\n";
-
- 		echo 	"<fieldset><input type='submit' value='".Settings::_("delete","submit")."'/></fieldset>";
- 		echo 	"</form>";
-
- 	}
-
- }
- ?>
+class AdminDelete {
+    /// Directories where we can upload
+    public $files = array();
+    /// What have we done ?
+    public $done;
+    /// Currently selected dir/file
+    private $selected;
+    /**
+     * Create upload page
+     *
+     * @author Thibaud Rohmer
+     */
+    public function __construct() {
+        /// Get all subdirs
+        $list_dirs = Menu::list_dirs(Settings::$photos_dir, true);
+        /// Get all subfiles
+        $list_files = Menu::list_files(Settings::$photos_dir, true);
+        foreach ($list_dirs as $dir) {
+            $this->files[] = File::a2r($dir);
+        }
+        foreach ($list_files as $file) {
+            $this->files[] = File::a2r($file);
+        }
+        if (isset(CurrentUser::$path)) {
+            $this->selected = File::a2r(CurrentUser::$path);
+        }
+    }
+    /**
+     * Delete files on the server
+     *
+     * @author Thibaud Rohmer
+     */
+    public function delete() {
+        /// Just to be really sure...
+        if (!(CurrentUser::$admin || CurrentUser::$uploader)) {
+            return;
+        }
+        if (!is_array($_POST['del'])) {
+            $del = File::r2a(stripslashes($_POST['del']));
+            return AdminDelete::rec_del($del);
+        } else {
+            foreach ($_POST['del'] as $todel) {
+                $del = File::r2a(stripslashes($todel));
+                AdminDelete::rec_del($del);
+            }
+        }
+    }
+    /**
+     * Reccursively delete all files in $dir
+     *
+     * @param string $dir
+     * @author Thibaud Rohmer
+     */
+    public function rec_del($dir) {
+        if ($dir == Settings::$photos_dir) {
+            return;
+        }
+        if (is_file($dir)) {
+            return unlink($dir);
+        }
+        $dirs = Menu::list_dirs($dir);
+        $files = Menu::list_files($dir, false, true);
+        foreach ($dirs as $d) {
+            AdminDelete::rec_del($d);
+        }
+        foreach ($files as $f) {
+            unlink($f);
+        }
+        return rmdir($dir);
+    }
+    /**
+     * Display upload page on website
+     *
+     * @author Thibaud Rohmer
+     */
+    public function toHTML() {
+        echo "<h1>" . Settings::_("delete", "delete") . "</h1>";
+        echo "<form action='?t=Adm&a=Del' method='post' enctype='multipart/form-data'>";
+        echo "<fieldset><span>" . Settings::_("delete", "path") . "</span><div><select name='del'>";
+        foreach ($this->files as $file) {
+            if ($file == $this->selected) {
+                $selected = "selected";
+            } else {
+                $selected = "";
+            }
+            echo "<option value='" . htmlentities($file, ENT_QUOTES, 'UTF-8') . "' $selected>" . htmlentities($file, ENT_QUOTES, 'UTF-8') . "</option>\n";
+        }
+        echo "</select></div></fieldset>\n";
+        echo "<fieldset><input type='submit' value='" . Settings::_("delete", "submit") . "'/></fieldset>";
+        echo "</form>";
+    }
+}
+?>

@@ -2,11 +2,11 @@
 /**
  * This file implements the interface
  *  HTMLObject.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -29,7 +29,6 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
 /**
  * HTMLObject
  *
@@ -43,9 +42,7 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-interface HTMLObject
-{
-	public function toHTML();
+interface HTMLObject {
+    public function toHTML();
 }
-
 ?>

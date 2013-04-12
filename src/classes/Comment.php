@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class Comment.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -28,7 +28,6 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
 /**
  * Comment
  *
@@ -41,60 +40,53 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-class Comment implements HTMLObject
-{
-	/// Login of the poster
-	public $login;
-	
-	/// Date when the comment wat posted
-	public $date;
-	
-	/// Content of the comment
-	public $content;
-
-	/// File
-	public $file;
-
-	/**
-	 * Create comment
-	 *
-	 * @param string $login 
-	 * @param string $content 
-	 * @param string $date 
-	 * @author Thibaud Rohmer
-	 */
-	public function __construct($login,$content,$date,$file=null){
-		$this->login	=	$login;
-		$this->content	=	$content;
-		$this->date		=	$date;
-		$this->file 	=	$file;
-	}
-	
-	/**
-	 * Display comment on website
-	 *
-	 * @return void
-	 * @author Thibaud Rohmer
-	 */
-	public function toHTML(){
-		$login		=	stripslashes(htmlentities( $this->login , ENT_QUOTES ,'UTF-8'));
-		$content	=	stripslashes(htmlentities( $this->content , ENT_QUOTES ,'UTF-8'));
-		$date		=	$this->date;
-
-		echo "<div class='comment'>\n";
-		// Not implemented yet.
-		if(false && (CurrentUser::$admin || $login == CurrentUser::$account->login)){
-			echo "<div class='delete'>
+class Comment implements HTMLObject {
+    /// Login of the poster
+    public $login;
+    /// Date when the comment wat posted
+    public $date;
+    /// Content of the comment
+    public $content;
+    /// File
+    public $file;
+    /**
+     * Create comment
+     *
+     * @param string $login
+     * @param string $content
+     * @param string $date
+     * @author Thibaud Rohmer
+     */
+    public function __construct($login, $content, $date, $file = null) {
+        $this->login = $login;
+        $this->content = $content;
+        $this->date = $date;
+        $this->file = $file;
+    }
+    /**
+     * Display comment on website
+     *
+     * @return void
+     * @author Thibaud Rohmer
+     */
+    public function toHTML() {
+        $login = stripslashes(htmlentities($this->login, ENT_QUOTES, 'UTF-8'));
+        $content = stripslashes(htmlentities($this->content, ENT_QUOTES, 'UTF-8'));
+        $date = $this->date;
+        echo "<div class='comment'>\n";
+        // Not implemented yet.
+        if (false && (CurrentUser::$admin || $login == CurrentUser::$account->login)) {
+            echo "<div class='delete'>
 							<form action='?t=Adm&a=CDe' method='post'>
-								<input type='hidden' name='image' value='".htmlentities(File::a2r($this->file), ENT_QUOTES ,'UTF-8')."'>
+								<input type='hidden' name='image' value='" . htmlentities(File::a2r($this->file), ENT_QUOTES, 'UTF-8') . "'>
 								<input type='hidden' name='date' value='$date'>
 								<input type='submit' value='x'>
 							</form>
 						</div>";
-		}
-		echo "<div class='login name'>$login</div>\n";
-		echo "<div class='content'>$content</div>\n";
-		echo "</div>\n";
-	}
+        }
+        echo "<div class='login name'>$login</div>\n";
+        echo "<div class='content'>$content</div>\n";
+        echo "</div>\n";
+    }
 }
 ?>

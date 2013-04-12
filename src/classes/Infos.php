@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class Infos.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -28,7 +28,6 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
 /**
  * Used to print the info panel
  *
@@ -43,49 +42,31 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
-class Infos implements HTMLObject
-{
-	private $info;
-	
-	private $exif;
-
-	private $comments;
-
-	public function __construct(){
-
-		if(CurrentUser::$admin || CurrentUser::$uploader){
-			$this->info = new AdminPanel();
-		}
-		
-		$this->exif = new Exif(CurrentUser::$path);
-
-		if(!Settings::$nocomments){
-			$this->comments	=	new Comments(CurrentUser::$path);
-		}
-
-	}
-
-	public function toHTML(){
-
-		if(CurrentUser::$admin || CurrentUser::$uploader ){
-		$this->info->toHTML();
-		}
-
-		$this->exif->toHTML();
-
-		echo "<div id='comments' class='box'>\n";
-		if(!Settings::$nocomments){
-			$this->comments->toHTML();
-		}
-		echo "</div>\n";
-
-		echo "<div id='share'>\n";
-
-		echo "</div>";
-
-	}
-
+class Infos implements HTMLObject {
+    private $info;
+    private $exif;
+    private $comments;
+    public function __construct() {
+        if (CurrentUser::$admin || CurrentUser::$uploader) {
+            $this->info = new AdminPanel();
+        }
+        $this->exif = new Exif(CurrentUser::$path);
+        if (!Settings::$nocomments) {
+            $this->comments = new Comments(CurrentUser::$path);
+        }
+    }
+    public function toHTML() {
+        if (CurrentUser::$admin || CurrentUser::$uploader) {
+            $this->info->toHTML();
+        }
+        $this->exif->toHTML();
+        echo "<div id='comments' class='box'>\n";
+        if (!Settings::$nocomments) {
+            $this->comments->toHTML();
+        }
+        echo "</div>\n";
+        echo "<div id='share'>\n";
+        echo "</div>";
+    }
 }
-
 ?>

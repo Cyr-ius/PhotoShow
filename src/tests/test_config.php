@@ -2,11 +2,11 @@
 /**
  * This file contains the website configuration for unit test only.
  * Do not modify !
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -29,17 +29,14 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
 // Folder where your pictures are stored.
 // Must be at least readable by web server process
 #$config->photos_dir   = "path_to_your_photos_dir_goes_here";
-$config->photos_dir   = realpath(dirname(__FILE__))."/tmp/photos/";
-
+$config->photos_dir = realpath(dirname(__FILE__)) . "/tmp/photos/";
 // Folder where PhotoShow parameters and thumbnails are stored.
 // Must be writable by web server process
 #$config->ps_generated   = "path_where_photoshow_generates_files_goes_here";
-$config->ps_generated   = realpath(dirname(__FILE__))."/tmp/generated/";
-
+$config->ps_generated = realpath(dirname(__FILE__)) . "/tmp/generated/";
 // Local timezone. Default one is "Europe/Paris".
 #$config->timezone = "Europe/Paris";
 

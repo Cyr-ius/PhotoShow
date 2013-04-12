@@ -16,7 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 /**
  * \brief
  *      A simple XML-RPC client.
@@ -42,21 +41,15 @@
  *      $client->{"foo.bar.baz"}(42);
  * \endcode
  */
-class   XRL_Client
-extends XRL_FactoryRegistry
-{
+class XRL_Client extends XRL_FactoryRegistry {
     /// The remote XML-RPC server's base URL.
     protected $_baseURL;
-
     /// A DateTimeZone object representing the server's timezone.
     protected $_timezone;
-
     /// A stream context to use when querying the server.
     protected $_context;
-
     /// Callable used to fetch the response.
     protected $_fetcher;
-
     /**
      * Create a new XML-RPC client.
      *
@@ -86,42 +79,21 @@ extends XRL_FactoryRegistry
      * \throw InvalidArgumentException
      *      The given timezone or context is invalid.
      */
-    public function __construct(
-                                $baseURL,
-                                $timezone   = NULL,
-                                $context    = NULL
-    )
-    {
-        if ($timezone === NULL)
-            $timezone = date_default_timezone_get();
-        if ($context === NULL)
-            $context = stream_context_get_default();
-
-        if (!is_resource($context))
-            throw new InvalidArgumentException('Invalid context');
-
+    public function __construct($baseURL, $timezone = NULL, $context = NULL) {
+        if ($timezone === NULL) $timezone = date_default_timezone_get();
+        if ($context === NULL) $context = stream_context_get_default();
+        if (!is_resource($context)) throw new InvalidArgumentException('Invalid context');
         $this->_baseURL = $baseURL;
         try {
             $this->_timezone = new DateTimeZone($timezone);
         }
-        catch (Exception $e) {
+        catch(Exception $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode());
         }
-
-        $this->_context     = $context;
-        $this->_fetcher     = 'file_get_contents';
-        $this->_interfaces  = array(
-            'xrl_encoderfactoryinterface'   =>
-                new XRL_CompactEncoderFactory(),
-
-            'xrl_decoderfactoryinterface'   =>
-                new XRL_ValidatingDecoderFactory(),
-
-            'xrl_requestfactoryinterface'   =>
-                new XRL_RequestFactory(),
-        );
+        $this->_context = $context;
+        $this->_fetcher = 'file_get_contents';
+        $this->_interfaces = array('xrl_encoderfactoryinterface' => new XRL_CompactEncoderFactory(), 'xrl_decoderfactoryinterface' => new XRL_ValidatingDecoderFactory(), 'xrl_requestfactoryinterface' => new XRL_RequestFactory(),);
     }
-
     /**
      * A magic method that forwards all method calls
      * to the remote XML-RPC server and returns
@@ -151,38 +123,21 @@ extends XRL_FactoryRegistry
      *      the remote server (such as when no connection
      *      could be established to it).
      */
-    public function __call($method, array $args)
-    {
-        $factory    = $this['XRL_RequestFactoryInterface'];
-        $request    = $factory->createRequest($method, $args);
+    public function __call($method, array $args) {
+        $factory = $this['XRL_RequestFactoryInterface'];
+        $request = $factory->createRequest($method, $args);
         assert($request instanceof XRL_RequestInterface);
-
-        $factory    = $this['XRL_EncoderFactoryInterface'];
-        $encoder    = $factory->createEncoder();
+        $factory = $this['XRL_EncoderFactoryInterface'];
+        $encoder = $factory->createEncoder();
         assert($encoder instanceof XRL_EncoderInterface);
-
-        $factory    = $this['XRL_DecoderFactoryInterface'];
-        $decoder    = $factory->createDecoder();
+        $factory = $this['XRL_DecoderFactoryInterface'];
+        $decoder = $factory->createDecoder();
         assert($decoder instanceof XRL_DecoderInterface);
-
-        $xml        = $encoder->encodeRequest($request);
-        $options    = array(
-            'http' => array(
-                'method'    => 'POST',
-                'content'   => $xml,
-                'header'    => 'Content-Type: text/xml',
-            ),
-        );
+        $xml = $encoder->encodeRequest($request);
+        $options = array('http' => array('method' => 'POST', 'content' => $xml, 'header' => 'Content-Type: text/xml',),);
         stream_context_set_option($this->_context, $options);
-
-        $data = call_user_func(
-            $this->_fetcher,
-            $this->_baseURL,
-            FALSE,
-            $this->_context
-        );
+        $data = call_user_func($this->_fetcher, $this->_baseURL, FALSE, $this->_context);
         $result = $decoder->decodeResponse($data);
         return $result;
     }
 }
-

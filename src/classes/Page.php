@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class Page.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -28,7 +28,6 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
 /**
  * Page
  *
@@ -42,66 +41,52 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
-abstract class Page implements HTMLObject
-{
-		/**
-		 * Generate an insanely beautiful header.
-		 * TODO: Title
-		 *
-		 * @return void
-		 * @author Thibaud Rohmer
-		 */
-		public function header($head_content=NULL){
-			echo "<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>\n";
-			echo "<html>";
-			echo "<head>\n";
-			echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>\n";
-			echo "<title>".Settings::$name."</title>\n";
-			echo "<meta name='author' content='Thibaud Rohmer'>\n";
-			echo "<link rel='icon' type='image/ico' href='/inc/favico.ico'>";
-
-			/// CSS
-
-			echo "<link rel='stylesheet' href='/inc/stylesheets/main.css' type='text/css' media='screen' charset='utf-8'>\n";
-			echo "<link rel='stylesheet' href='/inc/stylesheets/page.css' type='text/css' media='screen' charset='utf-8'>\n";
-			echo "<link rel='stylesheet' href='/inc/stylesheets/panels.css' type='text/css' media='screen' charset='utf-8'>\n";
-			echo "<link rel='stylesheet' href='/inc/stylesheets/forms.css' type='text/css' media='screen' charset='utf-8'>\n";
-
-			/// Trick to hide "only-script" parts
-	 		echo "<noscript><style>.noscript_hidden { display: none; }</style></noscript>";
-
-			/// JS
-			echo "<script src='/inc/js/jquery.js'></script>\n";
-			echo "<script src='/inc/js/jquery-ui.js'></script>\n";
-			echo "<script src='/inc/js/mousewheel.js'></script>\n";
-			echo "<script src='/inc/js/jquery.scrollTo.js'></script>\n";
-			echo "<script src='/inc/js/jquery.fileupload.js'></script>\n";
-
-
-			echo "<script src='/inc/js/menu.js'></script>\n";
-			echo "<script src='/inc/js/panel.js'></script>\n";
-			echo "<script src='/inc/js/slideshow.js'></script>\n";
-			echo "<script src='/inc/js/image_panel.js'></script>\n";
-			echo "<script src='/inc/js/keyboard.js'></script>\n";
-			echo "<script src='/inc/js/select.js'></script>\n";
-
-			
-			if(CurrentUser::$admin || CurrentUser::$uploader){
-				echo "<link rel='stylesheet' href='/inc/stylesheets/fileupload-ui.css' type='text/css' media='screen' charset='utf-8'>\n";
-				echo "<link rel='stylesheet' href='/inc/stylesheets/admin.css' type='text/css' media='screen' charset='utf-8'>\n";
-
-				echo "<script src='/inc/js/jquery.fileupload-ui.js'></script>\n";
-				echo "<script src='/inc/js/admin.js'></script>\n";
-			}
-
-            // Add specific head content if needed
-            if ($head_content)
-            {
-                echo $head_content;
-            }
-
-			echo "</head>";
-		}
+abstract class Page implements HTMLObject {
+    /**
+     * Generate an insanely beautiful header.
+     * TODO: Title
+     *
+     * @return void
+     * @author Thibaud Rohmer
+     */
+    public function header($head_content = NULL) {
+        echo "<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>\n";
+        echo "<html>";
+        echo "<head>\n";
+        echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>\n";
+        echo "<title>" . Settings::$name . "</title>\n";
+        echo "<meta name='author' content='Thibaud Rohmer'>\n";
+        echo "<link rel='icon' type='image/ico' href='/inc/favico.ico'>";
+        /// CSS
+        echo "<link rel='stylesheet' href='/inc/stylesheets/main.css' type='text/css' media='screen' charset='utf-8'>\n";
+        echo "<link rel='stylesheet' href='/inc/stylesheets/page.css' type='text/css' media='screen' charset='utf-8'>\n";
+        echo "<link rel='stylesheet' href='/inc/stylesheets/panels.css' type='text/css' media='screen' charset='utf-8'>\n";
+        echo "<link rel='stylesheet' href='/inc/stylesheets/forms.css' type='text/css' media='screen' charset='utf-8'>\n";
+        /// Trick to hide "only-script" parts
+        echo "<noscript><style>.noscript_hidden { display: none; }</style></noscript>";
+        /// JS
+        echo "<script src='/inc/js/jquery.js'></script>\n";
+        echo "<script src='/inc/js/jquery-ui.js'></script>\n";
+        echo "<script src='/inc/js/mousewheel.js'></script>\n";
+        echo "<script src='/inc/js/jquery.scrollTo.js'></script>\n";
+        echo "<script src='/inc/js/jquery.fileupload.js'></script>\n";
+        echo "<script src='/inc/js/menu.js'></script>\n";
+        echo "<script src='/inc/js/panel.js'></script>\n";
+        echo "<script src='/inc/js/slideshow.js'></script>\n";
+        echo "<script src='/inc/js/image_panel.js'></script>\n";
+        echo "<script src='/inc/js/keyboard.js'></script>\n";
+        echo "<script src='/inc/js/select.js'></script>\n";
+        if (CurrentUser::$admin || CurrentUser::$uploader) {
+            echo "<link rel='stylesheet' href='/inc/stylesheets/fileupload-ui.css' type='text/css' media='screen' charset='utf-8'>\n";
+            echo "<link rel='stylesheet' href='/inc/stylesheets/admin.css' type='text/css' media='screen' charset='utf-8'>\n";
+            echo "<script src='/inc/js/jquery.fileupload-ui.js'></script>\n";
+            echo "<script src='/inc/js/admin.js'></script>\n";
+        }
+        // Add specific head content if needed
+        if ($head_content) {
+            echo $head_content;
+        }
+        echo "</head>";
+    }
 }
 ?>

@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements unit tests for Settings class
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -28,31 +28,26 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
 /**
  * Unit test Guest Toke
  *
  * I used that for some debug. It's incomplete and I guess
- * It would be better to have a proper framework for unit 
+ * It would be better to have a proper framework for unit
  * test on PHP website. Anyway, it does not harm anyone for now
  *
  * @category  Website
  * @package   Photoshow
  * @license   http://www.gnu.org/licenses/
  */
-
-require_once(realpath(dirname(__FILE__)."/TestUnit.php"));
-class SettingsTest extends TestUnit
-{
+require_once (realpath(dirname(__FILE__) . "/TestUnit.php"));
+class SettingsTest extends TestUnit {
     /**
      * test set_lang
      * @test
      */
-    public function test_set_lang(){
+    public function test_set_lang() {
         Settings::set_lang("francais");
         $this->assertEquals(Settings::_("settings", "noregister"), "Bloquer les inscriptions");
     }
-
-
 }
 ?>

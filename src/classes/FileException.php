@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class FileException.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -28,7 +28,6 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
 /**
  * FileException
  *
@@ -41,12 +40,8 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
-class FileException 
-extends Exception
-{	
-	/// Path to missing file
-	public $file;
+class FileException extends Exception {
+    /// Path to missing file
+    public $file;
 }
-
 ?>

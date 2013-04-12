@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class Index.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -28,7 +28,6 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
 /**
  * Index
  *
@@ -42,73 +41,69 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-
-class Index
-{
-	function __construct(){
-		/// Initialize variables
-		Settings::init();
-
-
-		/// Initialize CurrentUser
-		try{
-			CurrentUser::init();
-		}catch(Exception $e){
-			$page = new RegisterPage(true);
-			$page->toHTML();
-			return;
-		}
-
-		/// Check what to do
-		switch (CurrentUser::$action){
-
-			case "Judge":	// Same as page
-			case "Page":	$page = new MainPage();
-							$page->toHTML();
-							break;
-							
-			case "Log":		$page = new LoginPage();
-							$page->toHTML();
-							break;
-							
-			case "Reg":		$page = new RegisterPage();
-							$page->toHTML();
-							break;
-
-			case "JS":		$page = new JS();
-							break;
-
-			case "Img":		Provider::Image(CurrentUser::$path);
-							break;
-			
-			case "BDl":		Provider::Image(CurrentUser::$path,false,true,true,true);
-							break;
-
-			case "Big":		Provider::Image(CurrentUser::$path,false,true);
-							break;
-
-			case "Thb":		Provider::Image(CurrentUser::$path,true);
-							break;
-
-			case "Vid":		Provider::Video(CurrentUser::$path);
-							break;
-						
-			case "Zip":		Provider::Zip(CurrentUser::$path);
-							break;
-			
-			case "Acc":		if(CurrentUser::$admin && isset($_POST['login'])){
-								$acc = new Account($_POST['login']);
-							}else{
-								$acc = CurrentUser::$account;
-							}
-							$acc->toHTML();
-							break;
-			
-			case "Adm":		$page = new Admin();
-							$page->toHTML();
-							break;
-		}
-	}
+class Index {
+    function __construct() {
+        /// Initialize variables
+        Settings::init();
+        /// Initialize CurrentUser
+        try {
+            CurrentUser::init();
+        }
+        catch(Exception $e) {
+            $page = new RegisterPage(true);
+            $page->toHTML();
+            return;
+        }
+        /// Check what to do
+        switch (CurrentUser::$action) {
+            case "Judge": // Same as page
+                
+            case "Page":
+                $page = new MainPage();
+                $page->toHTML();
+            break;
+            case "Log":
+                $page = new LoginPage();
+                $page->toHTML();
+            break;
+            case "Reg":
+                $page = new RegisterPage();
+                $page->toHTML();
+            break;
+            case "JS":
+                $page = new JS();
+            break;
+            case "Img":
+                Provider::Image(CurrentUser::$path);
+            break;
+            case "BDl":
+                Provider::Image(CurrentUser::$path, false, true, true, true);
+            break;
+            case "Big":
+                Provider::Image(CurrentUser::$path, false, true);
+            break;
+            case "Thb":
+                Provider::Image(CurrentUser::$path, true);
+            break;
+            case "Vid":
+                Provider::Video(CurrentUser::$path);
+            break;
+            case "Zip":
+                Provider::Zip(CurrentUser::$path);
+            break;
+            case "Acc":
+                if (CurrentUser::$admin && isset($_POST['login'])) {
+                    $acc = new Account($_POST['login']);
+                } else {
+                    $acc = CurrentUser::$account;
+                }
+                $acc->toHTML();
+            break;
+            case "Adm":
+                $page = new Admin();
+                $page->toHTML();
+            break;
+        }
+    }
 }
-
 ?>

@@ -15,13 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-class       XRL_ResponseFactory
-implements  XRL_ResponseFactoryInterface
-{
-    public function createResponse($response)
-    {
+class XRL_ResponseFactory implements XRL_ResponseFactoryInterface {
+    public function createResponse($response) {
         return new XRL_Response($response);
     }
 }
-
