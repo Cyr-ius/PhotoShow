@@ -37,6 +37,11 @@ $config->photos_dir   = "path_to_your_photos_dir_goes_here";
 // Must be writable by web server process
 $config->ps_generated   = "path_where_photoshow_generates_files_goes_here";
 
+// Full URL as seen from outside. This should be set to the location 
+// of your gallery directory, e.g. http://yourserver/whatever/path/of/your/gallery/
+// Must be writable by web server process
+$config->self_url_path   = "path_where_photoshow_generates_files_goes_here";
+
 // Local timezone. Default one is "Europe/Paris".
 #$config->timezone = "Europe/Paris";
 
