@@ -26,7 +26,8 @@
  * @author    Franck Royer <royer.franck@gmail.com>
  * @copyright 2012 Thibaud Rohmer
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
 /**
  * Unit test Guest Toke

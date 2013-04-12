@@ -24,9 +24,10 @@
  * @category  Website
  * @package   Photoshow
  * @author    Franck Royer <royer.franck@gmail.com>
- * @copyright 2012 Thibaud Rohmer
+ * @copyright 2012 Thibaud Rohmer 2103 Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
 /**
  * Cleaning
@@ -36,9 +37,10 @@
  * @category  Website
  * @package   Photoshow
  * @author    Franck Royer <royer.franck@gmail.com>
- * @copyright Thibaud Rohmer
+ * @copyright Thibaud Rohmer + Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
 class Cleaning {
     /**

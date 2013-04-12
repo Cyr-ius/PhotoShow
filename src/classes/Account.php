@@ -21,12 +21,12 @@
  * You should have received a copy of the GNU General Public License
  * along with PhotoShow.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @package	  PhotoShow
+ * @package   PhotoShow
  * @category  Website
- * @author	  Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright 2011 Thibaud Rohmer
- * @license	  http://www.gnu.org/licenses/
- * @link	  http://github.com/thibaud-rohmer/PhotoShow
+ * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com> + Psychedelys <psychedelys@gmail.com>
+ * @copyright 2011 Thibaud Rohmer + 2013 Psychedelys
+ * @license   http://www.gnu.org/licenses/
+ * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
 /**
  * Account
@@ -45,12 +45,12 @@
  * - Key
  *
  *
- * @package	  PhotoShow
+ * @package   PhotoShow
  * @category  Website
- * @author	  Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright Thibaud Rohmer
- * @license	  http://www.gnu.org/licenses/
- * @link	  http://github.com/thibaud-rohmer/PhotoShow
+ * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com> + Psychedelys <psychedelys@gmail.com>
+ * @copyright Thibaud Rohmer + Psychedelys
+ * @license   http://www.gnu.org/licenses/
+ * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
 class Account extends Page {
     /// Login of the user

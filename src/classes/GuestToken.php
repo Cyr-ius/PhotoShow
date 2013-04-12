@@ -41,7 +41,7 @@
  * @category  Website
  * @author	  Franck Royer <royer.franck@gmail.com>
  * @author	  Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright Thibaud Rohmer
+ * @copyright Thibaud Rohmer + Psychedelys
  * @license	  http://www.gnu.org/licenses/
  * @link	  http://github.com/thibaud-rohmer/PhotoShow
  */
