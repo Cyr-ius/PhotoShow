@@ -65,6 +65,9 @@ class RegisterPage extends Page {
             header("HTTP/1.1 301 Moved Permanently");
             header("Location: https://" . Settings::$self_url . Settings::$self_path . $_SERVER["REQUEST_URI"]);
             exit();
+        } elseif (Settings::$noregister) {
+            header("HTTP/1.1 501 Not Authorised");
+            exit();
         } else {
             if (!$this->included) {
                 echo "<div class='center'>\n";

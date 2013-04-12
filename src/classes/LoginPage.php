@@ -82,7 +82,11 @@ class LoginPage extends Page {
                     <input type='password' name='password' value=''>
                 </div>
             </fieldset>\n";
-            echo "<fieldset class='alignright'><input type='submit' value='" . Settings::_("login", "submit") . "' > " . Settings::_("login", "or") . " <a class='inline' href='?t=Reg'>" . Settings::_("login", "register") . "</a> " . Settings::_("login", "or") . " <a class='inline' href='.'>" . Settings::_("login", "back") . "</a>";
+            echo "<fieldset class='alignright'><input type='submit' value='" . Settings::_("login", "submit") . "' > " . Settings::_("login", "or");
+            if (!Settings::$noregister) {
+                echo " <a class='inline' href='?t=Reg'>" . Settings::_("login", "register") . "</a> " . Settings::_("login", "or");
+            }
+            echo " <a class='inline' href='.'>" . Settings::_("login", "back") . "</a>";
             echo "</fieldset></form>\n";
             echo "</div>\n";
         }
