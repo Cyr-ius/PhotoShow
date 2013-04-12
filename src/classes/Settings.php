@@ -50,7 +50,9 @@ class Settings extends Page {
     /// File where the admin settings are stored
     static public $admin_settings_file;
     /// Web site outside URL
-    static public $self_url_path;
+    static public $self_url;
+    /// Web site outside URL
+    static public $self_path;
     /**** Admin Settings ****/
     /// Website name
     static public $name = "PhotoShow";
@@ -136,7 +138,8 @@ class Settings extends Page {
         Settings::$thumbs_dir = $config->ps_generated . "/Thumbs/";
         Settings::$conf_dir = $config->ps_generated . "/Conf/";
         Settings::$admin_settings_file = $config->ps_generated . "/Conf/admin_settings.ini";
-        Settings::$self_url_path = $config->self_url_path;
+        Settings::$self_url = $config->self_url;
+        Settings::$self_path = $config->self_path;
         /// Set TimeZone
         date_default_timezone_set($config->timezone);
         // Now, check that this stuff exists.

@@ -90,7 +90,7 @@ class Image implements HTMLObject {
         echo " height:100%;";
         echo "';>";
         echo "<a href='?f=$this->dir'>";
-        echo "<img src='/inc/img.png' height='100%' width='100%' style='opacity:0;'>";
+        echo "<img src='" . Settings::$self_path . "/inc/img.png' height='100%' width='100%' style='opacity:0;'>";
         echo "</a>";
         echo "</div>";
     }

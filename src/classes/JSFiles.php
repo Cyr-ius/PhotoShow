@@ -120,7 +120,7 @@ class JSFiles {
 				</div>";
         $ret.= $this->dir2div(Settings::$photos_dir);
         $ret.= "</div>
-				<div class='bin'><img src='/inc/bin.png'></div>";
+				<div class='bin'><img src='" . Settings::$self_path . "/inc/bin.png'></div>";
         return $ret;
     }
     public function toHTML() {

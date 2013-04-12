@@ -55,9 +55,9 @@ class LoginPage extends Page {
      * @author Thibaud Rohmer
      */
     public function toHTML() {
-        if (Settings::$forcehttps && ( !isset($_SERVER["HTTPS"]) || !$_SERVER["HTTPS"]) && ( !isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) || ($_SERVER["HTTP_X_FORWARDED_PROTO"] != "https" ) ) ) {
+        if (Settings::$forcehttps && (!isset($_SERVER["HTTPS"]) || !$_SERVER["HTTPS"]) && (!isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) || ($_SERVER["HTTP_X_FORWARDED_PROTO"] != "https"))) {
             header("HTTP/1.1 301 Moved Permanently");
-            header("Location: https://" . Settings::$self_url_path  . $_SERVER["REQUEST_URI"]);
+            header("Location: https://" . Settings::$self_url . Settings::$self_path . $_SERVER["REQUEST_URI"]);
             exit();
         } else {
             $this->header();
