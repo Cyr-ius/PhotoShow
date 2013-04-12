@@ -59,7 +59,7 @@ class JS extends Page {
                     echo "<div id='menu' class='menu'>\n";
                     $m->toHTML();
                     if (CurrentUser::$admin) {
-                        echo "<div class='bin'><img src='" . Settings::$self_path . "/inc/bin.png'>" . Settings::_("bin", "delete") . "</div>";
+                        echo "<div class='bin'><img src='" . Settings::$self_path . "/inc/bin.png' alt=".Settings::_("bin", "delete").">" . Settings::_("bin", "delete") . "</div>";
                     }
                     echo "</div>\n";
                     echo "<div class='panel'>\n";
@@ -94,7 +94,7 @@ class JS extends Page {
                     $m = new Menu();
                     $m->toHTML();
                     if (CurrentUser::$admin) {
-                        echo "<div class='bin'><img src='" . Settings::$self_path . "/inc/bin.png'>" . Settings::_("bin", "delete") . "</div>";
+                        echo "<div class='bin'><img src='" . Settings::$self_path . "/inc/bin.png' alt=".Settings::_("bin", "delete").">" . Settings::_("bin", "delete") . "</div>";
                     }
                 break;
                 case "Pan":

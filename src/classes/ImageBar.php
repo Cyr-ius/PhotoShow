@@ -57,17 +57,17 @@ class ImageBar {
     public function __construct($fs = false) {
         $file = urlencode(File::a2r(CurrentUser::$path));
         //		if($fs){
-        //			$t = "?t=Fs&";
+        //			$t = "?t=Fs&amp;";
         //		}else{
         $t = "?";
         //		}
-        $this->buttons['prev'] = $t . "p=p&f=" . $file;
+        $this->buttons['prev'] = $t . "p=p&amp;f=" . $file;
         $this->buttons['back'] = "?f=" . urlencode(File::a2r(dirname(CurrentUser::$path)));
         if (!Settings::$nodownload) {
-            $this->buttons['img'] = "?t=Big&f=" . $file;
-            $this->buttons['get'] = "?t=BDl&f=" . $file;
+            $this->buttons['img'] = "?t=Big&amp;f=" . $file;
+            $this->buttons['get'] = "?t=BDl&amp;f=" . $file;
         }
-        $this->buttons['next'] = $t . "p=n&f=" . $file;
+        $this->buttons['next'] = $t . "p=n&amp;f=" . $file;
         $this->buttons['slideshow'] = $t . "f=" . $file;
     }
     /**

@@ -67,24 +67,24 @@ abstract class Page implements HTMLObject {
         echo "<link rel='stylesheet' href='" . Settings::$self_path . "/inc/stylesheets/panels.css' type='text/css' media='screen' charset='utf-8'>\n";
         echo "<link rel='stylesheet' href='" . Settings::$self_path . "/inc/stylesheets/forms.css' type='text/css' media='screen' charset='utf-8'>\n";
         /// Trick to hide "only-script" parts
-        echo "<noscript><style>.noscript_hidden { display: none; }</style></noscript>";
+        //echo "<noscript><style type='text/css'>.noscript_hidden { display: none; }</style></noscript>";
         /// JS
-        echo "<script src='" . Settings::$self_path . "/inc/js/jquery.js'></script>\n";
-        echo "<script src='" . Settings::$self_path . "/inc/js/jquery-ui.js'></script>\n";
-        echo "<script src='" . Settings::$self_path . "/inc/js/mousewheel.js'></script>\n";
-        echo "<script src='" . Settings::$self_path . "/inc/js/jquery.scrollTo.js'></script>\n";
-        echo "<script src='" . Settings::$self_path . "/inc/js/jquery.fileupload.js'></script>\n";
-        echo "<script src='" . Settings::$self_path . "/inc/js/menu.js'></script>\n";
-        echo "<script src='" . Settings::$self_path . "/inc/js/panel.js'></script>\n";
-        echo "<script src='" . Settings::$self_path . "/inc/js/slideshow.js'></script>\n";
-        echo "<script src='" . Settings::$self_path . "/inc/js/image_panel.js'></script>\n";
-        echo "<script src='" . Settings::$self_path . "/inc/js/keyboard.js'></script>\n";
-        echo "<script src='" . Settings::$self_path . "/inc/js/select.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "/inc/js/jquery.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "/inc/js/jquery-ui.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "/inc/js/mousewheel.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "/inc/js/jquery.scrollTo.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "/inc/js/jquery.fileupload.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "/inc/js/menu.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "/inc/js/panel.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "/inc/js/slideshow.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "/inc/js/image_panel.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "/inc/js/keyboard.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "/inc/js/select.js'></script>\n";
         if (CurrentUser::$admin || CurrentUser::$uploader) {
             echo "<link rel='stylesheet' href='" . Settings::$self_path . "/inc/stylesheets/fileupload-ui.css' type='text/css' media='screen' charset='utf-8'>\n";
             echo "<link rel='stylesheet' href='" . Settings::$self_path . "/inc/stylesheets/admin.css' type='text/css' media='screen' charset='utf-8'>\n";
-            echo "<script src='" . Settings::$self_path . "/inc/js/jquery.fileupload-ui.js'></script>\n";
-            echo "<script src='" . Settings::$self_path . "/inc/js/admin.js'></script>\n";
+            echo "<script type='text/javascript' src='" . Settings::$self_path . "/inc/js/jquery.fileupload-ui.js'></script>\n";
+            echo "<script type='text/javascript' src='" . Settings::$self_path . "/inc/js/admin.js'></script>\n";
         }
         // Add specific head content if needed
         if ($head_content) {

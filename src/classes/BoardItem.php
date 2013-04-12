@@ -74,7 +74,7 @@ class BoardItem implements HTMLObject {
      */
     public function toHTML() {
         /// If item is small, display its thumb. Else, display the item
-        $getfile = $this->width > 25 ? "t=Img&f=$this->file" : "t=Thb&f=$this->file";
+        $getfile = $this->width > 25 ? "t=Img&amp;f=$this->file" : "t=Thb&amp;f=$this->file";
         /// We display the image as a background
         echo "<div class='item";
         if (CurrentUser::$path == $this->path) {
@@ -92,7 +92,7 @@ class BoardItem implements HTMLObject {
         echo "<span class='name hidden'>" . htmlentities(basename($this->path), ENT_QUOTES, 'UTF-8') . "</span>";
         echo "<span class='path hidden'>" . htmlentities(File::a2r($this->path), ENT_QUOTES, 'UTF-8') . "</span>";
         echo "<a href='?f=$this->file'>";
-        echo "<img src=" . Settings::$self_path . "'/inc/img.png' width='100%' height='100%'>";
+        echo "<img src='" . Settings::$self_path . "/inc/img.png' width='100%' height='100%'>";
         echo "</a>\n";
         echo "</div>\n";
     }

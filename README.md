@@ -11,6 +11,9 @@
 
 First, you need to copy the repository into whatever you like (here, toto)
 
+`git clone https://github.com/psychedelys/PhotoShow.git gallery`
+
+based/forked on 
 `git clone https://github.com/thibaud-rohmer/PhotoShow.git toto`
 
 ### Create two directories
@@ -19,8 +22,10 @@ Note : you may create those directories wherever you want, and give them the nam
 
 * **Photos** : Where your photos will be stored.
 * **Generated** : Where the thumbnails of your photos will be stored. 
+* **Server FQDN** : Your server FQDN, as if not this is not working behind a reverse proxy
+* **Server Path** : The application path as seen on the outside world
 
-***Important*** : Make sure that the web server has the rights to read and write in those directories.
+***Important*** : Make sure that the web server has the rights to read in the Photos directory and read/write in the Generated one.
 
 ### Edit your settings
 

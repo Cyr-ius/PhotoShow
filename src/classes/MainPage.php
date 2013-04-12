@@ -116,7 +116,7 @@ class MainPage extends Page {
         $this->menu->toHTML();
         echo "</div>\n";
         if (CurrentUser::$admin || CurrentUser::$uploader) {
-            echo "<div class='bin'><img src='" . Settings::$self_path . "/inc/bin.png'>" . Settings::_("bin", "delete") . "</div>";
+            echo "<div class='bin'><img src='" . Settings::$self_path . "/inc/bin.png' alt=".Settings::_("bin", "delete").">" . Settings::_("bin", "delete") . "</div>";
         }
         /// Stop menu
         echo "<div id='menu_hide'></div>";
