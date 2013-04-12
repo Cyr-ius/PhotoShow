@@ -101,7 +101,7 @@ class BoardItem implements HTMLObject
 		echo 	"<span class='path hidden'>".htmlentities(File::a2r($this->path), ENT_QUOTES ,'UTF-8')."</span>";
 		
 		echo 	"<a href='?f=$this->file'>";
-		echo 	"<img src='./inc/img.png' width='100%' height='100%'>";
+		echo 	"<img src='/inc/img.png' width='100%' height='100%'>";
 		echo 	"</a>\n";
 		echo 	"</div>\n";
 	}

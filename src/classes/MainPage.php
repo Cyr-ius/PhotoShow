@@ -137,7 +137,7 @@ class MainPage extends Page
 
 		echo "</div>\n";
 		if(CurrentUser::$admin || CurrentUser::$uploader){
-			echo "<div class='bin'><img src='inc/bin.png'>".Settings::_("bin","delete")."</div>";
+			echo "<div class='bin'><img src='/inc/bin.png'>".Settings::_("bin","delete")."</div>";
 		}
 		/// Stop menu
 

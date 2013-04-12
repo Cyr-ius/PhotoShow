@@ -108,7 +108,7 @@ class Image implements HTMLObject
 		echo 	"';>";
 
 		echo 	"<a href='?f=$this->dir'>"; 
-		echo 	"<img src='inc/img.png' height='100%' width='100%' style='opacity:0;'>";
+		echo 	"<img src='/inc/img.png' height='100%' width='100%' style='opacity:0;'>";
 		echo 	"</a>";
 		echo	"</div>";
 	}

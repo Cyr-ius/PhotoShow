@@ -59,40 +59,40 @@ abstract class Page implements HTMLObject
 			echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>\n";
 			echo "<title>".Settings::$name."</title>\n";
 			echo "<meta name='author' content='Thibaud Rohmer'>\n";
-			echo "<link rel='icon' type='image/ico' href='inc/favico.ico'>";
+			echo "<link rel='icon' type='image/ico' href='/inc/favico.ico'>";
 
 			/// CSS
 
-			echo "<link rel='stylesheet' href='src/stylesheets/main.css' type='text/css' media='screen' charset='utf-8'>\n";
-			echo "<link rel='stylesheet' href='src/stylesheets/page.css' type='text/css' media='screen' charset='utf-8'>\n";
-			echo "<link rel='stylesheet' href='src/stylesheets/panels.css' type='text/css' media='screen' charset='utf-8'>\n";
-			echo "<link rel='stylesheet' href='src/stylesheets/forms.css' type='text/css' media='screen' charset='utf-8'>\n";
+			echo "<link rel='stylesheet' href='/inc/stylesheets/main.css' type='text/css' media='screen' charset='utf-8'>\n";
+			echo "<link rel='stylesheet' href='/inc/stylesheets/page.css' type='text/css' media='screen' charset='utf-8'>\n";
+			echo "<link rel='stylesheet' href='/inc/stylesheets/panels.css' type='text/css' media='screen' charset='utf-8'>\n";
+			echo "<link rel='stylesheet' href='/inc/stylesheets/forms.css' type='text/css' media='screen' charset='utf-8'>\n";
 
 			/// Trick to hide "only-script" parts
 	 		echo "<noscript><style>.noscript_hidden { display: none; }</style></noscript>";
 
 			/// JS
-			echo "<script src='inc/jquery.js'></script>\n";
-			echo "<script src='inc/jquery-ui.js'></script>\n";
-			echo "<script src='inc/mousewheel.js'></script>\n";
-			echo "<script src='inc/jquery.scrollTo.js'></script>\n";
-			echo "<script src='inc/jquery.fileupload.js'></script>\n";
+			echo "<script src='/inc/js/jquery.js'></script>\n";
+			echo "<script src='/inc/js/jquery-ui.js'></script>\n";
+			echo "<script src='/inc/js/mousewheel.js'></script>\n";
+			echo "<script src='/inc/js/jquery.scrollTo.js'></script>\n";
+			echo "<script src='/inc/js/jquery.fileupload.js'></script>\n";
 
 
-			echo "<script src='src/js/menu.js'></script>\n";
-			echo "<script src='src/js/panel.js'></script>\n";
-			echo "<script src='src/js/slideshow.js'></script>\n";
-			echo "<script src='src/js/image_panel.js'></script>\n";
-			echo "<script src='src/js/keyboard.js'></script>\n";
-			echo "<script src='src/js/select.js'></script>\n";
+			echo "<script src='/inc/js/menu.js'></script>\n";
+			echo "<script src='/inc/js/panel.js'></script>\n";
+			echo "<script src='/inc/js/slideshow.js'></script>\n";
+			echo "<script src='/inc/js/image_panel.js'></script>\n";
+			echo "<script src='/inc/js/keyboard.js'></script>\n";
+			echo "<script src='/inc/js/select.js'></script>\n";
 
 			
 			if(CurrentUser::$admin || CurrentUser::$uploader){
-				echo "<link rel='stylesheet' href='inc/fileupload-ui.css' type='text/css' media='screen' charset='utf-8'>\n";
-				echo "<link rel='stylesheet' href='src/stylesheets/admin.css' type='text/css' media='screen' charset='utf-8'>\n";
+				echo "<link rel='stylesheet' href='/inc/stylesheets/fileupload-ui.css' type='text/css' media='screen' charset='utf-8'>\n";
+				echo "<link rel='stylesheet' href='/inc/stylesheets/admin.css' type='text/css' media='screen' charset='utf-8'>\n";
 
-				echo "<script src='inc/jquery.fileupload-ui.js'></script>\n";
-				echo "<script src='src/js/admin.js'></script>\n";
+				echo "<script src='/inc/js/jquery.fileupload-ui.js'></script>\n";
+				echo "<script src='/inc/js/admin.js'></script>\n";
 			}
 
             // Add specific head content if needed

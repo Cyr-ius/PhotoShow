@@ -119,7 +119,7 @@ class BoardDir implements HTMLObject
 			}
 		}
 		echo 	"<a href='?f=$this->url'>";
-		echo 	"<img src='./inc/img.png' width='100%' height='100%'>";
+		echo 	"<img src='/inc/img.png' width='100%' height='100%'>";
 		echo 	"</a>\n";
 		echo 	"</div>\n";
 		echo 	"<div class='dirname'>";
