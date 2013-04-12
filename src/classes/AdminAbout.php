@@ -73,6 +73,11 @@ class AdminAbout {
         echo "<li><a href='https://github.com/thibaud-rohmer/'>GitHub</a></li>\n";
         echo "<li><a href='https://plus.google.com/114933352963292387937/about'>Google Profile</a></li>\n";
         echo "</ul>\n";
+        echo "<h2>Patched and Maintained by Psychedelys</h2>";
+        echo "<ul style='text-align:center;'>";
+        echo "<li>No new patches included since 1 year and couting</li>\n";
+        echo "<li><a href='https://github.com/psychedelys/'>GitHub</a></li>\n";
+        echo "</ul>\n";
         echo "<h2>If you like PhotoShow ... </h2>";
         echo "<ul style='text-align:center;'>";
         echo "<li>Spread the word ! Tell it to your friends :)</li>\n";
