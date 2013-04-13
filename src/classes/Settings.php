@@ -215,8 +215,16 @@ class Settings extends Page {
         // Localization files path
         Settings::$locpath = dirname(dirname(dirname(__FILE__))) . "/inc/loc/";
         // Get Localization array
-        if (is_file(Settings::$locpath . "/" . Settings::$loc)) {
+        //$_SESSION['lang'] = 'fr';
+        if ((isset($_SESSION['lang'])) && (strlen($_SESSION['lang']) == 2) && (is_file(Settings::$locpath . "/" . $_SESSION['lang'] . ".ini"))) {
+            Settings::$loc_chosen = parse_ini_file(Settings::$locpath . "/" . $_SESSION['lang'] . ".ini", true);
+            Settings::$loc = $_SESSION['lang'] . ".ini";
+        } elseif (is_file(Settings::$locpath . "/" . Settings::$loc . ".ini")) {
+            Settings::$loc_chosen = parse_ini_file(Settings::$locpath . "/" . Settings::$loc . ".ini", true);
+            $_SESSION['lang'] = Settings::$loc;
+        } elseif (is_file(Settings::$locpath . "/" . Settings::$loc)) {
             Settings::$loc_chosen = parse_ini_file(Settings::$locpath . "/" . Settings::$loc, true);
+            $_SESSION['lang'] = explode('.', Settings::$loc);
         }
         Settings::$loc_default = parse_ini_file(Settings::$locpath . "/default.ini", true);
         // Localization files available
@@ -232,9 +240,14 @@ class Settings extends Page {
      * Set website language
      */
     static public function set_lang($l) {
+        if ($l == 'default') {
+            $l = 'en'; # TODO: Settings::$loc_default
+            
+        }
         // Get Localization array
         if (is_file(Settings::$locpath . "/" . $l . ".ini")) {
             Settings::$loc_chosen = parse_ini_file(Settings::$locpath . "/" . $l . ".ini", true);
+            $_SESSION['lang'] = $l;
         }
     }
     /**

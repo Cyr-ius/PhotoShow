@@ -34,7 +34,8 @@
 session_start();
 /// Because we don't care about notices
 if (function_exists("error_reporting")) {
-    error_reporting(E_ERROR | E_WARNING);
+    //error_reporting(E_ERROR | E_WARNING);
+    error_reporting(-1);
 }
 /// Autoload classes
 function my_autoload($class) {
@@ -60,6 +61,43 @@ if (!get_magic_quotes_gpc()) {
     $_COOKIE = protect_user_send_var($_COOKIE);
     $_GET = protect_user_send_var($_GET);
 }
+if (isset($_GET['lang']) && (preg_match('/^[a-z]{2}$/', mb_substr($_GET['lang'], 0, 2)))) {
+    $lang = mb_substr($_GET['lang'], 0, 2);
+    Settings::set_lang($lang);
+    $_SESSION['lang'] = $lang;
+} elseif ((!isset($_SESSION['lang'])) || (strlen($_SESSION['lang']) != 2)) {
+    // User tracking
+    // Start user session if not already started.
+    $lang = "default";
+    //echo 'lang set from IP'.$lang;
+    //print_r ($_SESSION);
+    if (geoip_db_avail(GEOIP_COUNTRY_EDITION)) {
+        //print geoip_database_info(GEOIP_COUNTRY_EDITION);
+        if (!empty($_SERVER['HTTP_X_REAL_IP'])) {
+            if (preg_match('/^((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])$/', mb_substr($_SERVER['HTTP_X_REAL_IP'], 0, 15))) {
+                $remote_ip = mb_substr($_SERVER['HTTP_X_REAL_IP'], 0, 15);
+                $country = geoip_country_code_by_name($remote_ip);
+                if ($country) {
+                    //echo 'This host is located in: ' . $country;
+                    $lang = strtolower($country);
+                } else {
+                    $lang = "default";
+                }
+            } else {
+                $lang = "default";
+            }
+        } else {
+            $lang = "default";
+        }
+    }
+    Settings::set_lang($lang);
+    //} else {
+    //echo 'lang load from profile'.$lang;
+    //$lang = $_SESSION['lang'];
+    //Settings::set_lang($lang);
+    
+}
+// echo 'lang load from profile'.$lang;
 if (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'text/xml') {
     new API();
 } else {
