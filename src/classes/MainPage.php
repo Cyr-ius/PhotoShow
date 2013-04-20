@@ -152,7 +152,7 @@ class MainPage extends Page {
 		</script>
 		';
         }
-        echo "</body>";
+        echo "</body></html>";
     }
 }
 ?>
