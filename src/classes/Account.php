@@ -122,7 +122,8 @@ class Account extends Page {
         }
         $acc = new Account();
         $acc->login = $login;
-        $acc->password = Account::password($password);
+        $salt = dechex(crc32(Settings::$challenge));
+        $acc->password = $salt . '!' . Account::password($password, $salt);
         $acc->groups = $groups;
         $acc->name = $name;
         $acc->email = $email;
@@ -138,8 +139,13 @@ class Account extends Page {
      * @return void
      * @author Thibaud Rohmer
      */
-    public static function password($password) {
-        return sha1($password);
+    public static function password($password, $salt) {
+        $hash = $password;
+        for ($i = 1;$i <= 1024;$i++) {
+            $hash = sha1($salt . $hash);
+        }
+        // error_log("hash is '$hash'", 0);
+        return $hash;
     }
     /**
      * Generate key
@@ -204,6 +210,7 @@ class Account extends Page {
             }
         }
         if (isset($account)) {
+            error_log('save pass:' . $this->password, 0);
             $account->password = $this->password;
             $account->name = $this->name;
             $account->email = $this->email;
@@ -256,12 +263,14 @@ class Account extends Page {
             $acc = CurrentUser::$account;
         }
         /// Check password
-        if (!CurrentUser::$admin && Account::password($old_password) != $acc->password) {
+        list($salt, $passwd_hash) = explode('!', $acc->password);
+        if (!CurrentUser::$admin && strcmp(Account::password($old_password, $salt), $passwd_hash) != 0) {
             return;
         }
         /// Edit attributes
-        if (isset($password) && sizeof($password) > 4) {
-            $acc->password = Account::password($password);
+        if (isset($password) && sizeof($password) > 6) {
+            $salt = dechex(crc32(Settings::$challenge));
+            $acc->password = $salt . '!' . Account::password($password, $salt);
         }
         if (isset($name)) {
             $acc->name = $name;
