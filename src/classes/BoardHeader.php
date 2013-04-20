@@ -95,7 +95,6 @@ class BoardHeader {
         } else {
             echo "<h1>" . htmlentities($this->title, ENT_QUOTES, 'UTF-8') . "</h1>";
         }
-        echo "<span>";
         echo "<div>";
         // Outputting Facebook Like Button
         if (Settings::$like) {
@@ -122,7 +121,6 @@ class BoardHeader {
 				<div>" . Settings::_("adminpanel", "upload") . "</div>
 				</form>";
         }
-        echo "</span>\n";
         echo "</div>\n";
     }
 }
