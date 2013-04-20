@@ -150,31 +150,95 @@ class CurrentUser {
                     }
                 break;
                 case "Reg":
+                    // TODO add registration check also here..
                     if (isset($_POST['login']) && isset($_POST['password'])) {
                         if (!Account::create($_POST['login'], $_POST['password'], $_POST['verif'])) {
                             echo "Error creating account.";
                         }
                     }
                 case "Log":
+                    // Here is the login validation, not the login form!
                     if (isset($_SESSION['login'])) {
                         CurrentUser::logout();
                         echo "logged out";
                         break;
                     }
-                    if (isset($_POST['login']) && isset($_POST['password'])) {
-                        try {
-                            if (!CurrentUser::login($_POST['login'], $_POST['password'])) {
-                                echo "Wrong password";
+                    if (extension_loaded('gmp') && !defined('USE_EXT')) {
+                        define('USE_EXT', 'GMP');
+                    } else if (extension_loaded('bcmath') && !defined('USE_EXT')) {
+                        define('USE_EXT', 'BCMATH');
+                    }
+                    error_log("Checking the login data 2:" . $_POST["challenge"] . ":" . $_SESSION['challenge'] . ":" . strcmp(mb_substr($_POST["challenge"], 0, 76), $_SESSION['challenge']) . ":" . $_POST["login"], 0);
+                    error_log(var_export($_POST, true), 0);
+                    if ((!empty($_POST["challenge"])) && (strcmp(mb_substr($_POST["challenge"], 0, 76), $_SESSION['challenge']) == 0) && (!empty($_POST["login"])) && (!empty($_POST["truc"]))) {
+                        error_log("Checking the login data 3", 0);
+                        unset($_SESSION['challenge']);
+                        $password = '';
+                        //data checking
+                        $user = strtolower(Settings::quote($_POST["login"]));
+                        $user = str_replace("'", "", $user);
+                        $pass = $_POST["truc"];
+                        if (!Settings::valid_it($user, "alphanum", 4, 32)) {
+                            //print "bad user:$user";
+                            error_log("bad user:$user", 0);
+                            header("Location: https://" . Settings::$self_url . Settings::$self_path . "index.php");
+                            exit;
+                        }
+                        $bob_pub_x = Settings::quote($_POST["bob_pub_x"]);
+                        $bob_pub_x = str_replace("'", "", $bob_pub_x);
+                        $bob_pub_y = Settings::quote($_POST["bob_pub_y"]);
+                        $bob_pub_y = str_replace("'", "", $bob_pub_y);
+                        $row = '';
+                        if (isset($pass) and isset($user) and isset($bob_pub_x) and isset($bob_pub_y) and isset($_SESSION['alice_priv'])) {
+                            error_log("parameters first check ok", 0);
+                            $alice_priv = $_SESSION['alice_priv'];
+                            $g = NISTcurve::generator_192();
+                            $alice = new EcDH($g);
+                            $alice->setSecret($_SESSION['alice_priv']);
+                            $curve = new CurveFp($_SESSION['alice_curve_prime'], $_SESSION['alice_curve_a'], $_SESSION['alice_curve_b']);
+                            //new point with Bob public;
+                            $bob_pub = new Point($curve, $bob_pub_x, $bob_pub_y);
+                            //set bob pub point
+                            $alice->setPublicPoint($bob_pub);
+                            // calculate alice key
+                            $alice->calculateKey();
+                            $alice_key = $alice->getkey();
+                            // include_once 'include/classes/aes.php';
+                            $password = AesCtr::decrypt($pass, $alice_key, 256);
+                            unset($_SESSION['alice_priv']);
+                            unset($_SESSION['alice_curve_prime']);
+                            unset($_SESSION['alice_curve_a']);
+                            unset($_SESSION['alice_curve_b']);
+                            //  check length
+                            if (isset($password) and isset($user)) {
+                                try {
+                                    if (!CurrentUser::login($user, $password)) {
+                                        //echo "Wrong password";
+                                        error_log("Wrong password", 0);
+                                        header("Location: https://" . Settings::$self_url . Settings::$self_path . "index.php");
+                                        exit;
+                                    }
+                                }
+                                catch(Exception $e) {
+                                    //echo "Account not found";
+                                    error_log("Account not found", 0);
+                                    header("Location: https://" . Settings::$self_url . Settings::$self_path . "index.php");
+                                    exit;
+                                }
                             }
+                        } else {
+                            //print "not all field defined<br>";
+                            error_log("not all field defined", 0);
+                            header("Location: https://" . Settings::$self_url . Settings::$self_path . "index.php");
+                            exit;
                         }
-                        catch(Exception $e) {
-                            echo "Account not found";
-                        }
+                    } else {
+                        error_log("Challenge or login bad", 0);
                     }
                     if (!isset(CurrentUser::$account)) {
                         CurrentUser::$action = $_GET['t'];
                     }
-                break;
+                    break;
                 case "Acc":
                     if (isset($_POST['old_password'])) {
                         Account::edit($_POST['login'], $_POST['old_password'], $_POST['password'], $_POST['name'], $_POST['email'], NULL, $_POST['language']);
@@ -183,43 +247,43 @@ class CurrentUser {
                         return;
                     }
                     CurrentUser::$action = "Acc";
-                break;
+                    break;
                 case "Adm":
                     if (CurrentUser::$admin) {
                         CurrentUser::$action = "Adm";
                     }
-                break;
+                    break;
                 case "Com":
                     Comments::add(CurrentUser::$path, $_POST['content'], $_POST['login']);
-                break;
+                    break;
                 case "Rig":
                     Judge::edit(CurrentUser::$path, $_POST['users'], isset($_POST['groups']) ? $_POST['groups'] : null, true);
                     CurrentUser::$action = "Judge";
-                break;
+                    break;
                 case "CTk":
                     GuestToken::create(CurrentUser::$path);
                     CurrentUser::$action = "Judge";
-                break;
+                    break;
                 case "Pub":
                     Judge::edit(CurrentUser::$path);
                     CurrentUser::$action = "Judge";
-                break;
+                    break;
                 case "Pri":
                     Judge::edit(CurrentUser::$path, array(), array(), true);
                     CurrentUser::$action = "Judge";
-                break;
+                    break;
                 case "Inf":
                     CurrentUser::$action = "Inf";
-                break;
+                    break;
                 case "Fs":
                     if (is_file(CurrentUser::$path)) {
                         CurrentUser::$action = "Fs";
                     }
-                break;
+                    break;
                 default:
                     CurrentUser::$action = "Page";
-                break;
-            }
+                    break;
+                }
         } else {
             CurrentUser::$action = "Page";
         }
@@ -259,7 +323,9 @@ class CurrentUser {
         CurrentUser::$admin = false;
         $acc = new Account($login);
         // Check password
-        if (Account::password($password) == $acc->password) {
+        list($salt, $passwd_hash) = explode('!', $acc->password);
+        error_log("Salt is '$salt' '$passwd_hash' '$password' '" . $acc->password . "'", 0);
+        if (strcmp(Account::password($password, $salt), $passwd_hash) == 0) {
             $_SESSION['login'] = $login;
             CurrentUser::$account = $acc;
             $_SESSION['token'] = NULL;
@@ -311,7 +377,16 @@ class CurrentUser {
         CurrentUser::$token = NULL;
         CurrentUser::$admin = false;
         CurrentUser::$uploader = false;
+        //Clean-up the session to force the disconnect.
+        if (isset($_COOKIE[session_name() ])) {
+            setcookie(session_name(), '', time() - 42000, '/');
+        }
         session_unset();
+        session_destroy();
+        $_SESSION = array();
+        header("HTTP/1.1 301 Moved Permanently");
+        header("Location: https://" . Settings::$self_url . Settings::$self_path . "index.php");
+        exit();
     }
 }
 ?>
