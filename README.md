@@ -1,5 +1,8 @@
 # PhotoShow
 
+This is a Friendly fork of the original as the maintener is currently not active.
+
+=======
 
 ## Overview
 
@@ -36,3 +39,33 @@ Edit the file `config.php` that is inside your PhotoShow folder. It is advised t
 Now, use your favorite web browser to go to your PhotoShow website. You should be asked to create the main account. This account will be the admin of the website.
 
 > Your website is now ready.
+
+
+=======
+
+Packages needed:
+
+* php5
+* php5-gd
+* php5-geoip
+* php5-gmp
+
+=======
+
+Using:
+
+* http://jquery.com/
+* http://www-cs-students.stanford.edu/~tjw/jsbn/
+* http://matejdanter.com/2010/12/elliptic-curve-php-oop-dsa-and-diffie-hellman/
+* http://www.movable-type.co.uk/scripts/aes.html
+
+=======
+
+Thanks to:
+
+* http://crypto.stanford.edu/sjcl/
+* https://github.com/nappa/eliptic_curve_names
+* http://www.unlimitednovelty.com/2012/03/dont-use-bcrypt.html
+* Jose Rodriguez http://code.google.com/p/cool-php-captcha GPLv3
+* John Resig Jquery MIT & GPL
+
