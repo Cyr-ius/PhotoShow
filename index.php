@@ -30,6 +30,11 @@
  * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
  * @link      http://github.com/psychedelys/PhotoShow-v2
  */
+// Set full Unicode work
+mb_language('uni');
+mb_internal_encoding('UTF-8');
+// Interdit les appel directes au pages inc
+$included = true;
 /// Start session
 session_start();
 /// Because we don't care about notices
@@ -40,7 +45,13 @@ if (function_exists("error_reporting")) {
 /// Autoload classes
 function my_autoload($class) {
     if (file_exists(dirname(__FILE__) . "/src/classes/$class.php")) {
-        require (dirname(__FILE__) . "/src/classes/$class.php");
+        require_once (dirname(__FILE__) . "/src/classes/$class.php");
+    } elseif (file_exists(dirname(__FILE__) . "/src/classes/util/$class.php")) {
+        require_once (dirname(__FILE__) . "/src/classes/util/$class.php");
+    } elseif (file_exists(dirname(__FILE__) . "/src/classes/interface/$class.php")) {
+        require_once (dirname(__FILE__) . "/src/classes/interface/$class.php");
+    } elseif ($class = "AesCtr") {
+        require_once (dirname(__FILE__) . "/src/classes/aes.php");
     } else {
         return FALSE;
     }
@@ -61,11 +72,19 @@ if (!get_magic_quotes_gpc()) {
     $_COOKIE = protect_user_send_var($_COOKIE);
     $_GET = protect_user_send_var($_GET);
 }
+// Try to protect against the Xsrf and the post validation
+srand();
+$challenge = "";
+for ($i = 0;$i < 76;$i++) { // Longueur qui sent le sha
+    $challenge.= dechex(rand(0, 15));
+}
+Settings::$challenge = $challenge;
+// Language check, validation and import
 if (isset($_GET['lang']) && (preg_match('/^[a-z]{2}$/', mb_substr($_GET['lang'], 0, 2)))) {
     $lang = mb_substr($_GET['lang'], 0, 2);
     Settings::set_lang($lang);
     $_SESSION['lang'] = $lang;
-} elseif ((!isset($_SESSION['lang'])) || (strlen($_SESSION['lang']) != 2)) {
+} elseif ((array_key_exists('lang', $_SESSION)) && (!isset($_SESSION['lang'])) && (strlen($_SESSION['lang']) != 2)) {
     // User tracking
     // Start user session if not already started.
     $lang = "default";
@@ -103,4 +122,6 @@ if (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'text/xml') {
 } else {
     new Index();
 }
+// challenge save for the next round.
+$_SESSION['challenge'] = $challenge;
 ?>
