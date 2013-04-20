@@ -326,6 +326,12 @@ class Settings extends Page {
      * Function valid_it
      * Validate a string type and lenght
      *
+     * @param string $field_string
+     * @param string $field_type : [tel, zipcode, num, url, alpha, alpha_spc, alphanum, alphanum_spc, print_spc, email, datefr]
+     * @param string $min_length
+     * @param string $max_length
+     * @author Thanatos
+     *
      */
     public static function valid_it($field_string, $field_type, $min_length, $max_length) {
         # pas de data a checker
