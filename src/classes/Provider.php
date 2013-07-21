@@ -130,7 +130,7 @@ class Provider
 
         $basefile	= 	new File($file);
         $basepath	=	File::a2r($file);
-        $path	=	Settings::$thumbs_dir.dirname($basepath)."/".$basefile->name.".webm";	
+        $path	=	Settings::$thumbs_dir.dirname($basepath)."/".$basefile->name.".mp4";	
 
         if(!isset($path) || !file_exists($path)){
             error_log('ERROR/Provider::Video: path:'.$path.' does not exist, using '.$file);
@@ -143,12 +143,13 @@ class Provider
         $etag = md5_file($file); 
 
         header("Last-Modified: " . 0 . " GMT");
-        header("Pragma: public");
+        header("Pragma: no-cache");
         header("Cache-Control: max-age=360000");
         header("Etag: $etag"); 
         header("Cache-Control: maxage=".$expires);
         header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$expires) . ' GMT');
-        header('Content-type: video/webm');
+        header('Content-type: video/mp4');
+        header('Content-length: '.filesize($path));
         readfile($path);
     }
 
@@ -269,7 +270,7 @@ class Provider
 				$last_modified_time = 0;
 				$etag = md5_file($file); 
 
-		    	header("Last-Modified: " . 0 . " GMT");
+				header("Last-Modified: " . 0 . " GMT");
 				header("Pragma: public");
 				header("Cache-Control: max-age=360000");
 				header("Etag: $etag"); 

@@ -68,7 +68,8 @@
  		echo "</ul>\n";
 
  		echo "<h3>Me</h3>";
- 		echo "<div style='text-align:center;'><img src='inc/me.jpg' width='150px' align='center' style='border-radius:5px; -moz-border-radius:5px;'>";
+ 		echo "<div style='text-align:center;'>";
+		echo "<p><img src='inc/me.jpg' width='150px' align='center' style='border-radius:5px; -moz-border-radius:5px;'></p>";
  		echo "<ul class='breadcrumb'>";
  		echo "<li><a href='mailto:thibaud.rohmer@gmail.com'>Email</a></li>\n";
  		echo "<li><a href='http://twitter.com/#osi_iien'>Twitter</a></li>\n";

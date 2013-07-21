@@ -94,12 +94,10 @@
  		if( !(CurrentUser::$admin || CurrentUser::$uploader) ){			
 			Json::$json = array("action"=>"AdminMove",
 							"result"=>1,
-							"desc"=>"Error : No Rights",
-							"url"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)),
-							"js"=>"");						
+							"desc"=>"Error : No Rights");						
 			return;
  		}
-
+		
  		$from 	= File::r2a(stripslashes($_POST['pathFrom']));
  		$to  	= File::r2a(stripslashes($_POST['pathTo']));
 		$from_thumb = File::r2a(stripslashes(Settings::$thumbs_dir.$_POST['pathFrom']),File::Root());
@@ -109,31 +107,38 @@
  		if($from == $to){	
 			Json::$json = array("action"=>"AdminMove",
 						"result"=>1,
-						"desc"=>"Error : Source = Cible",
-						"url"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)),
-						"js"=>"");					
+						"desc"=>"Error : Source = Cible");					
  			return;
  		}
 
  		if($type == "rename"){
- 			@rename($from,dirname($from)."/".stripslashes($_POST['pathTo']));
- 			@rename($from_thumb,dirname($from_thumb)."/".stripslashes($_POST['pathTo']));
-			Json::$json = array("action"=>"AdminMove",
+ 			rename($from,dirname($from)."/".stripslashes($_POST['pathTo']));
+ 			rename($from_thumb,dirname($from_thumb)."/".stripslashes($_POST['pathTo']));
+			Json::$json = array("action"=>"AdminMove File",
 						"result"=>0,
-						"desc"=>"Rename Successfull ",
-						"url"=>'.?f='.urlencode(File::a2r(dirname($from)."/".stripslashes($_POST['pathTo']))),
-						"js"=>"");					
+						"uri"=>urlencode(File::a2r(dirname($from)."/".stripslashes($_POST['pathTo']))),						
+						"desc"=>"Rename file or folder successful ");	
 			return;
  		}
-
- 		if(is_file($from) || $type=="directory"){
- 			@rename($from,$to."/".basename($from));
- 			@rename($from_thumb,$to_thumb."/".basename($from_thumb));
-			Json::$json = array("action"=>"AdminMove",
-						"result"=>1,
-						"desc"=>"Rename File or Folder ",
-						"url"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)),
-						"js"=>"");					
+				
+		/// Move File
+ 		if(is_file($from)){
+ 			rename($from,$to."/".basename($from));
+ 			rename($from_thumb,$to_thumb."/".basename($from_thumb));
+			Json::$json = array("action"=>"AdminMove File",
+						"result"=>0,
+						"uri"=>urlencode(File::a2r(CurrentUser::$path)),						
+						"desc"=>"Rename or move file successful ");
+ 			return;
+ 		}
+		/// Move Directory
+ 		if($type=="directory"){
+ 			rename($from,$to."/".basename($from));
+ 			rename($from_thumb,$to_thumb."/".basename($from_thumb));
+			Json::$json = array("action"=>"AdminMove Directory",
+						"result"=>0,
+						"uri"=>urlencode(File::a2r($to."/".basename($from))),						
+						"desc"=>"Rename or move folder successful ");					
  			return;
  		}
 
@@ -146,10 +151,8 @@
 	 		}
  		}
 		Json::$json = array("action"=>"AdminMove",
-					"result"=>1,
-					"desc"=>"Move multiple Files",
-					"url"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)),
-					"js"=>"");			
+					"result"=>0,
+					"desc"=>"Move multiple Files");			
 		return;
 	}
 

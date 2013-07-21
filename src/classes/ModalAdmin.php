@@ -14,17 +14,25 @@ class ModalAdmin
 		<!-- Modal Template
 		================================================== -->
 		<div  id='ModalAdmin' class='modal container fade hide' tabindex='-1' data-backdrop='static' data-keyboard='false'>
-		<div class='modal-header'>
-		<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>x</button>";
-		$p = new AdminMenu();
-		$p->toHTML();
-		echo "		
-		<h3></h3>
+		<div  class='modal-header navbar'>
+		<div class='navbar-inner modal-header-bar'>
+			<div class='container-fluid '>
+				<a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
+				<span class='icon-bar'></span>
+				<span class='icon-bar'></span>
+				<span class='icon-bar'></span>
+				</a>
+				<div class='nav-collapse collapse'>";
+				$p = new AdminMenu();
+				$p->toHTML();
+				echo "
+				<ul class='nav pull-right'  style='margin-right: -30px;'><li><a data-dismiss='modal' aria-hidden='true' href='#'>X</a></li></ul>
+				</div>
+			</div>
+		</div>
 		</div>
 		<div class='modal-body'></div>
-		<div class='modal-footer'>
-		<span class='alert alert-error modal-infos hide'></span>
-		</div>
+		<div class='modal-footer'></div>
 		</div>";
 	}	
 	

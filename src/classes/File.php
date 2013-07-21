@@ -201,7 +201,6 @@ class File
 		if( substr($rf,0,strlen($rd)) != $rd ){
 			throw new Exception("This file $file is not inside the photos folder $dir !<br/>");
 		}
-		
 		return ( substr($rf,strlen($rd) + 1 ) );
 	}
 

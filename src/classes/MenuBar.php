@@ -81,25 +81,26 @@ class MenuBar implements HTMLObject{
 						<ul class='nav pull-left'>
 						<li><a id='menu_hide' href='#'><i class='icon-backward'></i></a></li>";
 						if(isset(CurrentUser::$account)){
-							echo "<li><a href='#' data-href='?t=MyA' data-toggle='modal' data-target='#myModal' data-title='".CurrentUser::$account->login."'><i class='icon-user'></i> ".CurrentUser::$account->login."</a></li>";
+							echo "<li><a href='#' data-href='?t=MyA' data-toggle='modal' data-target='#myModal' data-title='".CurrentUser::$account->login."' data-type='account'><i class='icon-user'></i> ".CurrentUser::$account->login."</a></li>";
 							echo "<li><a href='#' id='logout'><i class='icon-off'></i> ".Settings::_("menubar","logout")."</a></li>";
 							if(CurrentUser::$admin){
 							echo "<li><a  href='#' data-href='?t=Adm&a=Set' data-toggle='modal' data-target='#ModalAdmin' ><i class='icon-wrench'></i> ".Settings::_("menubar","admin")."</a></li>";
 							}
 						} else {
-							echo "<li><a href='#' data-href='?t=Log' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","login")."'><i class='icon-globe'></i> ".Settings::_("menubar","login")."</a></li>";
+							echo "<li><a href='#' data-href='?t=Log' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","login")."' data-type='login'><i class='icon-globe'></i> ".Settings::_("menubar","login")."</a></li>";
 							if(!Settings::$noregister){
-							echo "<li><a href='#' data-href='?t=Reg' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","register")."'><i class='icon-pencil'></i> ".Settings::_("menubar","register")."</a></li>";
+							echo "<li><a href='#' data-href='?t=Reg' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","register")."' data-type='register'><i class='icon-pencil'></i> ".Settings::_("menubar","register")."</a></li>";
 							}
 						}
+							echo "<li><a href='/'><i class='icon-home'></i> ".Settings::_("menubar","home")."</a></li>";
 						echo "</ul>";
 						echo "<ul class='nav pull-right'>";
 							echo "<li class='drowpdown'>
 									<a id='menu-actions' data-toggle='dropdown' class='dropdown-toggle' href='#'><i class='icon-tasks'></i> Action <b class='caret'></b></a>
 									<ul class='dropdown-menu'>";
 									if(CurrentUser::$admin){
-									echo "<li><a id='button_createdir' href='#' data-href='?f=".urlencode(File::a2r(CurrentUser::$path))."&j=MkD' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("adminpanel","create")."'><i class='icon-folder-open'></i> ".Settings::_("adminpanel","create")."</a></li>\n";				
-									echo "<li><a id='button_renamedir' href='#' data-href='?f=".urlencode(File::a2r(CurrentUser::$path))."&j=MvD' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("adminpanel","rename")."'><i class='icon-pencil'></i> ".Settings::_("adminpanel","rename")."</a></li>\n";
+									echo "<li><a id='button_createdir' href='#' data-href='?f=".urlencode(File::a2r(CurrentUser::$path))."&t=MkD' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("adminpanel","create")."'><i class='icon-folder-open'></i> ".Settings::_("adminpanel","create")."</a></li>\n";				
+									echo "<li><a id='button_renamedir' href='#' data-href='?f=".urlencode(File::a2r(CurrentUser::$path))."&t=MvD' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("adminpanel","rename")."'><i class='icon-pencil'></i> ".Settings::_("adminpanel","rename")."</a></li>\n";
 									echo "<li><a id='button_rights' href='#' data-href='?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Rights' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","rightsset")."'><i class='icon-screenshot'></i> ".Settings::_("menubar","rightsset")."</a></li>\n";
 									echo "<li><a id='button_token' href='#' data-href='?f=".urlencode(File::a2r(CurrentUser::$path))."&j=Tokens' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("token","tokens")."'><i class='icon-share'></i> ".Settings::_("token","tokens")."</a></li>\n";
 									echo "<li><a id='button_thb' href='#' ><i class='icon-picture'></i> ".Settings::_("adminpanel","createthumbnails")."</a></li>\n";
@@ -117,8 +118,8 @@ class MenuBar implements HTMLObject{
 						echo "</ul>";
 						echo "<ul class='nav pull-right'>";
 							if(CurrentUser::$admin || CurrentUser::$uploader){
-							echo "<li class='hide uploadbtn'><a id='button_upload' href='#' ><i class='icon-upload'></i> ".Settings::_("adminpanel","uploadfiles")."</a></li>\n";	
-							echo "<li><a id='bin' class='btn btn-small btn-disabled bin ui-droppable' disabled='disabled'><i class=' icon-trash'></i></a></li>\n";							
+							echo "<li class='hide uploadbtn'><a id='button_upload' href='#' ><i class='icon-upload'></i> ".Settings::_("adminpanel","upload")."</a></li>\n";	
+							echo "<li><a id='bin' class='btn btn-small  bin' style='padding-top:5px;padding-bottom:5px;margin-right:5px;'><i class=' icon-trash'></i></a></li>\n";							
 							}
 						echo "</ul>";
 						echo"

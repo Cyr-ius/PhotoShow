@@ -56,33 +56,6 @@ class JS extends Page
 		if(isset($_GET['j'])){
 			switch($_GET['j']){
 
-				case "Pag":		/// Pag need load in div #content
-								$mb=new MenuBar();
-								$m = new Menu();
-								$p = new Board();
-								$ap = new Infos();
-								$mt = new ModalTemplate();
-								$ma = new ModalAdmin();
-								echo "<div class='row-fluid'>";
-									echo "<div id='menu' class='well span2 menu'>";
-									$m->toHTML();
-									echo "</div>\n";
-									echo "<div class='span10 center'>";
-										/// ImagePanel
-										echo "<div class='image_panel hide'>\n";
-										echo "</div>\n";									
-										///Linear_panel
-										echo "<div id='linear_panel' class='linear_panel hide'><ul class='thumbnails'></ul></div>";						
-										///Panel (include boardheader(title+button) , album , images , videos , comments)
-										echo "<div class='panel'>\n";
-										$p->toHTML();
-										echo "</div>\n";					
-									echo "</div>\n";
-								echo "</div>\n";
-								$mt->toHTML();
-								$ma->toHTML();
-								break;
-
 				case "Pan":		if(is_file(CurrentUser::$path)){
 									$b = new ImagePanel(CurrentUser::$path);
 									$b->toHTML();
@@ -94,14 +67,18 @@ class JS extends Page
 
 				case "Men":		$m = new Menu();
 								$m->toHTML();
-								break;								
+								break;	
+
+				case "MenBar":	$m = new MenuBar();
+								$m->toHTML();
+								break;	
+
+				case "Item":		$item= new BoardItem(CurrentUser::$path);
+								$item->toHTML();
+								break;	
 								
-				case "MkD":		$f = new AdminPanel(CurrentUser::$path);
-								$f->CreateDir_toHTML();
-								break;
-								
-				case "MvD":		$f = new AdminPanel(CurrentUser::$path);
-								$f->RenameDir_toHTML();
+				case "LinearP":	$lip= new Linear_panel(CurrentUser::$path);
+								$lip->toHTML();
 								break;
 								
 				case "JSon"	:	$f = new Json();

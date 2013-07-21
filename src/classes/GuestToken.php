@@ -102,7 +102,8 @@ class GuestToken extends Page
         $token->save();
 	Json::$json = array("action"=>"GuestToken",
 				"result"=>0,
-				"desc"=>"GuestTokens Create ".$key);	
+				"uri"=>".?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Token",						
+				"desc"=>"Create GuestTokens ".$key);	
         return true;
     }
 
@@ -159,7 +160,8 @@ class GuestToken extends Page
         if ($found && $xml->asXML(CurrentUser::$tokens_file)){
 	     Json::$json = array("action"=>"GuestToken",
 						"result"=>0,
-						"desc"=>"GuestToken delete successfull");
+						"uri"=>".?t=Adm&a=VTk",						
+						"desc"=>"Delete GuestToken $key  successfull");
             return true;
         } else {
 	    Json::$json = array("action"=>"GuestToken",
@@ -354,13 +356,15 @@ class GuestToken extends Page
 	public function toHTML() {
 	
 	echo "<div class='row-fluid'>\n";
-	echo "<form id='admintokens-form' action='?f=".File::a2r($this->file)."&t=CTk' method='post'>\n
-		<fieldset>\n
-		<legend>".Settings::_("token","tokens")."</legend>\n";
+	echo "<form id='admintokens-form' action='?f=".File::a2r($this->file)."&t=Adm&a=CTk' method='post'>\n
+		<fieldset>\n";
 		$tokens = GuestToken::find_for_path($this->file);
 		if ($tokens && !empty($tokens)){
 			foreach($tokens as $token){
-			echo "<a href='".GuestToken::get_url($token['key'])."' >".$token['key']."</a><br />\n";
+			echo "
+			<div class='controls controls-row'>\n
+			<a href='".GuestToken::get_url($token['key'])."' >".$token['key']."</a><br />\n
+			</div>";
 			}
 		}
 	echo "<div class='controls controls-row'>\n

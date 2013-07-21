@@ -144,7 +144,8 @@ li.plupload_droptext {
     text-align: center;
     font-weight: bold;
 	z-index: auto !important;
-	background: transparent;	
+	background: white;	
+	opacity:0.85;
 }
 
 #dropzone.hovered{

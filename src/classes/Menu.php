@@ -60,6 +60,8 @@ class Menu implements HTMLObject
 	/// Relative path to file
 	private $path = "";
 	
+	private $html;
+	
 	/**
 	 * Create Menu
 	 *
@@ -80,7 +82,7 @@ class Menu implements HTMLObject
 	 */
 	public function toHTML(){
 		$a = self::CsMenu();
-		//print_r($a);
+		//~ print_r($a);
 		echo self::ListFolder('',0,$a);	
 	}
 	
@@ -88,6 +90,7 @@ class Menu implements HTMLObject
 		/// Init Menu 
 		if($dir == null)
 			$dir = Settings::$photos_dir;
+		
 		
 		/// Check rights
 		if(!(Judge::view($dir) || Judge::searchDir($dir))){
@@ -101,21 +104,27 @@ class Menu implements HTMLObject
 		/// Set variables
 		$title = basename($dir);
 		$webdir= urlencode(File::a2r($dir));
-		$apath  = File::a2r($dir);			
+		$apath  = File::a2r($dir);	
 
 		try{
 			/// Check if selected dir is in $dir
 			File::a2r(CurrentUser::$path,$dir);
 			$selected 			="selected";
+			$actived 			="active";
 			
 		}catch(Exception $e){
 			/// Selected dir not in $dir, or nothing is selected			
 			$selected 			="";
+			$actived 			="";
 		}
 	
-		$this->categories[$level][] = array('title'=>$title,'categorie_id'=>$title,'parent_id'=>$item_prec,'path' => $apath ,'selected' => $selected);
+		$this->categories[$level][] = array('title'=>$title,'categorie_id'=>$title,'parent_id'=>$item_prec,'path' => $apath ,'selected' => $selected,'active'=>$actived);
 		$item_prec = $title;
 		$subdirs = $this->list_dirs($dir);
+
+		if(Settings::$reverse_menu){
+			$subdirs = array_reverse($subdirs);
+		}
 		foreach($subdirs as $d){
 				self::CsMenu($d,$level+1,$item_prec);
 		}
@@ -123,23 +132,27 @@ class Menu implements HTMLObject
 	}	
 	
 	public function ListFolder($parent, $niveau, $array) {
-			$html = "";
+			
 			$niveau_precedent = 0;
-			if (!$niveau && !$niveau_precedent) $html .= "\n<ul class='nav root' style='margin-bottom:0px;'>\n";
+			if (!$niveau && !$niveau_precedent) {
+				$html = "<a data-target='.nav-menu' data-toggle='collapse' class='btn btn-navbar btn-navbar-menu '>Menu</a>";				
+				$html .= "<div  class='nav-menu collapse'>\n
+						<ul class='nav nav-pills nav-stacked  root' style='margin-bottom:0px;'>\n";
+			}
 			if (!is_array($array[$niveau])) {return $html;} //Cette ligne corrige le fait qu'un répertoire fils peut avoir le même nom que son père
 			foreach($array[$niveau] as $item) {
 				if ($parent == $item['parent_id']) {
-					if ($niveau_precedent < $niveau) $html .= "\n<ul class='nav' style='margin-bottom:0px;'>\n";
-					$html .= "<li class='submenu menu_title ".$item['selected']."'>";
-					$html .= "<span class='name hidden'>".htmlentities($item['title'], ENT_QUOTES ,'UTF-8')."</span>";
-					$html .= "<span class='path hidden'>".htmlentities($item['path'], ENT_QUOTES ,'UTF-8')."</span>";
+					if ($niveau_precedent < $niveau) $html .= "<ul class='nav nav-pills nav-stacked' style='margin-bottom:0px;'>\n";
+					$html .= "<li class='submenu menu_title ".$item['selected']." ".$item['active']."'>";
+					$html .= "<span class='name hide'>".htmlentities($item['title'], ENT_QUOTES ,'UTF-8')."</span>";
+					$html .= "<span class='path hide'>".htmlentities($item['path'], ENT_QUOTES ,'UTF-8')."</span>";
 					$html .= "<a href='?f=".urlencode($item['path'])."'>".htmlentities($item['title'], ENT_QUOTES ,'UTF-8')."</a>";					
 					$niveau_precedent = $niveau;
 					$html .= self::ListFolder($item['categorie_id'], ($niveau + 1), $array);
-				}
+				} 
 			}
 			if (($niveau_precedent == $niveau) && ($niveau_precedent != 0)) $html .= "</ul>\n</li>\n";
-			else if ($niveau_precedent == $niveau) $html .= "</ul>\n";
+			else if ($niveau_precedent == $niveau) $html .= "</ul>\n</div>\n";
 			else $html .= "</li>\n";	
 			return $html;
 	}

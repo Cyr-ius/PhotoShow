@@ -1,20 +1,21 @@
-body {
-	background: none repeat scroll 0 0 #DDDDDD;
+mbody {
+	/*background: none repeat scroll 0 0 #DDDDDD;
+	background: none repeat scroll 0 0  ivory;*/
+	padding-top:60px;
 }
 
 a {
 	color:inherit;
 }
 
-.center {
-	padding-right:20px;
+.panel , .bigpanel {
 	right:0px;
 	bottom:0;
-	top:40px;
-	position:absolute;
+	top:50px;
+	position:fixed;
 	overflow-x:hidden;
-	min-width:300px;
 	z-index:-1;
+	margin-left:0px !important;
 }
 
 .page {
@@ -34,16 +35,16 @@ a {
 }
 
 .menu {
-	box-shadow:		0px 2px 5px #111;	
-	top:42px;
+	box-shadow:0px 2px 5px #111;	
+	top:50px;
 	bottom:0;
-    font-size: 10pt;
-    left: 0;
-    padding-top: 10px;
-	padding-left: 0;
-    padding-right: 0;	
-    margin-bottom: 2px;	
-    word-wrap: break-word;
+	font-size: 9pt;
+	padding-top: 10px;
+	padding-left: 5px;
+	padding-right: 5px;	
+	padding-bottom: 10px;	
+	margin-bottom: 15px;	
+	word-wrap: break-word;
 	position:absolute;
 	overflow-x:hidden;
 	overflow-y:auto;
@@ -66,6 +67,10 @@ a {
     width: 600px;	
 }
 
+.images , .videos {
+	margin-bottom:15px;
+}
+
 .textinfoadmin {
     display: none;
     margin-bottom: 5px;
@@ -79,16 +84,19 @@ a {
 }
 
 .loading {
-  display: none;
   background: url('../../inc/loading.gif') no-repeat center center;
   height: 100%;
-  position: absolute;
-  width: 100%;
-  z-index: -1;
+  position: fixed;
+  right:0;	
 }
 
-.item.selected,  .item:hover, .item-video.selected, .item-video:hover {
+.item.active,.item.selected,  .item:hover, .item-video.selected, .item-video:hover {
     border-color: #0088E8;
+}
+
+/* Scrollbar */
+#VerticalScrollBar, #HorizontalScrollBar {
+	display:none;
 }
 
 /* Corbeille */	
@@ -97,21 +105,13 @@ a {
 	width:50px;
 }
 
+.bin > a{
+	margin-bottom: 0 !important;
+    margin-top: 0 !important;
+}
+
 .bin.hovered{
 	background:		red;
-}
-/* Menu Bar */
-.navbar .btn {
-	margin-top:0;
-}
-
-.navbar .container {
-	width:100%;
-}
-
-.navbar .container .nav > li > a {
-	padding-left:5px;
-	padding-right:5px;
 }
 	
 /* Thumbnails */
@@ -137,26 +137,38 @@ li.selected > a.thumbnail {
 
 .dirname {
 	padding-top: 5px;
-    position: absolute;
-    text-align: center;
-    text-shadow: 0 2px 5px #ffffff;
-    width: 120px;
+    	position: absolute;
+	text-align: center;
+	text-shadow: 0 2px 5px #ffffff;
+	width: 120px;
 	height:40px;
-    word-wrap: break-word;
+	word-wrap: break-word;
 	overflow:auto;
+}
+
+/* Tooltips */
+.tooltip.in {
+  opacity: 1;
+  filter: alpha(opacity=1);
+}
+
+.tooltip-inner {  
+	max-width: 400px;
+	max-height: 400px;
 }
 
 /* Linear_Panel */
 
 .linear_panel {
-	overflow-x: auto;
 	overflow-y: hidden;
+	overflox-x: auto;
 	white-space: nowrap;
 	bottom:0px;
 	position:absolute;
 	left:0;
 	right:0;
 	margin-right:20px;
+	height:120px;
 	}
 
 .linear_panel ul li {
@@ -181,6 +193,10 @@ li.selected > a.thumbnail {
  	min-width : 90px;
 }
 
+#linear {
+	display : none;
+}
+
 /* Image Panel */
 .image_panel {
 	position:absolute;
@@ -188,6 +204,7 @@ li.selected > a.thumbnail {
 	left:0;
 	right:0;
 	top:0;
+	text-align:center;
 }
 
 .image_panel ul {
@@ -201,8 +218,6 @@ li.selected > a.thumbnail {
 	float:none;
 }
 
-
-
 /* BigImage */
 #image_big {
     height: auto;
@@ -212,15 +227,15 @@ li.selected > a.thumbnail {
 /* Image_Bar */
 .image_bar {
     bottom: 0;
-    left: 0;
+    left: 20px;
     position: absolute;
-    right: 0;
+    right: 0px;
     text-align: center;
 }
 
 .image_bar li {
-display:inline-block;
-padding-left : 5px;
+    display:inline-block;
+    padding-right : 20px;
 }
 
 .bigimage, .bigvideo {
@@ -228,87 +243,76 @@ padding-left : 5px;
     overflow: hidden;
     position: absolute;
     text-align: center;
-    top: 10px;
+    top: 0px;
 	left:0px;
 	right:0px;
 }
 
 /* Menu */
+.btn-navbar-menu {
+	display:none;
+}
 
-li.submenu {
-	 margin: 0 0 0 5px;
+.nav-menu.collapse {
+    height: auto;
+    overflow: visible;
+}
+
+.submenu li {
 	 padding-left: 5px;
 }
 
-li.submenu > ul  {
+.submenu li > ul  {
     display: none;
 }
 
-li.submenu.hovered >a {
-	background-color: red !important;
+li.submenu .hovered > a {
+	background: red!important;
+}
+
+.submenu li >a {
+	padding-left:5px;
+	padding-right:5px;
 }
 
 li.submenu.selected > ul  {
     display: inherit;
 }
 
-
-
-li.submenu.selected > a  {
-    border-left: 2px solid #0088E8;
-    padding-left: 3px;
-	background-color:#eeeeee;
+.root > li {
+	padding-left:0px;
 }
 
 /* Modal */
 .modal {
-	background-clip: border-box;
 	margin-top:0px !important;
+}
+
+.modal-header-bar {
+    border: medium none;
+    border-radius: 4px 4px 0 0;
+	padding-left:5px;
+	padding-right:5px;
+	padding-top:0px;
+	padding-bottom:0px;
+	
 }
 
 #ModalAdmin {
 	top:40px;
 }
 
+#ModalAdmin .modal-header{
+	padding:0;
+}
+
 #myModal {
 	top:25%
-}
-
-.modal-header {
-	background: -moz-linear-gradient(-90deg, #A0E800, #64C800) repeat scroll 0 0 transparent;
-	background: -o-linear-gradient(-90deg, #A0E800, #64C800) repeat scroll 0 0 transparent;
-	background: -webkit-linear-gradient(-90deg, #A0E800, #64C800) repeat scroll 0 0 transparent;
-	background: -ms-linear-gradient(-90deg, #A0E800, #64C800) repeat scroll 0 0 transparent;
-	background: linear-gradient(-90deg, #A0E800, #64C800) repeat scroll 0 0 transparent;
-    border-radius: 2px 2px 2px 2px;
-    box-shadow: 0 2px 2px black;
-    color: white;
-    font-style: normal;
-    padding: 6px 6px 6px 15px;
-    text-shadow: 1px 1px 3px black;
-	height:25px;	
-	border-bottom:none;
-}
-
-.modal-footer {
-	text-align:center;
 }
 
 .modal-infos {
 	margin:0;
 	padding:0;
-}
-
-/* Preference */
-
-#AdminTab {
-	list-style: none outside none;
-}
-
-#AdminTab > li {
-	float: left;
-    margin-left: 10px;
-    margin-top: 2px;	
 }
 
 /* Account and Group */
@@ -320,4 +324,47 @@ li.submenu.selected > a  {
 .groupitem , .accountitem {
     border-radius: 2px 2px 2px 2px;
     box-shadow: 0 2px 2px black;	
+}
+
+.accountitem {
+	cursor:  move;
+}
+
+/*Plupload*/
+.plupload.html5 {
+	width:0 !important;
+}
+
+/* responsive */
+@media (max-width: 979px) {
+  .menu, .image_panel, .panel, .image_bar, .bigimage, .bigpanel, .linear_panel {
+        position:static;
+		overflow:auto;
+    }
+	.linear_panel {
+		overflow-y:hidden;
+	}
+	
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+}
+
+@media (max-width: 767px) {
+  .nav-menu, .nav-menu.collapse {
+    height: 0;
+    overflow: hidden;
+	}	
+	
+	.btn-navbar-menu {
+		display:block;
+	}		
+}
+
+@media (min-width: 768px) {
+  .nav-menu, .nav-menu.collapse {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
 }

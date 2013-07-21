@@ -53,6 +53,4 @@ class Json
 		echo json_encode(Json::$json);
 	}
 }
-
-
 ?>

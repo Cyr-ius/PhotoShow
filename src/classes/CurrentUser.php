@@ -98,24 +98,25 @@ class CurrentUser
 
 			}
 		}
-
-        if(isset($_GET['token'])){
-            $token = $_GET['token'];
-            if (GuestToken::exist($token)){
-                if (isset($_SESSION['login']) || isset(CurrentUser::$account)){
-                    CurrentUser::logout();
-                }
-                CurrentUser::$token = $token;
-                $_SESSION['token'] = CurrentUser::$token;
-            }
-        } elseif (isset($_SESSION['token'])){
-            CurrentUser::$token = $_SESSION['token'];
-        }
+	
+		///Check Token
+		if(isset($_GET['token'])){
+		    $token = $_GET['token'];
+		    if (GuestToken::exist($token)){
+			if (isset($_SESSION['login']) || isset(CurrentUser::$account)){
+			    CurrentUser::logout();
+			}
+			CurrentUser::$token = $token;
+			$_SESSION['token'] = CurrentUser::$token;
+		    }
+		} elseif (isset($_SESSION['token'])){
+		    CurrentUser::$token = $_SESSION['token'];
+		}
+		
 
 		/// Set path
 		if(isset($_GET['f'])){
 			CurrentUser::$path = stripslashes(File::r2a($_GET['f']));
-
 			if(isset($_GET['p'])){
 				switch($_GET['p']){
 					case 'n':	CurrentUser::$path = File::next(CurrentUser::$path);
@@ -130,7 +131,6 @@ class CurrentUser
 			CurrentUser::$path = Settings::$photos_dir;
 		}
 
-
 		/// Set CurrentUser account
 		if (isset($_SESSION['login'])) {
 
@@ -143,10 +143,10 @@ class CurrentUser
 			self::$uploader = in_array("uploaders", $groups);
 			Settings::set_lang(self::$account->language);
 
-            $_SESSION['token'] = "";
+			$_SESSION['token'] = "";
 
-		}
-
+		} 
+		
 		/// Set action (needed for page layout)
 		if(isset($_GET['t'])){
 			switch($_GET['t']){
@@ -164,8 +164,10 @@ class CurrentUser
 								}
 								break;
 
+
 				case "Reg"	:	if(isset($_POST['login']) && isset($_POST['password'])){
 									Account::create($_POST['login'],$_POST['password'],$_POST['verif']);
+									CurrentUser::login($_POST['login'],$_POST['password']);
 									break;
 								}
 
@@ -185,25 +187,23 @@ class CurrentUser
 								break;
 								
 
-				//~ case "Acc"	:	if(isset($_POST['old_password'])){
-									//~ Account::edit($_POST['login'],$_POST['old_password'],$_POST['password'],$_POST['name'],$_POST['email'],NULL,$_POST['language']);
-									//~ unset($_POST['old_password']);
-									//~ CurrentUser::init();
-									//~ return;
-								//~ }
-								//~ CurrentUser::$action = "Acc";
-								//~ break;
+				case "MyA"	:	if(isset($_POST['old_password'])){
+									Account::edit($_POST['login'],$_POST['old_password'],$_POST['password'],$_POST['name'],$_POST['email'],NULL,$_POST['language']);
+									unset($_POST['old_password']);
+									//CurrentUser::init();
+									//return;
+								}
 								
-				//~ case "Acc"	:	if(isset($_POST['edit'])){
-									//~ Account::edit($_POST['login'],$_POST['old_password'],$_POST['password'],$_POST['name'],$_POST['email'],NULL,$_POST['language']);
-									//~ unset($_POST['old_password']);
-									//~ CurrentUser::init();
-									//~ return;
-								//~ }
-								//~ CurrentUser::$action = "Acc";
-								//~ break;								
+								if(isset($_POST['edit'])){
+									Account::edit($_POST['login'],$_POST['old_password'],$_POST['password'],$_POST['name'],$_POST['email'],NULL,$_POST['language']);
+									//CurrentUser::init();
+									//return;
+								}
+								
+								CurrentUser::$action = "MyA";
+								break;
 
-				case "Adm"	:	if(CurrentUser::$admin){
+				case "Adm"	:	if(CurrentUser::$admin || CurrentUser::$uploader){
 									CurrentUser::$action = "Adm";
 								}
 								break;
@@ -212,44 +212,20 @@ class CurrentUser
 								CurrentUser::$action = "Com";
 								break;
 
-				case "CTk"	:	if (isset($_POST['token'])) {
-								GuestToken::create(CurrentUser::$path);
-								}
-								CurrentUser::$action = "Token";
-								break;
-				
-				//~ case "MyA"	:	if (isset($_POST['edit'])) {
-									//~ Account::edit($_POST['login'],$_POST['old_password'],$_POST['password'],$_POST['name'],$_POST['email'],NULL,$_POST['language']);
-									//~ unset($_POST['old_password']);
-								//~ } else {
-								//~ }
-								//~ CurrentUser::$action = "MyA";
-								//~ break;
-								
-				case "MyA"	:	
-								if($_POST){
-									Account::edit($_POST['login'],$_POST['old_password'],$_POST['password'],$_POST['name'],$_POST['email'],NULL,$_POST['language']);
-									unset($_POST);
-								}
-								CurrentUser::$action = "MyA";
-								break;								
-
-				//~ case "Inf" 	:	CurrentUser::$action = "Inf";
-								//~ break;
-
-				//~ case "Fs"		:	if(is_file(CurrentUser::$path)){
-									//~ CurrentUser::$action = "Fs";
-								//~ }
-								//~ break;
-				
 				case "Rights"	:	CurrentUser::$action = "Rights";
 								break;
 								
 				case "Token"	:	CurrentUser::$action = "Token";
 								break;
 								
-				case "Exif":		CurrentUser::$action = "Exif";
-								break;								
+				case "Exif"	:	CurrentUser::$action = "Exif";
+								break;	
+
+				case "MkD"	:	CurrentUser::$action = "MkD";
+								break;
+								
+				case "MvD"	:	CurrentUser::$action = "MvD";
+								break;	
 				
 				default		:	CurrentUser::$action = "Page";
 								break;
@@ -312,9 +288,7 @@ class CurrentUser
 			// Wrong password
 			Json::$json = array("action"=>"CurrentUser",
 				"result"=>1,
-				"desc"=>"Error : user or password incorrect",
-				"url"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)),
-				"js"=>"");							
+				"desc"=>"Error : user or password incorrect");							
 			return false;
 		}
 		if(in_array('root',$acc->groups)){
@@ -325,9 +299,8 @@ class CurrentUser
 		}
 		Json::$json = array("action"=>"CurrentUser",
 			"result"=>0,
-			"desc"=>"Authnetification sucessfull",
-			"url"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)),
-			"js"=>"");		
+			"pathn"=>File::a2r(CurrentUser::$path),
+			"desc"=>"Authnetification sucessfull");
 		return true;
 	}
 

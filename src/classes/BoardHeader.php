@@ -72,7 +72,7 @@ class BoardHeader{
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){
-		echo "<div class='page-header header'>\n";
+		echo "<div class='page-header'>\n";
 			/// Title
 			if ($this->textinfo->title) { 
 				echo 	"<h1 class='album-title'>".$this->textinfo->title."</h1>\n";
@@ -80,15 +80,22 @@ class BoardHeader{
 				echo 	"<h1 class='album-title'>".(htmlentities($this->title, ENT_QUOTES ,'UTF-8'))."</h1>\n";	
 			}
 		echo "</div>\n";
-		echo "<div id='textinfo'>\n";
+
+		if(CurrentUser::$admin || CurrentUser::$uploader){		
+			echo "<div class='row-fluid'>\n";
+				$this->upload->toHTML();
+			echo "</div>\n";
+		}
+		echo "<div id='textinfo' class='row-fluid'>\n";
 		$this->textinfo->toHTML();
-		echo "</div>\n";
-		if(CurrentUser::$admin || CurrentUser::$uploader){				
-			$this->upload->toHTML();
+		echo "</div>\n";		
+		if(CurrentUser::$admin || CurrentUser::$uploader){
 			echo "
-			<div id='view_style' class='btn-group' data-toggle='buttons-radio'>\n
+			<div class='row-fluid'>
+			<div id='view_style' class='btn-group span1' data-toggle='buttons-radio'>\n
 				<button id='view-thumb' class='btn btn-mini active' type='button'><i class='icon-th'></i></button>\n
 				<button id='view-list' class='btn btn-mini' type='button'><i class='icon-th-list'></i></button>\n
+			</div>\n
 			</div>\n";			
 		}
 

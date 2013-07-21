@@ -65,7 +65,7 @@ class BoardItem implements HTMLObject
 	 */
 	public function __construct($file,$ratio){
 		$this->path 	= 	$file;
-		$this->file		=	urlencode(File::a2r($file));
+		$this->file	=	urlencode(File::a2r($file));
 		$this->ratio	=	$ratio;
 	}
 	
@@ -88,7 +88,7 @@ class BoardItem implements HTMLObject
 			echo " selected ";
 			}
 		echo ">\n";
-		echo "\t\t<a class='thumbnail' href='?f=".$this->file."'>";
+		echo "\t\t<a class='thumbnail' href='?f=".$this->file."' rel='tooltip' data-title=\"<img style='opacity:1;max-width:400px;max-height:400px;'  src='?t=Img&f=".$this->file."'>\">";
 		//~ echo "<img class='loadimg' src='./inc/spacer.gif' style='background: url(\"?".$getfile."\") no-repeat center center; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;'>";
 		echo "<img class='lazy' src='./inc/spacer.gif' data-original='?".$getfile."' width='100%' height='100%'>";
 		echo "</a>\n";

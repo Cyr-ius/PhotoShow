@@ -113,9 +113,7 @@ class Comments implements HTMLObject
 		if($content == ""){
 			Json::$json = array("action"=>"Comments",
 				"result"=>1,
-				"desc"=>"Comment is empty",
-				"url"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)),
-				"js"=>"&j=Com");		
+				"desc"=>"Comment is empty");		
 			return;
 		}
 
@@ -169,6 +167,7 @@ class Comments implements HTMLObject
 		$xml->asXML($c->commentsfile);
 		Json::$json = array("action"=>"Comments",
 			"result"=>0,
+			"uri"=>".?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Com",						
 			"desc"=>"Delete comment successfull");			
 	}
 
@@ -191,6 +190,7 @@ class Comments implements HTMLObject
 		$xml->asXML($this->commentsfile);
 		Json::$json = array("action"=>"Comments",
 			"result"=>0,
+			"uri"=>".?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Com",						
 			"desc"=>"Save comment successfull");		
 	}
 

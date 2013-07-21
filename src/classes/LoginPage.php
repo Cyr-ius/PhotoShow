@@ -67,12 +67,12 @@ class LoginPage extends Page
 		/// Login
 		echo "<div class='control-group'>\n";
 		echo "<label for='login' class='control-label'>".Settings::_("login","login")."</label>";
-		echo "<div class='controls'><input id='login' class='input-large' type='text' name='login' value=''></div>\n";
+		echo "<div class='controls'><input id='login' class='input-large' type='text' name='login' value='' placeholder='".Settings::_("login","login")."'></div>\n";
 		echo "</div>\n";
 		/// Password
 		echo "<div class='control-group'>\n";
                  echo "<label for='password' class='control-label'>".Settings::_("login","pass")."</label>";
-		echo "<div class='controls'><input id='password' class='input-large' type='password' name='password' value=''></div>\n";
+		echo "<div class='controls'><input id='password' class='input-large' type='password' name='password' value='' placeholder='".Settings::_("login","pass")."'></div>\n";
 		echo "</div>\n";		
 		echo "<div class='controls controls-row'>\n";
 		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("login","submit")."'>\n";

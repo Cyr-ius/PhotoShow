@@ -189,7 +189,7 @@ class Video implements HTMLObject
 
         $file_file	       = new File($file);
         $thumb_path_no_ext = Settings::$thumbs_dir.dirname(File::a2r($file))."/".$file_file->name;
-        $thumb_path_webm   = $thumb_path_no_ext.'.webm';	
+        $thumb_path_webm   = $thumb_path_no_ext.'.mp4';	
         $thumb_path_jpg    = $thumb_path_no_ext.'.jpg';	
 
 
@@ -207,13 +207,13 @@ class Video implements HTMLObject
             $dimensions = self::GetScaledDimension($file, 320);
             
             $u=Settings::$ffmpeg_path.' -itsoffset -'.$offset.'  -i "'.$file.'" -vcodec mjpeg -vframes 1 -an -f rawvideo -s '.$dimensions['x'].'x'.$dimensions['y'].' -y "'.$thumb_path_jpg.'"';
-            exec($u);
+             self::ExecInBackground($u);
         }
 
         if (self::NoJob($file))// We check that first to allow the clean of old job files
         {
             if (!file_exists($thumb_path_webm) || filectime($file) > filectime($thumb_path_webm)){
-                if ($file_file->extension !="webm") {
+                if ($file_file->extension !="mp4") {
                     ///Convert video to webm format in Thumbs folder
                     //TODO: Max job limit
                     $u = Settings::$ffmpeg_path.' -i "'.$file.'" '.Settings::$ffmpeg_option.' -y "'.$thumb_path_webm.'"';		
@@ -306,17 +306,19 @@ class Video implements HTMLObject
     }
 
     //TODO: center the video on y axis
-    public function VideoDiv($width='100%',$height='100%',$control=false){
-		$c = null;
-		self::FastEncodeVideo($this->file);
-		$wh = ' height="'.$height.'" width="'.$width.'"';
+    public function VideoDiv($width='',$height='100%',$control=false){
+	$c = null;
+	self::FastEncodeVideo($this->file);
+	$wh = ' height="'.$height.'" width="'.$width.'"';
         if ($control) {
             $c = ' controls="controls"';
         }
-        echo '<video'.$wh.$c.'><source src="?t=Vid&f='.$this->fileweb.'" type="video/webm" />';
+	//~ echo '<div class="videoUiWrapper">';
+        echo '<video height="100%"'.$c.'><source src="?t=Vid&f='.$this->fileweb.'" type="video/mp4" />';
         echo 'Your browser does not support the video tag.<br />';
         echo 'Please upgrade your brower or Download the codec <a href="http://tools.google.com/dlpage/webmmf">Download</a>';
         echo '</video>';
+        //~ echo '</div>';
         //TODO: verify the message above works/do translations
 	}	
 	
@@ -327,7 +329,7 @@ class Video implements HTMLObject
 	 * @author Cédric Levasseur
 	 */
 	public function toHTML(){	
-        self::VideoDiv('',400,true);
+        self::VideoDiv('100%','100%',true);
 	}
 
 }

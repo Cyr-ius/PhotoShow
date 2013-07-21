@@ -118,20 +118,22 @@ class ImagePanel implements HTMLObject
 			echo "<ul><li class='span12'><a href='' class='thumbnail'><img id='image_big' src=''></a></li></ul>";
 			return;
 		}
-		if(isset($this->image)){
-			echo "<div class='bigimage'>\n";
-			$this->image->toHTML();
+			if(isset($this->image)){
+				echo "<div class='container-fluid bigimage'>\n";
+				$this->image->toHTML();
+				echo "</div>\n";
+			}	
+			elseif(isset($this->video)){
+				echo "<div class='container-fluid bigvideo'>\n";
+				$this->video->toHTML();
+				echo "</div>\n";
+			}		
+			echo "<div class='well exif '></div>";
+			echo "<div class='container-fluid'>\n";
+				echo "<ul class='image_bar' id='image_bar'>\n";
+				$this->imagebar->toHTML();
+				echo "</ul>\n";
 			echo "</div>\n";
-		}	
-		elseif(isset($this->video)){
-			echo "<div class='bigvideo'>\n";
-			$this->video->toHTML();
-			echo "</div>\n";
-		}		
-		echo "<div class='well exif '></div>";
-		echo "<ul class='image_bar' id='image_bar'>\n";
-		$this->imagebar->toHTML();
-		echo "</ul>\n";
 	}
 	
 }

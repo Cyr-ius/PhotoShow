@@ -45,25 +45,29 @@
 
 class Index
 {
+
+	public static $welcome; ///First Connexion Site
+	
 	function __construct(){
 		/// Initialize variables
 		Settings::init();
-
-
-		/// Initialize CurrentUser
+		
+		/// CurrentUser init() , load CurrentUser + Admin
 		try{
+			/// Initialize CurrentUser
 			CurrentUser::init();
 		}catch(Exception $e){
-			$page = new RegisterPage(true);
-			$page->toHTML();
-			return;
+			//~ $page = new RegisterPage(true);
+			//~ $page->toHTML();
+			//~ return;
+			Index::$welcome = true;
 		}
 
 		/// Check what to do
 		switch (CurrentUser::$action){
 
 			case "Judge":	// Same as page
-			case "Page":		$page = new MainPage();
+			case "Page":		$page = new MainBody();
 							$page->toHTML();
 							break;
 							
@@ -99,14 +103,6 @@ class Index
 						
 			case "Zip":		Provider::Zip(CurrentUser::$path);
 							break;
-			
-			//~ case "Acc":		if(CurrentUser::$admin && isset($_POST['login'])){
-								//~ $acc = new Account($_POST['login']);
-							//~ }else{
-								//~ $acc = CurrentUser::$account;
-							//~ }
-							//~ $acc->toHTML();
-							//~ break;
 							
 			case "MyA":		$acc = CurrentUser::$account;
 							$acc->toHTML();
@@ -129,6 +125,14 @@ class Index
 							break;
 
 			case "Exif":		$page = new Exif(CurrentUser::$path);
+							$page->toHTML();
+							break;
+							
+			case "MkD":		$page = new AdminCreate(CurrentUser::$path);
+							$page->toHTML();
+							break;
+								
+			case "MvD":		$page= new AdminRename(CurrentUser::$path);
 							$page->toHTML();
 							break;
 

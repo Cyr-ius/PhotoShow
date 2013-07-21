@@ -67,6 +67,9 @@ class Settings extends Page
 
 	/// Website root address
 	static public $site_address	=   "";
+	
+	/// Website icon 
+	static public $icon_path	=   "inc/favico.ico";	
 
 	/// Display Facebook button
 	static public $like 		=	false;
@@ -171,11 +174,11 @@ class Settings extends Page
 		}
 
 		/// Setup variables
-		Settings::$photos_dir	=	$config->photos_dir;
-		Settings::$thumbs_dir	=	$config->ps_generated."/Thumbs/";
-		Settings::$conf_dir		=	$config->ps_generated."/Conf/";
-		Settings::$admin_settings_file = $config->ps_generated."/Conf/admin_settings.ini";
-		Settings::$timezone = $config->timezone;
+		Settings::$photos_dir			=	$config->photos_dir;
+		Settings::$thumbs_dir		=	$config->ps_generated."/Thumbs/";
+		Settings::$conf_dir			=	$config->ps_generated."/Conf/";
+		Settings::$admin_settings_file	= $config->ps_generated."/Conf/admin_settings.ini";
+		Settings::$timezone 			= $config->timezone;
 
 		/// Set TimeZone
 		date_default_timezone_set(Settings::$timezone);
@@ -222,20 +225,19 @@ class Settings extends Page
                 Settings::$site_address	=	Settings::$site_address."/";
             }
 
-			Settings::$like 		=	isset($admin_settings['like']);
+			Settings::$like 			=	isset($admin_settings['like']);
 			Settings::$plusone 		=	isset($admin_settings['plusone']);
 			Settings::$noregister	=	isset($admin_settings['noregister']);
-			Settings::$forcehttps   =   isset($admin_settings['forcehttps']);
+			Settings::$forcehttps  	=   isset($admin_settings['forcehttps']);
 			Settings::$nocomments	=	isset($admin_settings['nocomments']);
 			Settings::$nodownload	=	isset($admin_settings['nodownload']);
 			Settings::$l33t 		=	isset($admin_settings['l33t']);
-			Settings::$reverse_menu	=	isset($admin_settings['reverse_menu']);
-			Settings::$hide_menu    =   isset($admin_settings['hide_menu']);
-			Settings::$thumbs_fixed_width	=	isset($admin_settings['thumbs_fixed_width']);			
+			Settings::$reverse_menu=	isset($admin_settings['reverse_menu']);
+			Settings::$hide_menu    	=   isset($admin_settings['hide_menu']);
+			Settings::$thumbs_fixed_width	=	isset($admin_settings['thumbs_fixed_width']);
 
-
-			if(isset($admin_settings['max_comments'])){
-				Settings::$max_comments = 	$admin_settings['max_comments'] + 0;
+			if(isset($admin_settings['icon_path'])){
+				Settings::$icon_path	=	$admin_settings['icon_path'];
 			}
 
 			if(isset($admin_settings['max_comments'])){
@@ -329,6 +331,7 @@ class Settings extends Page
 	public static function set(){
         $var = array("name",
             "site_address",
+	    "icon_path",
             "like",
             "plusone",
             "fbappid",
@@ -358,6 +361,7 @@ class Settings extends Page
 		Settings::init(true);	
 		Json::$json = array("action"=>"Settings",
 					"result"=>0,
+					"uri"=>".?t=Adm&a=Set",
 					"desc"=>"Save settings");				
 	}
 
@@ -383,7 +387,9 @@ class Settings extends Page
 		}
 		Json::$json = array("action"=>"Settings",
 					"result"=>0,
-					"desc"=>"Generate Thumbnails finished");				
+					"uri"=>".?t=Adm&a=GAl",
+					"desc"=>"Generate Thumbnails finished");
+		return;
 	}
 	
 	
@@ -399,7 +405,9 @@ class Settings extends Page
 		}	
 		Json::$json = array("action"=>"Settings",
 			"result"=>0,
+			"uri"=>".?t=Adm&a=DAl",
 			"desc"=>"Cleanup Thumbnails finished");	
+		return;
 	}	
 
 	/**
@@ -418,6 +426,11 @@ class Settings extends Page
 		echo "<label for='title' class='control-label'>".Settings::_("settings","title")."</label>\n";
 		echo "<div class='controls'><input id='title' class='input-large' type='text' name='name' value='".htmlentities(Settings::$name, ENT_QUOTES ,'UTF-8')."'></div>\n";
 		echo "</div>\n";
+		/// Icon Site
+		echo "<div class='control-group'>\n";
+		echo "<label for='icon_path' class='control-label'>".Settings::_("settings","icon-path")."</label>\n";
+		echo "<div class='controls'><input id='icon_path' class='input-large' type='text' name='icon_path' value='".htmlentities(Settings::$icon_path, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";		
 		/// Language
 		echo "<div class='control-group'>\n";
 		echo "<label for='language' class='control-label'>".Settings::_("settings","language")."</label>\n";

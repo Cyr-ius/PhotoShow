@@ -67,7 +67,7 @@
  	 */
  	public function toHTML(){
 	
-		echo "\n\t<ul  id='AdminTab'>\n";
+		echo "\n\t<ul  class='nav'>\n";
 		foreach($this->options as $op=>$val){
 		echo "\t\t<li ><a style='text-decoration:none' id='$op' href='?t=Adm&a=$op'>$val</a></li>\n";
  		}

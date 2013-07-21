@@ -58,16 +58,18 @@ class ImageBar
 	public function __construct($fs=false){
 
 		$file = urlencode(File::a2r(CurrentUser::$path));
-
-		$this->buttons['prev'] = 	"?p=p&f=".$file;
-		$this->buttons['back'] = "?f=".urlencode(File::a2r(dirname(CurrentUser::$path)));
+		$this->buttons['prev'] = array('icon'=>"icon-step-backward","url"=>"?p=p&f=".$file);
+		$this->buttons['linear'] = array('icon'=>"  icon-camera","url"=> "?f=".$file);
+		$this->buttons['back'] = array('icon'=>" icon-th","url"=>"?f=".urlencode(File::a2r(dirname(CurrentUser::$path))));
 		if(!Settings::$nodownload){
-			$this->buttons['img']  = 	"?t=Big&f=".$file;
-			$this->buttons['get']  = 	"?t=BDl&f=".$file;
+			$this->buttons['img'] = array('icon'=>"icon-picture","url"=>"?t=Big&f=".$file);
+			$this->buttons['get'] = array('icon'=>"icon-download-alt","url"=>"?t=BDl&f=".$file);
 		}
-		$this->buttons['next'] = 	"?p=n&f=".$file;
-		$this->buttons['slideshow'] = "?f=".$file;
-
+		
+		$this->buttons['slideshow'] = array('icon'=>" icon-play","url"=> "?f=".$file);
+		//~ $this->buttons['fullscreen'] = array('icon'=>" icon-fullscreen","url"=> "?f=".$file);
+		$this->buttons['next'] = array('icon'=>"icon-step-forward","url"=>"?p=n&f=".$file);
+		
 	}
 
 	/**
@@ -76,8 +78,8 @@ class ImageBar
 	 * @author Thibaud Rohmer
 	 */
 	 public function toHTML(){
-	 	foreach($this->buttons as $name=>$url){
-	 		echo "<li id='$name'><a href='$url'>$name</a></li>";
+	 	foreach($this->buttons as $key=>$value){
+	 		echo "<li id='$key'><a href='".$value['url']."' alt='$key'><i  class='".$value['icon']." icon-white'></i></a></li>";
 	 	}
 	 }
 

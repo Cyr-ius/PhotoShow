@@ -62,6 +62,7 @@ class RegisterPage extends Page
 		$this->included 	 = $included;
 	}
 	
+	
 	/**
 	 * Display Register Page on website
 	 *
@@ -80,18 +81,18 @@ class RegisterPage extends Page
             /// Login
 		echo "<div class='control-group'>\n";
 		echo "<label for='login' class='control-label'>".Settings::_("register","logintxt")."</label>";
-		echo "<div class='controls'><input id='login' class='span12' type='text' name='login' value=''></div>\n";
+		echo "<div class='controls'><input id='login' class='input-large' type='text' name='login' value=''></div>\n";
 		echo "</div>\n";
 
             /// Password
 		echo "<div class='control-group'>\n";
                  echo "<label for='password' class='control-label'>".Settings::_("register","passtxt")."</label>";
-		echo "<div class='controls'><input id='password' class='span12' type='password' name='password' value=''></div>\n";
+		echo "<div class='controls'><input id='password' class='input-large' type='password' name='password' value=''></div>\n";
 		echo "</div>\n";
             /// Verif
 		echo "<div class='control-group'>\n";
 		echo "<label for='verif' class='control-label'>".Settings::_("register","veriftxt")."</label>";
-		echo "<div class='controls'><input id='verif' class='span12' type='password' name='verif' value=''></div>\n";
+		echo "<div class='controls'><input id='verif' class='input-large' type='password' name='verif' value=''></div>\n";
 		echo "</div>\n";
 		echo "<div class='controls controls-row'>\n";
 		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("register","submit")."'>\n";

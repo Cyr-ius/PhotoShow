@@ -6,7 +6,8 @@ function init_plupload() {
 		container : 'uploader',
 		browse_button : 'dropzone',
 		drop_element : 'dropzone',
-		multipart_params : {path: currentpath},
+		multiple_queues : true,
+		multipart_params : {path: $('span.currentpath').text()},
 	        max_file_size : '50mb',
 		unique_names : true,		
 		flash_swf_url : '/plupload/js/plupload.flash.swf',
@@ -24,7 +25,7 @@ function init_plupload() {
 	
 	uploader.destroy();
 	uploader.bind('Init', function(up, params) {
-		//$('#filelist').html("<div class='info'>Current runtime: " + params.runtime + "</div>");
+		//~ $('#filelist').html("<div class='info'>Current runtime: " + params.runtime + "</div>");
 	});
 
 	$('#button_upload').unbind();
@@ -42,6 +43,7 @@ function init_plupload() {
 		if ($('.uploadbtn').is(':hidden')) {
 			$('.uploadbtn').show();
 		}
+		
 		$.each(files, function(i, file) {
 			$('#files').append('<tr  id="' + file.id + '"><td  class="name">' + file.name + '</td><td class="span6"><div class="progress progress-success progress-striped active" aria-valuenow="0" aria-valuemax="100" aria-valuemin="0" role="progressbar"><div class="bar" style="width:0%;"></div></div></td><td class="size">' + plupload.formatSize(file.size) +'<td><td><a class="action" href="#"><i class="icon-remove-sign"></i></a></td></tr>');			
 			$('#' + file.id + " .action").bind('click',function(){
@@ -57,28 +59,28 @@ function init_plupload() {
 	});
 
 	uploader.bind('Error', function(up, err) {
-		$('#filelist').append("<div>Error: " + err.code +
-			", Message: " + err.message +
-			(err.file ? ", File: " + err.file.name : "") +
-			"</div>"
-		);
-
+		//~ $('#filelist').append("<div>Error: " + err.code +", Message: " + err.message +(err.file ? ", File: " + err.file.name : "")+"</div>");
+		get_message(1,err.code+'-'+err.message+(err.file ? "-" + err.file.name : ""));	
 		up.refresh(); // Reposition Flash/Silverlight
 	});
 
-	uploader.bind('FileUploaded', function(up, file) {
+	uploader.bind('FileUploaded', function(up, file,info) {
 		$('#' + file.id + " .action").html("<i class='icon-ok-sign'></i>");
-		$('#' + file.id).delay(4000).fadeOut(1000);
+		$('#' + file.id).delay(20).fadeOut(20);
+		var obj = JSON.parse(info.response);
+		$.get('?j=Item&f='+obj['uri'],$(this).serialize(),function(data){
+			$('.images .thumbnails').append(data);
+			init();
+		});
+		get_message(obj['result'],obj['desc']);		
 	});
 	
 	uploader.bind('UploadComplete',function(up,file){
-		$.get($(location).attr('search')+'&j=Pan',$(this).serialize(),function(data){
-			$('.panel').html(data);
-			$('.uploadbtn').hide();
-			update_url($(location).attr('search'));	
-			init_panel();
-		});		
+		$('.uploadbtn').hide();
+		get_message(0,'Upload Completed');	
 	});
+	
+	
 	
 	$('#dropzone').droppable({hoverClass: "hovered"});
 }

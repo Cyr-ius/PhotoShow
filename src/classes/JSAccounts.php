@@ -94,11 +94,11 @@ class JSAccounts
 		echo "
 		<form class='addgroup form-inline' method='post' action='?t=Adm&a=GC'>";
 		echo "<legend>".Settings::_("jsaccounts","addgroup")."</legend>\n";
-		echo "<fieldset>\n";				
-		echo "<label for='groupname' class='control-label'>".Settings::_("jsaccounts","groupname")."</label>";
+		//~ echo "<fieldset>\n";				
+		//~ echo "<label for='groupname' class='control-label'>".Settings::_("jsaccounts","groupname")."</label>";
 		echo "<input id='groupname' class='input-medium' type='text' name='group' placeholder='".Settings::_("jsaccounts","groupname")."'>\n";
 		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("jsaccounts","addgroup")."'>\n";
-		echo "</fieldset>\n";		
+		//~ echo "</fieldset>\n";		
 		echo "</form>\n";
 		echo "</div>";
 		foreach($this->groups as $g){

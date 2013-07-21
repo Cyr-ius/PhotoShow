@@ -58,18 +58,6 @@
  	 * @author Thibaud Rohmer
  	 */
  	public function __construct(){
-
- 		//~ /// Get all subdirs
- 		//~ $list_dirs = Menu::list_dirs(Settings::$photos_dir,true);
-
- 		//~ foreach ($list_dirs as $dir){
- 			//~ $this->dirs[] = File::a2r($dir);
- 		//~ }
-
- 		//~ if(isset(CurrentUser::$path)){
- 			//~ $this->selected_dir = File::a2r(CurrentUser::$path);
- 		//~ }
-
  	}
 
  	/**
@@ -90,9 +78,7 @@
  		if( !(CurrentUser::$admin || CurrentUser::$uploader) ){
 			Json::$json = array("action"=>"AdminUpload",
 							"result"=>1,
-							"desc"=>"Error : No Rights",
-							"url"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)),
-							"js"=>"");		
+							"desc"=>"Error : No Rights");		
  			return;
  		}
  		/// Set upload path
@@ -119,9 +105,8 @@
 		if(!isset($_FILES["file"])) {	
 			Json::$json = array("action"=>"AdminUpload",
 							"result"=>0,
-							"desc"=>"Folder Create",
-							"url"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)),
-							"js"=>"");							
+							"uri"=>urlencode(File::a2r(CurrentUser::$path)),
+							"desc"=>"Folder Create");							
  			return;
 		}
  		/// Treat uploaded files
@@ -149,10 +134,7 @@
 
 			// Save the files
 			if(move_uploaded_file($tmp_name, "$path/$name")){
-				$done .= "Successfully uploaded $name";
-				Json::$json = array("action"=>"AdminUpload",
-							"result"=>0,
-							"desc"=>"File save :".$name);					
+				$done .= "Successfully uploaded $name";					
 				Video::FastEncodeVideo("$path/$name");			 
 			}
 			// Setup rights
@@ -163,11 +145,15 @@
 					Judge::edit("$path/$name",$_POST['users'],$_POST['groups']);					
 				}
 			}
+			Json::$json = array("action"=>"AdminUpload",
+				"result"=>0,
+				"uri"=>urlencode(File::a2r("$path/$name")),
+				"desc"=>"File save :".$name);
 			
 		  } else { 
 				Json::$json = array("action"=>"AdminUpload",
-							"result"=>1,
-							"desc"=>"Error : Upload error");					
+					"result"=>1,
+					"desc"=>"Error : Upload error");					
 		  }
 		  return;
 		 //~ }
@@ -180,13 +166,13 @@
  	 */
  	public function toHTML(){
 		echo "
-		<div  style='display: inline; white-space: nowrap;' >
-		<div id='rights_upload' class='btn-group' data-toggle='buttons-radio' style='display:inline;'>
-			<button type='button' class='btn btn-mini active' value='true'>Inherit</button>
-			<button type='button' class='btn btn-mini'>Public</button>
+		<section style='margin-bottom: 5px;'>
+			<div id='rights_upload' class='btn-group' data-toggle='buttons-radio'>
+				<button type='button' class='btn btn-mini active' value='true'>Inherit</button>
+				<button type='button' class='btn btn-mini'>Public</button>
 			</div>
-		<span style='font-size: 11px;vertical-align: bottom;'>".Settings::_("upload","rights_upload")."</span>
-		</div>";		
+			<span ><small>".Settings::_("upload","rights_upload")."</small></span>
+		</section>";		
 		echo "<div id='dropzone' class='well'>".Settings::_("upload","dropzone")."</div>";
 		echo "<div id='uploader'>
 				<div id='filelist'> 

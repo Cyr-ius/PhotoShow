@@ -125,6 +125,11 @@ class Group
 			$xml_right->addChild($r);
 		
 		$xml->asXML(CurrentUser::$groups_file);
+		Json::$json = array("action"=>"Group",
+			"result"=>0,
+			"uri"=>".?t=Adm&a=GC",
+			"desc"=>"Create Group $name sucessful");
+		return;		
 	}
 	
 	/**
@@ -154,6 +159,11 @@ class Group
 		}
 
 		$xml->asXML($xml_infos);
+		Json::$json = array("action"=>"Group",
+			"result"=>0,
+			"uri"=>".?t=Adm&a=GDe",
+			"desc"=>"Delete Group $groupname sucessful");
+		return;			
 	}
 
 	/**

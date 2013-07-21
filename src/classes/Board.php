@@ -99,7 +99,7 @@ class Board implements HTMLObject
 		$this->dirs	=	Menu::list_dirs($this->path);
 		$pageURL 	=	Settings::$site_address."/?f=".urlencode(File::a2r($this->path));
 		//~ $this->comm	=	new Comments($this->path);
-        
+
         // generate the header - opengraph metatags for facebook
         $this->page_header = "<meta property=\"og:url\" content=\"".$pageURL."\"/>\n"
             ."<meta property=\"og:site_name\" content=\"".Settings::$name."\"/>\n"
@@ -242,7 +242,7 @@ class Board implements HTMLObject
 			$this->boardlines[] = $bl;
 		}
 	}
-
+	
 	/**
 	 * Generate a foldergrid
 	 *
@@ -281,7 +281,7 @@ class Board implements HTMLObject
 	 * @return void
 	 * @author Thibaud Rohmer
 	 */
-	private function ratio($file){
+	public function ratio($file){
 		// Calculate ratio
 		list($x,$y) = getimagesize($file);
 

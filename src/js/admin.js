@@ -39,7 +39,9 @@ function init_admin(){
 		revert: 		true
 	});
 	
-	$( ".menu_title,.directory" ).droppable({ greedy: true });
+	$( ".menu_title,.directory" ).droppable({
+		greedy: true
+	});
 
 	$(".directory").draggable({
 		cursor: 		"move",
@@ -71,85 +73,96 @@ function init_admin(){
 		scroll: 		false,
 		revert: 		true
 	});	
-
+	
 	$(".submenu,.directory").droppable({
 		hoverClass: "hovered",
-		drop: 		function(event, ui){
-						
+		drop: 	function(event, ui){
 						var dragg = ui.draggable;
 						dragg.draggable('option','revert',false);
 						from  =  dragg.children('span.path').text();
 						to 	  = $(this).children("span.path").text();
-						if($(dragg).hasClass("selected")){
-							$(".panel .item.selected").each(function(){
-								from = $(this).children(".path").text();
-								$(".panel").load(".?t=Adm&a=Mov&j=Pan",{'pathFrom' : from,'pathTo' : to, 'move':'directory'},init_panel);
-							});
-						}else{ 
-							if($(dragg).hasClass("item")){
-								$(".panel").load(".?t=Adm&a=Mov&j=Pan",{'pathFrom' : from,'pathTo' : to, 'move':'directory'},init_panel);	
-							}else{
-								$("#content").load(".?t=Adm&a=Mov&j=Pag",{'pathFrom' : from,'pathTo' : to, 'move':'directory'},function(){
-									$('.menu').mCustomScrollbar({scrollButtons:{enable:true}});
-									init_panel();
-								});								
+						if($(dragg).hasClass("item")){
+							if($(dragg).hasClass("selected")){
+								$(".panel .item.selected").each(function(){
+									from = $(this).children(".path").text();
+									$.post(".?t=Adm&a=Mov&j=JSon",{'pathFrom' : from,'pathTo' : to, 'move':'directory'},function(data){
+										refresh(data.uri);
+										get_message(data.result,data.desc);										
+									});	
+								});
+							} else {
+								$.post(".?t=Adm&a=Mov&j=JSon",{'pathFrom' : from,'pathTo' : to, 'move':'directory'},function(data){
+									refresh(data.uri);
+									get_message(data.result,data.desc);
+								});	
 							}
+						} else {
+							$.post(".?t=Adm&a=Mov&j=JSon",{'pathFrom' : from,'pathTo' : to, 'move':'directory'},function(data){
+								refresh(data.uri);
+								get_message(data.result,data.desc);	
+							});
 						}
-						
-					}
-	});
+				}
+	});	
 
 	$(".bin").droppable({
 		hoverClass: "hovered",
-		drop: 		function(event, ui){
+		drop: 	function(event, ui){
 						var dragg = ui.draggable;
 						dragg.draggable('option','revert',false);
 						file  = dragg.children('span.path').text();
-			
+						var folder='';
+					//Delete  multiple files
 					 if($(dragg).hasClass("selected")){
 						$(".panel .item.selected").each(function(){
 							file = $(this).children(".path").text();
-							$(".panel").load("?t=Adm&a=Del&j=Pan",{'del' : file },init_panel);
+							$.post(".?t=Adm&a=Del&j=JSon",{'del' : file },function(data){
+								refresh(data.uri);
+								get_message(data.result,data.desc);
+							});					
 						});
+						
 					}else{ 
-
+						//Delete file
 						if($(dragg).hasClass("item")){
-							$(".panel").load("?t=Adm&a=Del&j=Pan",{'del' : file },init_panel);
+							$.post(".?t=Adm&a=Del&j=JSon",{'del' : file },function(data){
+								refresh(data.uri);
+								get_message(data.result,data.desc);
+							});	
 						}else{
-							$("#content").load("?t=Adm&a=Del&j=Pag",{'del' : file },function(){
-								init_panel();
-								$('.menu').mCustomScrollbar({scrollButtons:{enable:true}});		
-							});
+							//Delete folder
+							$.post(".?t=Adm&a=Del&j=JSon",{'del' : file },function(data){
+								refresh(data.uri);
+								get_message(data.result,data.desc);								
+							});							     	 
 						}
 					}
-
-					}
+				}
 	});
 
 	$(".groupitem").droppable({
-		hoverClass: 	"hovered",
-		drop: 			function(event,ui){
-
-							var dragg = ui.draggable;
-							if($(dragg).hasClass("accountitem")){
-								dragg.draggable('option','revert',false);
-								acc = dragg.children(".name").text();
-								group = $(this).children(".name").text();
-								$("#ModalAdmin .modal-body").load("?t=Adm&a=AGA",{'acc' : acc, 'group' : group },init_admin);
-							}
-						}
+		hoverClass:  "hovered",
+		drop: 	function(event,ui){
+					var dragg = ui.draggable;
+					if($(dragg).hasClass("accountitem")){
+						dragg.draggable('option','revert',false);
+						acc = dragg.children(".name").text();
+						group = $(this).children(".name").text();
+						$.post(".?t=Adm&a=AGA&j=JSon",{'acc' : acc, 'group' : group },function(data){
+							$("#ModalAdmin .modal-body").load(data.uri,init_admin);
+						});
+					}
+				}
 	})
 	
 	$('#Abo,#Sta,#VTk,#Set,#Acc,#EdA').unbind();
 	$('#Abo,#Sta,#VTk,#Set,#Acc,#EdA').click(function(){
 		$(target+' .modal-body').load($(this).attr('href'),init_admin);
-		$(target+' .modal-footer .modal-infos').hide();
-		$(target+' .modal-footer .modal-infos').removeClass('alert-info');
 	return false;		
 	});
 	
-	$("#adminchoiceaccount-form,#adminaccount-form").unbind();
-	$("#adminchoiceaccount-form,#adminaccount-form").submit(function(){
+	$("#adminchoiceaccount-form").unbind();
+	$("#adminchoiceaccount-form").submit(function(){
 		$.post($(this).attr('action'),$(this).serialize(),function(data){
 			$(target+' .modal-body').html(data);
 			init_admin();
@@ -157,72 +170,86 @@ function init_admin(){
 	return false;	
 	});	
 
+	$("#bin").unbind();
+	$("#bin").click(function(){
+		$(".panel .item.selected").each(function(){
+			file = $(this).children(".path").text();
+			$(".panel").load("?t=Adm&a=Del&j=Pan",{'del' : file },init);
+		});	
+	return false;
+	});	
+	
 	$("#button_thb").unbind();
 	$("#button_thb").click(function(){
-		$.post('?t=Adm&a=DAl&j=JSon',{'cleanpath': currentpath},function(data){
-			alert(data.desc);
+		currentdirectory = $('.submenu .active .path')[$('.submenu .active .path').size()-1].textContent;
+		$.post('?t=Adm&a=DAl&j=JSon',{'cleanpath': $('span.currentpath').text()},function(data,info){
+			get_message(data.result,data.desc);
+		});
+	});		
+	
+	//Comments
+	$('#comments-form,#delcomment-form').unbind();
+	$('#comments-form,#delcomment-form').submit(function(){
+		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data,info){
+			if (data.result ==0) {
+				$('#myModal .modal-body').load(data.uri,init_admin);
+			}
+			get_message(data.result,data.desc);
 		});
 	return false;	
-	});		
+	});	
 
 	//Json with reload page
-	$('#createfolder-form,#renamefolder-form,#logins-form').unbind();
-	$('#createfolder-form,#renamefolder-form,#logins-form').submit(function(){
-		$('#myModal .modal-footer .modal-infos').hide();
-		$('#myModal .modal-footer .modal-infos').removeClass('alert-info');
-		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data){
-			if (data.result ==0) {
-				$('#myModal .modal-footer .modal-infos').removeClass('alert-error').addClass('alert-info');
-				url = data.url+data.js;
-				window.location.replace(data.url);
-			}
-			$('#myModal .modal-footer .modal-infos').text(data.desc).show();
+	$('#createfolder-form,#renamefolder-form').unbind();
+	$('#createfolder-form,#renamefolder-form').submit(function(){
+		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data,info){
+			refresh(data.uri);
+			get_message(data.result,data.desc);		
 		});
+		$(this.parentNode.parentNode.parentNode).modal('hide');
 	return false;	
 	});
 	
 	//Json with myModal page
-	$('#admintype-form,#adminrights-form,#admintokens-form,#account-form,#register-form,#comments-form,#delcomment-form').unbind();
-	$('#admintype-form,#adminrights-form,#admintokens-form,#account-form,#register-form,#comments-form,#delcomment-form').submit(function(){
-		$('#myModal .modal-footer .modal-infos').hide();
-		$('#myModal .modal-footer .modal-infos').removeClass('alert-info');
-		url = $(this).attr('action');
-		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data){
+	$('#admintype-form,#adminrights-form,#admintokens-form').unbind();
+	$('#admintype-form,#adminrights-form,#admintokens-form').submit(function(){
+		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data,info){
 			if (data.result ==0) {
-				$('#myModal .modal-footer .modal-infos').removeClass('alert-error').addClass('alert-info');
-				$.get(url,function(data){
-					$('#myModal .modal-body').html(data); 
-					init_admin();
-				});
+				$('#myModal .modal-body').load(data.uri,init_admin);
 			}
-			$('#myModal .modal-footer .modal-infos').text(data.desc).show();
+			get_message(data.result,data.desc);
 		});
 	return false;	
 	});		
 	
 	//Json with ModalAdmin page
-	$('#deltoken,#setting-form,#gthumb-form,#delthumb-form,#adminregister-form,.addgroup,.removegroup,.removeacc,#rmacc-form,#rmgroup-form').unbind();
-	$('#deltoken,#setting-form,#gthumb-form,#delthumb-form,#adminregister-form,.addgroup,.removegroup,.removeacc,#rmacc-form,#rmgroup-form').submit(function(){
-		$('#ModalAdmin .modal-footer .modal-infos').hide();
-		$('#ModalAdmin .modal-footer .modal-infos').removeClass('alert-info');
-		url = $(this).attr('action');
-		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data){
+	$('#deltoken,#setting-form,#gthumb-form,#delthumb-form,#adminregister-form,.addgroup,.removegroup,.removeacc,#rmacc-form,#rmgroup-form,#adminaccount-form').unbind();
+	$('#deltoken,#setting-form,#gthumb-form,#delthumb-form,#adminregister-form,.addgroup,.removegroup,.removeacc,#rmacc-form,#rmgroup-form,#adminaccount-form').submit(function(){
+		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data,info){
 			if (data.result ==0) {
-				$('#ModalAdmin .modal-footer .modal-infos').removeClass('alert-error').addClass('alert-info');
-				$.get(url,function(data){
-					$('#ModalAdmin .modal-body').html(data); 
-					init_admin();
-				});
+				$('#ModalAdmin .modal-body').load(data.uri,init_admin);
 			}
-			$('#ModalAdmin .modal-footer .modal-infos').text(data.desc).show();
+			get_message(data.result,data.desc);
 		});
 	return false;	
 	});	
 }
 
+function refresh(url){
+	$(".menu").load(".?j=Men&f="+url,init_menu);
+	if ($('.panel').is(':visible')) {
+		$(".panel").load(".?j=Pan&f="+url,init);
+	}
+	if ($('.bigpanel').is(':visible')) {
+		$(".image_panel").load(".?j=Pan&f="+url,init);
+		$(".images .thumbnails").load(".?j=LinearP&f="+url,init);
+	}
+	update_url("?f="+url);
+}
+
 function init_infos(){
-	$('#button_createdir').attr('data-href',$(location).attr('search')+"&j=MkD");
-	$('#button_renamedir').attr('data-href',$(location).attr('search')+"&j=MvD");
+	$('#button_createdir').attr('data-href',$(location).attr('search')+"&t=MkD");
+	$('#button_renamedir').attr('data-href',$(location).attr('search')+"&t=MvD");
 	$('#button_token').attr('data-href',$(location).attr('search')+"&t=Token");		
 	$('#button_rights').attr('data-href',$(location).attr('search')+"&t=Rights");
 	$('#button_download').attr('href',$(location).attr('search')+"&t=Zip");
@@ -232,7 +259,6 @@ function init_infos(){
 function init_textinfo(){
 	
 	$("#edit_textinfo,#editti-form,#delti-form").unbind();
-	
 	$("#edit_textinfo").click(function(){
 		if ( $('.textinfoadmin').is(':visible')){
 			$('.textinfo').show("slide",{direction:"down"},600);
@@ -244,11 +270,11 @@ function init_textinfo(){
 	});
 	
 	$("#editti-form,#delti-form").submit(function(){
-		$.post($(this).attr('action')+'&j=Pan',$(this).serialize(),function(data){
+		$.post($(this).attr('action')+'&j=Pan',$(this).serialize(),function(data,info){
 			$('.panel').html(data);
 			$('.textinfo').show("slide",{direction:"down"},600);
 			$('.textinfoadmin').hide("slide",{direction:"up"},600);
-			init_panel();
+			init();
 		});
 	return false;	
 	});		
@@ -256,7 +282,7 @@ function init_textinfo(){
 }
 
 function init_list(){
-
+	if ($('.view_list').size()==1) { return;}
 	$('#view-list').addClass('active');
 	$('#view-thumb').removeClass('active');
 	var tr = '<thead><tr><th>Preview</th><th>Name</th><th>Path</th><th><input class=\'select_all\' type=\'checkbox\'/></th></tr></thead>';
@@ -266,8 +292,9 @@ function init_list(){
 	$('.videos .thumbnails').children('li').each(function(){
 		tr = tr+'<tr ><td style=\'height: 120px; width: 120px;\'><li class=\'item \'>'+$(this).html()+'</li></td><td>'+$(this).children('.name').text()+'</td><td>'+$(this).children('.path').text()+'</td><td><input class=\'item_select\' type=\'checkbox\'/></td></tr>';
 	});	
-	old_view = $('.boardlines').html();
-	$('.boardlines').html('<table class=\'table table-striped well\'>'+tr+'</table>');
+	
+	view_grid = $('.boardlines').html();
+	$('.boardlines').html('<table class=\'table table-striped well view_list\'>'+tr+'</table>');
 	$('.boardlines .lazy').attr('width','');
 	$('.boardlines .lazy').attr('max-width','120px');
 	$('.boardlines .lazy').attr('height','');		
@@ -276,7 +303,11 @@ function init_list(){
 	
 	$(".boardlines .item_select").unbind();
 	$(".boardlines .item_select").change(function(){
+		if ($(this).is(':checked')) {
 		$(this).parent().parent().children().children('.item').addClass("selected");
+		} else {
+		$(this).parent().parent().children().children('.item').removeClass("selected");
+		}
 	});
 	
 	$(".boardlines .select_all").unbind();
@@ -290,4 +321,5 @@ function init_list(){
 			$(".boardlines .item").removeClass('selected');			
 		}
 	});
+	$('.boardlines').tooltip({ selector: "a[rel=tooltip]",html:true,placement:"right" });
 }

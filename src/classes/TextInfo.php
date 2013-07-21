@@ -110,6 +110,11 @@ class TextInfo
 		}
 		/// Save xml
 		$xml->asXML($ti->path);
+		Json::$json = array("action"=>"TextInfo",
+					"result"=>0,
+					"uri"=>urlencode(File::a2r(CurrentUser::$path)),						
+					"desc"=>"Save information for album");					
+		return;		
 	}
 	
 	public static function Delete_File($f) {
@@ -122,6 +127,11 @@ class TextInfo
 		if(file_exists($ti->path)){
 			@unlink($ti->path);
 		}
+		Json::$json = array("action"=>"TextInfo",
+					"result"=>0,
+					"uri"=>urlencode(File::a2r(CurrentUser::$path)),						
+					"desc"=>"Delete information for album");					
+		return;			
 	
 	}
 	
@@ -135,7 +145,7 @@ class TextInfo
 		$ti = new TextInfo($f);
 		if (!isset($ti->author)) { $ti->author = CurrentUser::$account->login; }
 		
-		echo "<form id='editti-form' class='form-horizontal' action='?a=Tis&f=".File::a2r($f)."' method='post'>\n";
+		echo "<form id='editti-form' class='form-horizontal' action='?f=".File::a2r($f)."&t=Adm&a=Tis' method='post'>\n";
 		echo "<fieldset>\n";
 		echo "<legend>Information</legend>\n
 			<div class='control-group'>\n
@@ -156,7 +166,7 @@ class TextInfo
 			<input id='f' type='hidden' name='f' value='$f' />\n";
 		echo "</fieldset>\n";
 		echo "</form>\n";
-		echo "<form id='delti-form' class='form-horizontal' action='?a=Tid&f=".File::a2r($f)."' method='post'>\n
+		echo "<form id='delti-form' class='form-horizontal' action='?f=".File::a2r($f)."&a=Tid' method='post'>\n
 			<input id='f' type='hidden' name='f' value='$f' />\n
 			<input id='button_clean'  type='submit'  class='btn btn-warning' value='".Settings::_("textinfo","delete")."' data-loading-text='Deleting...'/>
 			</form>\n";

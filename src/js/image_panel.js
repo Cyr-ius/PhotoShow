@@ -32,59 +32,81 @@
  * Initialise the image panel
  */
 function init_image_panel(){
+	$('img.lazy').lazyload().unbind();
+	$('#button_exif').show();
+	$("#button_createdir,#edit_textinfo").hide();
 	
-	$(".bigimage a, #image_bar #back").unbind();
-	$(".linear_panel .item a, #image_bar #next a, #image_bar #prev a").unbind();
-	$(".linear_panel,.img.lazy").unbind();
 	//If we are in a view mode were there is a linear panel and no image selected in that panel
 	if ($('.linear_panel').length == 1 && $('.linear_panel .selected').length == 0 && $(".linear_panel").is(":visible")){
-		url = $('#image_big').attr('src').replace(/^url|[\(\)\"]/g, '');
+		if ($('.bigimage').size()!=0) {
+			url = $('.bigimage').children().css('background-image').replace(/^url|[\(\)\"]/g, ''); 
+		}
+		if ($('.bigvideo').size()!=0) {
+			url = $('.bigvideo').find('source').attr('src'); 
+		}
 		url = url.slice(url.indexOf('f='));
-		$('.linear_panel a[href$="' + url + '"]').parent().addClass("selected");
+		$('.linear_panel a[href$="' + url + '"]').parent().addClass("active selected");
 	}
 	
-
+	init_image_bar();
+	
+	$('img.lazy').lazyload({effect : "fadeIn",container:$(".linear_panel"),threshold : 200});
+	
+	// On mousewheelling
+	$(".linear_panel").mousewheel(function(event,delta){
+		if($(".linear_panel").is(":visible")){
+			this.scrollLeft -= delta * 30;
+			event.preventDefault();
+		}
+	});
+	
+ }	
+ 
+ /**
+ * Initialise the image bar
+ */
+function init_image_bar(){
 
 	// On clicking the bigimage
+	$(".bigimage a, #image_bar #back").unbind();
 	$(".bigimage a, #image_bar #back").click(function(){
 		
 		if(slideshow_status == 1){
 			stop_slideshow();
 		} 
-		
 		// Edit layout
-		$(".image_panel").slideUp('fast',function(){
-			$(".linear_panel").hide();
+		$('img.lazy').lazyload().unbind();
+		$(".bigpanel").hide();
+		$(".panel").show("slide",{direction:"down"},600,function(){	
 			update_url($(".menu .selected:last a").attr("href"),$(".menu .selected:last a").text());
-			$('.linear_panel,#button_exif').hide();
-			$(".panel,#button_createdir,#button_download,#edit_textinfo").show();	
-			$(".linear_panel .thumbnails").children().remove();			
+			init();
 		});
-
-
+		
 	return false;
 	});
 
 	// On clicking an item
+	$(".linear_panel .item a").unbind();	
 	$(".linear_panel .item a").click(function(){
-		$(".linear_panel .selected").removeClass("selected");
-		$(this).parent().addClass("selected");
+		
 		url = $(this).attr("href");
 		update_url(url,"Image"); 
 		$(".image_panel").load(url+"&j=Pan",function() {
-			init_image_panel();
+			init_image_bar();
 			if (exifvisible==1) {
 				$('.exif').load(url+"&t=Exif",function() {
 					$('.exif').show();
 				});
 			}
-
 		}); 
-		return false;
+		
+	return false;
 	});
 
 	// On clicking NEXT
+	$("#image_bar #next a").unbind();		
 	$("#image_bar #next a").click(function(){
+		
 		var curr_select = $(".linear_panel .selected");
 		var new_select 	= curr_select.next('.item');
 
@@ -104,18 +126,19 @@ function init_image_panel(){
 					$('.exif').show();
 				});
 			}
-		curr_select.removeClass("selected");
-		new_select.addClass("selected");
-		init_image_panel();
-		if(slideshow_status == 1){
-			hide_links();
-		}
-		});		
-		return false;
+			init_image_bar();
+			if(slideshow_status == 1){
+				hide_links();
+			}
+		});	
+		
+	return false;
 	});
 
 	// On clicking PREV
+	$("#image_bar #prev a").unbind();		
 	$("#image_bar #prev a").click(function(){
+		
 		var curr_select = $(".linear_panel .selected");
 		var new_select 	= curr_select.prev();
 		
@@ -135,27 +158,16 @@ function init_image_panel(){
 					$('.exif').show();
 				});
 			}
-		curr_select.removeClass("selected");
-		new_select.addClass("selected");
-		init_image_panel();
+		init_image_bar();
 		if(slideshow_status == 1){
 			hide_links();
 		}
 		});	
 		
-		return false;
+	return false;
 	});
-
-	// On mousewheelling
-	$(".linear_panel").mousewheel(function(event,delta){
-		if($(".linear_panel").is(":visible")){
-			this.scrollLeft -= delta * 30;
-			event.preventDefault();
-		}
-	});
-
-	$(".linear_panel").scrollTo($(".linear_panel .selected")).scrollTo("-="+$(".linear_panel").width()/2);
-	$('img.lazy').lazyload({event:'scrollstop',effect : "fadeIn",container: $(".linear_panel")});
-
-	init_slideshow_panel();
+	
+	$(".linear_panel").scrollTo($(".linear_panel .selected")).scrollTo("-="+$(".linear_panel").width()/2);	
+	init_slideshow_panel();	
+	
 }

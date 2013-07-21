@@ -89,15 +89,21 @@
 
  		/// Just to be really sure... 
  		if( !(CurrentUser::$admin || CurrentUser::$uploader) ){
-			$json_array = array("action"=>"delete","result"=>1,"desc"=>"No rights","reload"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)));					
- 			return $json_array;
+			Json::$json = array("action"=>"AdminDelete",
+				"result"=>1,
+				"uri"=>urlencode(File::a2r(CurrentUser::$path)),						
+				"desc"=>"Error : no rights");	
+ 			return;
  		}
 		
 		$del 	=	File::r2a(stripslashes($_POST['del']));
 		
 		if($del == Settings::$photos_dir || empty($_POST['del'])){
-			$json_array = array("action"=>"delete","result"=>1,"desc"=>"No rights on".$del,"reload"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)));				
- 			return $json_array;
+			Json::$json = array("action"=>"AdminDelete",
+				"result"=>1,
+				"uri"=>urlencode(File::a2r(CurrentUser::$path)),						
+				"desc"=>"Error : no rights on ".$del);	
+ 			return;		
  		}
 
 		$file_file	       = new File($del);
@@ -108,9 +114,10 @@
 				$del_thumb_small   = $thumb_path_no_ext.'_small.'.$file_file->extension;	
 				$del_thumb    = $thumb_path_no_ext.'.'.$file_file->extension;
 			case "Video":
-				$del_thumb_small   = $thumb_path_no_ext.'.webm';	
+				$del_thumb_small   = $thumb_path_no_ext.'.mp4';	
 				$del_thumb    = $thumb_path_no_ext.'.jpg';
 		}			
+		
 		
 		if(is_file($del_thumb)){
 		AdminDelete::rec_del($del_thumb);
@@ -118,9 +125,22 @@
 		if(is_file($del_thumb_small)){
 		AdminDelete::rec_del($del_thumb_small);
 		}
-		AdminDelete::rec_del($del);
-		$json_array = array("action"=>"delete","result"=>0,"desc"=>"Delete Sucessfull for".$del,"reload"=>'.?f='.urlencode(File::a2r(CurrentUser::$path)));				
-		return $json_array;
+		
+		if (is_file($del)){
+			AdminDelete::rec_del($del);
+			Json::$json = array("action"=>"AdminDelete File",
+				"result"=>0,
+				"uri"=>urlencode(File::a2r(CurrentUser::$path)),						
+				"desc"=>"Delete file ".$del." sucessful");	
+			return;
+		} else {
+			AdminDelete::rec_del($del);
+			Json::$json = array("action"=>"AdminDelete Folder",
+				"result"=>0,
+				"uri"=>urlencode(File::a2r(CurrentUser::$path)),						
+				"desc"=>"Delete folder ".$del." sucessful");	
+			return;		
+		}		
 	}
 
 	/**

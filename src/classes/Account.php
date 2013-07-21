@@ -103,12 +103,12 @@ class Account extends Page
 				$this->key		= (string)$account->key;
 
 				$this->groups 	= array();
-
 				foreach($account->groups->children() as $group){
 					$this->groups[] = (string)$group;
 				}	
 				Json::$json = array("action"=>"Account",
 					"result"=>0,
+					"uri"=>".?t=Adm&a=Acc",
 					"desc"=>"Operation on ".$login." account sucessfull");					
 				return true;
 			}
@@ -170,6 +170,7 @@ class Account extends Page
 		$acc->save();
 		Json::$json = array("action"=>"Account",
 			"result"=>0,
+			"uri"=>".?t=Adm&a=AAc",
 			"desc"=>"Create Account for ".$login." sucessfull");					
 		return true;
 	}
@@ -221,6 +222,11 @@ class Account extends Page
 			$g = new Group($group);
 			$g->save();
 		}
+		Json::$json = array("action"=>"Account",
+			"result"=>0,
+			"uri"=>".?t=Adm&a=EdA",
+			"desc"=>"Add account in group ".$group." sucessfull");					
+		return;		
 	}
 	
 	/**
@@ -236,7 +242,44 @@ class Account extends Page
 			$id=array_search($group,$this->groups);
 			unset ( $this->groups[$id] );
 		}
+		Json::$json = array("action"=>"Account",
+			"result"=>0,
+			"uri"=>".?t=Adm&a=AGR",
+			"desc"=>"Remove account in group ".$group." sucessfull");					
+		return;			
 	}
+	/**
+	 * Change password from this user
+	 *
+	 * @param string $group 
+	 * @return void
+	 * @author Thibaud Rohmer
+	 */	
+	public function change_password($login,$old_password,$password){
+	
+		if( !CurrentUser::$admin && $login != CurrentUser::$account->login ){
+			Json::$json = array("action"=>"Account",
+				"result"=>1,
+				"desc"=>"Error : Insufficence rights for ".$login);	
+			return;
+		}
+		
+		if (CurrentUser::$admin){
+			$acc = new Account($login);
+			if(isset($password) && strlen($password) > 4 ){
+				$acc->password = Account::password($password);
+				$acc->save();
+			}			
+		} 
+		
+		if ($login = CurrentUser::$account->login && Account::password($old_password) != CurrentUser::$account->password )  {
+			if(isset($password) && strlen($password) > 4 ){
+				CurrentUser::$account->password = Account::password($password);
+				CurrentUser::$account->save();
+			}
+		}		
+	}
+	
 
 	/**
 	 * Save account in the base
@@ -286,7 +329,7 @@ class Account extends Page
 			}
 		}
 		// Saving into file
-		$xml->asXML($xml_infos);
+		$xml->asXML($xml_infos);	
 	}
 
 	/**
@@ -321,9 +364,9 @@ class Account extends Page
 				"desc"=>"Error : New and old password required ");	
 			return;
 		}
-
 		/// Edit attributes
-		if(isset($password) && sizeof($password) > 4 ){
+		if(isset($password) && strlen($password) > 4 ){
+			print_r('change password : '.$password);
 			$acc->password = Account::password($password);
 		}
 
@@ -335,9 +378,7 @@ class Account extends Page
 			$acc->email = $email;
 		}
 
-
 		if(isset($language)){
-			//~ echo "woot";
 			$acc->language = $language;
 		}
 
@@ -349,8 +390,8 @@ class Account extends Page
 		$acc->save();
 		Json::$json = array("action"=>"Account",
 			"result"=>0,
-			"desc"=>"Save Account for ".$login." sucessfull");			
-		return;				
+			"desc"=>"Account ".$login." modifed sucessful");			
+		return;	
 	}
 	
 	/**
@@ -373,6 +414,11 @@ class Account extends Page
 		$i++;
 		}
 		$xml->asXML($xml_infos);
+		Json::$json = array("action"=>"Account",
+			"result"=>0,
+			"uri"=>".?t=Adm&a=ADe",
+			"desc"=>"Delete Account for ".$login." sucessfull");			
+		return;		
 	}
 
 	/**
@@ -519,7 +565,7 @@ class Account extends Page
 		/// Password
 		echo "<div class='control-group'>\n";
 		echo "<label for='password' class='control-label'>".Settings::_("account","password")."</label>";
-		echo "<div class='controls'><input id='password' class='input-large' type='password' name='password'  value='".htmlentities($this->password, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "<div class='controls'><input id='password' class='input-large' type='password' name='password'  value=''></div>\n";
 		echo "</div>\n";
 	 	if(CurrentUser::$admin){
 	 		echo "<input type='hidden' value='plip' name='edit'>";

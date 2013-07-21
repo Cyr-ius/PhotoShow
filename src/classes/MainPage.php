@@ -50,9 +50,6 @@ class MainPage extends Page
 	
 	/// Boardpanel object
 	private $panel;
-
-    /// Specific header content
-    private $header_content;
 	
 	/// Boards class;
 	private $panel_class;
@@ -68,9 +65,6 @@ class MainPage extends Page
 
 	/// Imagepanel object
 	private $menu;
-
-	/// Infos
-	private $infos;
 	
 	///Modal
 	private $mt;
@@ -85,26 +79,20 @@ class MainPage extends Page
 	 * @author Thibaud Rohmer
 	 */
 	public function __construct(){	
-			
-		try{
-			$settings=new Settings();
-		}catch(FileException $e){
-			// If Accounts File missing... Register !
-			$this->header();
-			new RegisterPage();
-			exit;
-		}
-		
-		$this->pageURL = "?f=".urlencode(File::a2r(CurrentUser::$path));
+
 		/// Check how to display current file
 		if(is_file(CurrentUser::$path)){
+			$this->bigpanel_visible			=	"";			
 			$this->image_panel			=	new ImagePanel(CurrentUser::$path);
-			$this->panel				=	new Board(dirname(CurrentUser::$path));
-			$this->header_content       =   $this->image_panel->page_header;
+			$this->panel					=	new Board(dirname(CurrentUser::$path));
+			$this->linear_panel				=	new Linear_panel(CurrentUser::$path);
+			$this->panel_visible			=	"hide";
 		}else{
-			$this->image_panel			=	new ImagePanel();
-			$this->panel				=	new Board(CurrentUser::$path);
-			$this->header_content       =   $this->panel->page_header;
+			$this->bigpanel_visible			=	"hide";						
+			$this->image_panel			=	new ImagePanel();		
+			$this->panel					=	new Board(CurrentUser::$path);
+			$this->linear_panel				=	new Linear_panel(CurrentUser::$path);			
+			$this->panel_visible			=	"";			
 		}
 
 		/// Create MenuBar
@@ -112,16 +100,7 @@ class MainPage extends Page
 
 		/// Menu
 		$this->menu			=	new Menu();
-		
-		/// Right Menu
-		$this->infos 		= 	new Infos();
-		
-		///Modal
-		$this->mt = new ModalTemplate();
-		$this->ma = new ModalAdmin();			
-		
-		///Scripts
-		$this->scripts	= new Scripts();
+
 	}
 	
 	/**
@@ -130,11 +109,10 @@ class MainPage extends Page
 	 * @return void
 	 * @author Thibaud Rohmer
 	 */
-	public function toHTML(){
-		$this->header($this->header_content);
-		echo "<body>";
+	public function toHTML($menu=true){
 		//Navbar
-		$this->menubar->toHTML();
+		if ($menu){ $this->menubar->toHTML();}
+
 		echo "<div id='content' class='container-fluid'>";
 			echo "<div class='row-fluid'>";
 				/// Start menu
@@ -142,27 +120,30 @@ class MainPage extends Page
 				$this->menu->toHTML();
 				echo "</div>\n";
 				/// Stop menu		
-				echo "<div class='span10 center'>";
-					echo "<div class='loading hide'></div>";
+				echo "<div class='span10 loading hide'></div>";
+				echo "<div class='span10 container-fluid bigpanel $this->bigpanel_visible'>\n";
 					/// ImagePanel
-					echo "<div id='image_panel' class='image_panel hide'>\n";
+					echo "<div id='image_panel' class='image_panel'>\n";
 					$this->image_panel->toHTML();
 					echo "</div>\n";
 					///Linear_panel
-					echo "<div id='linear_panel' class='linear_panel hide'><ul class='thumbnails'></ul></div>";						
-					///Panel (include boardheader(title+button) , album , images , videos , comments)
-					echo "<div class='panel'>\n";
-					$this->panel->toHTML();
-					echo "</div>\n";					
+					echo "<div id='linear_panel' class='linear_panel'><ul class='thumbnails'>";
+					$this->linear_panel	->toHTML();
+					echo "</ul></div>";
+				echo "</div>\n";
+				///Panel (include boardheader(title+button) , album , images , videos , comments)
+				echo "<div class='span10 container-fluid panel $this->panel_visible'>\n";
+					if (Index::$welcome) {
+						echo "<h2>Welcome to Photoshow </h2>";
+						echo "<div id='welcome' class='well'>Please, clic on the link below <br/><br/><a href='#' data-href='?t=Reg' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","register")."' data-type='register'><i class='icon-pencil'></i> ".Settings::_("menubar","register")." the first account Administrator</a>";
+						echo "</div>";		
+					} else {
+						$this->panel->toHTML();
+					}
 				echo "</div>\n";	
+				
 			echo "</div>\n";					
-			$this->mt->toHTML();
-			$this->ma->toHTML();		
 		echo "</div>";
-		$this->scripts->toHTML();		
-		echo "</body>\n";		
-
-
 	}
 }
 

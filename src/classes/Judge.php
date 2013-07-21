@@ -180,22 +180,6 @@ class Judge
 		$rightsfiles=glob($rightsdir."/.*ights.xml");
 
 		// Check files
-		//~ foreach($rightsfiles as $rf){
-				//~ $f = Judge::associated_file($rf);
-				//~ if(($public_search and Judge::is_public($f))
-				     //~ or (!$public_search and Judge::view($f))){
-					    //~ if(is_file($f)){
-						//~ return $f;
-					    //~ }else{
-						//~ foreach(Menu::list_files($f,true) as $p){
-						    //~ if(($public_search and Judge::is_public($p))
-							//~ or (!$public_search and Judge::view($p))){
-							    //~ return $p;
-							//~ }
-						//~ }
-					    //~ }
-					//~ }
-		//~ }
 		if(isset($rightsfiles) && count($rightsfiles) > 0){
 			foreach($rightsfiles as $rf){
 				$f = Judge::associated_file($rf);
@@ -250,10 +234,7 @@ class Judge
 			@mkdir(dirname($this->path),0755,true);
 		}
 		/// Save xml
-		$xml->asXML($this->path);
-		Json::$json = array("action"=>"Judge",
-			"result"=>0,
-			"desc"=>"Save permissions succesfull");		
+		$xml->asXML($this->path);	
 	}
 	
 	/**
@@ -291,7 +272,10 @@ class Judge
 		
 		// Save the Judge
 		$rights->save();
-
+		Json::$json = array("action"=>"Judge",
+			"result"=>0,
+			"uri"=>".?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Rights",
+			"desc"=>"Edit permissions succesfull");	
 		return;
 	}
 	
@@ -375,10 +359,10 @@ class Judge
 	 * @return bool
 	 * @author Franck Royer
 	 */
-    public static function is_public($f){
-        $judge	=	new Judge($f);
-        return($judge->public);
-    }
+	public static function is_public($f){
+		$judge	=	new Judge($f);
+		return($judge->public);
+	}
 
 	public function toHTML() {
 		echo "<div class='row-fluid'>";
