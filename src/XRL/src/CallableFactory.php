@@ -16,13 +16,8 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-class       XRL_CallableFactory
-implements  XRL_CallableFactoryInterface
-{
-    public function fromPHP($callable)
-    {
+class XRL_CallableFactory implements XRL_CallableFactoryInterface {
+    public function fromPHP($callable) {
         return new XRL_Callable($callable);
     }
 }
-

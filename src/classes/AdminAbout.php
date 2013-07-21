@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class AdminAbout.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -24,11 +24,12 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright 2011 Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright 2011 Thibaud Rohmer + 2013 Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
-
 /**
  * AdminAbout
  *
@@ -37,10 +38,13 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright Thibaud Rohmer + Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
+<<<<<<< HEAD
  class AdminAbout
  {
 
@@ -98,3 +102,54 @@
 
  }
  ?>
+=======
+class AdminAbout {
+    /**
+     * Create about page
+     *
+     * @author Thibaud Rohmer
+     */
+    public function __construct() {
+    }
+    /**
+     * Display upload page on website
+     *
+     * @author Thibaud Rohmer
+     */
+    public function toHTML() {
+        echo "<h1>About</h1>";
+        echo "<h2>PhotoShow</h2>";
+        echo "<ul style='text-align:center;'>";
+        echo "<li><a href='http://www.photoshow-gallery.com'>PhotoShow-Gallery.com</a></li>\n";
+        echo "<li><a href='https://github.com/thibaud-rohmer/PhotoShow'>PhotoShow on GitHub</a></li>\n";
+        echo "<li><a href='https://github.com/thibaud-rohmer/PhotoShow/wiki/Tips'>Tips !</a></li>\n";
+        echo "</ul>\n";
+        echo "<h2>Me</h2>";
+        echo "<div id='me' style='margin:auto; text-align:center;'><img src='inc/me.jpg' width='150px' style='border-radius:5px; -moz-border-radius:5px;'></div>";
+        echo "<ul style='text-align:center;'>";
+        echo "<li><a href='mailto:thibaud.rohmer@gmail.com'>email</a></li>\n";
+        echo "<li><a href='http://twitter.com/#osi_iien'>Twitter</a></li>\n";
+        echo "<li><a href='https://github.com/thibaud-rohmer/'>GitHub</a></li>\n";
+        echo "<li><a href='https://plus.google.com/114933352963292387937/about'>Google Profile</a></li>\n";
+        echo "</ul>\n";
+        echo "<h2>Patched and Maintained by Psychedelys</h2>";
+        echo "<ul style='text-align:center;'>";
+        echo "<li>No new patches included since 1 year and couting</li>\n";
+        echo "<li><a href='https://github.com/psychedelys/'>GitHub</a></li>\n";
+        echo "</ul>\n";
+        echo "<h2>If you like PhotoShow ... </h2>";
+        echo "<ul style='text-align:center;'>";
+        echo "<li>Spread the word ! Tell it to your friends :)</li>\n";
+        echo "<li>Tweet/Post/Blog/Whatever about it (#photoshow)</li>\n";
+        echo "<li></li>";
+        #        echo '	<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+        #		<input type="hidden" name="cmd" value="_s-xclick">
+        #		<input type="hidden" name="hosted_button_id" value="EJCH63L4226YN">
+        #		<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+        #		<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+        #	</form>';
+        echo "</ul>\n";
+    }
+}
+?>
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4

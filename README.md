@@ -1,5 +1,8 @@
 # PhotoShow
 
+This is a Friendly fork of the original as the maintener is currently not active.
+
+=======
 
 ## Overview
 
@@ -12,6 +15,9 @@ Multi format supported : images (library GD required) and videos (binary ffmpeg 
 
 First, you need to copy the repository into whatever you like (here, toto)
 
+`git clone https://github.com/psychedelys/PhotoShow.git gallery`
+
+based/forked on 
 `git clone https://github.com/thibaud-rohmer/PhotoShow.git toto`
 
 ### Create two directories
@@ -20,8 +26,10 @@ Note : you may create those directories wherever you want, and give them the nam
 
 * **Photos** : Where your photos will be stored.
 * **Generated** : Where the thumbnails of your photos will be stored. 
+* **Server FQDN** : Your server FQDN, as if not this is not working behind a reverse proxy
+* **Server Path** : The application path as seen on the outside world
 
-***Important*** : Make sure that the web server has the rights to read and write in those directories.
+***Important*** : Make sure that the web server has the rights to read in the Photos directory and read/write in the Generated one.
 
 ### Edit your settings
 
@@ -32,3 +40,33 @@ Edit the file `config.php` that is inside your PhotoShow folder. It is advised t
 Now, use your favorite web browser to go to your PhotoShow website. You should be asked to create the main account. This account will be the admin of the website.
 
 > Your website is now ready.
+
+
+=======
+
+Packages needed:
+
+* php5
+* php5-gd
+* php5-geoip
+* php5-gmp
+
+=======
+
+Using:
+
+* http://jquery.com/
+* http://www-cs-students.stanford.edu/~tjw/jsbn/
+* http://matejdanter.com/2010/12/elliptic-curve-php-oop-dsa-and-diffie-hellman/
+* http://www.movable-type.co.uk/scripts/aes.html
+
+=======
+
+Thanks to:
+
+* http://crypto.stanford.edu/sjcl/
+* https://github.com/nappa/eliptic_curve_names
+* http://www.unlimitednovelty.com/2012/03/dont-use-bcrypt.html
+* Jose Rodriguez http://code.google.com/p/cool-php-captcha GPLv3
+* John Resig Jquery MIT & GPL
+

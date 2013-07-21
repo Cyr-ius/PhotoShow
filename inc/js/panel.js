@@ -27,6 +27,11 @@
  * @license	  http://www.gnu.org/licenses/
  * @link	  http://github.com/thibaud-rohmer/PhotoShow
  */
+
+ function init_dropzone(){
+ 	return;
+ }
+
  function init_panel(){
 	$("#button_createdir,#edit_textinfo").show();
 	$('#button_exif').hide();
@@ -35,6 +40,16 @@
 	//~ $('img.lazy').lazyload().unbind();
 	
 	$(".panel .item a").unbind();
+<<<<<<< HEAD:src/js/panel.js
+=======
+
+
+	readyselect();
+	init_dropzone();
+
+
+	// On clicking an item
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4:inc/js/panel.js
 	$(".panel .item a").click(function(){
 
 		url = $(this).attr("href");

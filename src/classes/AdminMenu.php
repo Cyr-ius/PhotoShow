@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class AdminMenu.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -24,11 +24,12 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright 2011 Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright 2011 Thibaud Rohmer + 2013 Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
-
 /**
  * AdminMenu
  *
@@ -37,10 +38,13 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright Thibaud Rohmer + Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
+<<<<<<< HEAD
  class AdminMenu
  {
  	/// Menu options
@@ -76,3 +80,45 @@
 
  }
  ?>
+=======
+class AdminMenu {
+    /// Menu options
+    public $options = array();
+    /**
+     * Build AdminMenu
+     *
+     * @author Thibaud Rohmer
+     */
+    public function __construct() {
+        $this->options['Abo'] = Settings::_("adminmenu", "about");
+        $this->options['Sta'] = Settings::_("adminmenu", "stats");
+        $this->options['VTk'] = Settings::_("adminmenu", "tokens");
+        $this->options['Set'] = Settings::_("adminmenu", "settings");
+        $this->options['Acc'] = Settings::_("adminmenu", "account");
+        $this->options['EdA'] = Settings::_("adminmenu", "groups");
+    }
+    /**
+     * Display AdminMenu on website
+     *
+     * @author Thibaud Rohmer
+     */
+    public function toHTML() {
+        foreach ($this->options as $op => $val) {
+            if (isset($_GET['a']) && $_GET['a'] == $op) {
+                $class = "menu_item selected";
+            } else {
+                $class = "menu_item";
+            }
+            echo "<div class='$class'>\n";
+            echo "<div class='menu_title'>\n";
+            echo "<a href='?t=Adm&a=$op'>$val</a>";
+            echo "</div>\n</div>\n";
+        }
+        echo "<div class='menu_item'>\n";
+        echo "<div class='menu_title'>\n";
+        echo "<a href='.'>" . Settings::_("adminmenu", "back") . "</a>";
+        echo "</div>\n</div>\n";
+    }
+}
+?>
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4

@@ -15,13 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-class       XRL_ValidatingDecoderFactory
-implements  XRL_DecoderFactoryInterface
-{
-    public function createDecoder()
-    {
+class XRL_ValidatingDecoderFactory implements XRL_DecoderFactoryInterface {
+    public function createDecoder() {
         return new XRL_Decoder(TRUE);
     }
 }
-

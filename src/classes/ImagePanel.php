@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class ImagePanel.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -24,11 +24,12 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright 2011 Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright 2011 Thibaud Rohmer + 2013 Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
-
 /**
  * ImagePanel
  *
@@ -39,16 +40,16 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright Thibaud Rohmer + Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
-
-class ImagePanel implements HTMLObject
-{
-
+class ImagePanel implements HTMLObject {
     /// Header of the html page
     public $page_header;
+<<<<<<< HEAD
 	
 	/// Image object
 	private $image;
@@ -136,5 +137,86 @@ class ImagePanel implements HTMLObject
 			echo "</div>\n";
 	}
 	
+=======
+    /// Image object
+    private $image;
+    /// Video object
+    private $video;
+    /// Exif object
+    private $exif;
+    /// Comments object
+    private $comments;
+    /// Judge object
+    private $judge;
+    /**
+     * Create ImagePanel
+     *
+     * @param string $file
+     * @author Thibaud Rohmer
+     */
+    public function __construct($file = NULL) {
+        if (!isset($file)) {
+            return;
+        }
+        $file_type = File::Type($file);
+        if ($file_type == "Image") {
+            /// Create Image object
+            $this->image = new Image($file);
+        } elseif ($file_type == "Video") {
+            /// Create Video object
+            $this->video = new Video($file);
+        }
+        /// Create Image object
+        $this->imagebar = new ImageBar($file);
+        /// Create EXIF object
+        $this->exif = new Exif($file);
+        if (!Settings::$nocomments) {
+            /// Create Comments object
+            $this->comments = new Comments($file);
+        }
+        $pageURL = Settings::$site_address . "/?f=" . urlencode(File::a2r($file));
+        // generate the header - opengraph metatags for facebook
+        $this->page_header = "<meta property=\"og:url\" content=\"" . $pageURL . "\"/>\n" . "<meta property=\"og:site_name\" content=\"" . Settings::$name . "\"/>\n" . "<meta property=\"og:type\" content=\"website\"/>\n" . "<meta property=\"og:title\" content=\"" . Settings::$name . ": " . File::a2r($file) . "\"/>\n" . "<meta property=\"og:image\" content=\"" . Settings::$site_address . "/?t=Thb&amp;f=" . urlencode(File::a2r($file)) . "\"/>\n";
+        if (Settings::$fbappid) {
+            $this->page_header.= "<meta property=\"fb:app_id\" content=\"" . Settings::$fbappid . "\"/>\n";
+        }
+        /// Set the Judge
+        $this->judge = new Judge($file);
+    }
+    /**
+     * Display ImagePanel on website
+     *
+     * @return void
+     * @author Thibaud Rohmer
+     */
+    public function toHTML() {
+        if (!isset($this->image) && !isset($this->video)) {
+            return;
+        }
+        /*
+        echo "<div id='exif' class='box'>\n";
+        $this->exif->toHTML();
+        */
+        if (isset($this->image)) {
+            echo "<div id='bigimage'>\n";
+            $this->image->toHTML();
+            echo "</div>\n";
+        } elseif (isset($this->video)) {
+            echo "<div id='bigvideo'>\n";
+            $this->video->toHTML();
+            echo "</div>\n";
+        }
+        echo "<div id='image_bar'>\n";
+        $this->imagebar->toHTML();
+        echo "</div>\n";
+        /*
+        echo "<div id='comments' class='box'>\n";
+        if(!Settings::$nocomments){
+        $this->comments->toHTML();
+        }
+        echo "</div>\n";
+        */
+    }
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4
 }
 ?>

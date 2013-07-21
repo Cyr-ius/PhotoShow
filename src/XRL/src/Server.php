@@ -16,7 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 /**
  * \brief
  *      A simple XML-RPC server.
@@ -60,35 +59,16 @@
  *      }
  * \endcode
  */
-class       XRL_Server
-extends     XRL_FactoryRegistry
-implements  Countable,
-            IteratorAggregate
-{
+class XRL_Server extends XRL_FactoryRegistry implements Countable, IteratorAggregate {
     /// Registered "procedures".
     protected $_funcs;
-
     /**
      * Create a new XML-RPC server.
      */
-    public function __construct()
-    {
-        $this->_funcs           = array();
-        $this->_interfaces      = array(
-            'xrl_encoderfactoryinterface'   =>
-                new XRL_CompactEncoderFactory(),
-
-            'xrl_decoderfactoryinterface'   =>
-                new XRL_ValidatingDecoderFactory(),
-
-            'xrl_callablefactoryinterface'  =>
-                new XRL_CallableFactory(),
-
-            'xrl_responsefactoryinterface'  =>
-                new XRL_ResponseFactory(),
-        );
+    public function __construct() {
+        $this->_funcs = array();
+        $this->_interfaces = array('xrl_encoderfactoryinterface' => new XRL_CompactEncoderFactory(), 'xrl_decoderfactoryinterface' => new XRL_ValidatingDecoderFactory(), 'xrl_callablefactoryinterface' => new XRL_CallableFactory(), 'xrl_responsefactoryinterface' => new XRL_ResponseFactory(),);
     }
-
     /**
      * Register a new procedure with this XML-RPC server.
      *
@@ -108,14 +88,12 @@ implements  Countable,
      *      http://php.net/language.pseudo-types.php#language.types.callback
      *      for the full list of supported constructs.
      */
-    public function __set($func, $callback)
-    {
-        $factory    = $this['XRL_CallableFactoryInterface'];
-        $callable   = $factory->fromPHP($callback);
+    public function __set($func, $callback) {
+        $factory = $this['XRL_CallableFactoryInterface'];
+        $callable = $factory->fromPHP($callback);
         assert($callable instanceof XRL_CallableInterface);
         $this->_funcs[$func] = $callable;
     }
-
     /**
      * Return a procedure previously registered
      * with this XML-RPC server.
@@ -136,11 +114,9 @@ implements  Countable,
      *      In case the given procedure has not been
      *      registered, a PHP notice will be issued.
      */
-    public function __get($func)
-    {
+    public function __get($func) {
         return $this->_funcs[$func];
     }
-
     /**
      * Test whether a procedure has been registered
      * with the given name on this server.
@@ -153,11 +129,9 @@ implements  Countable,
      *      TRUE if the procedure exists,
      *      FALSE otherwise.
      */
-    public function __isset($func)
-    {
+    public function __isset($func) {
         return isset($this->_funcs[$func]);
     }
-
     /**
      * Unregister a procedure.
      *
@@ -169,11 +143,9 @@ implements  Countable,
      *      procedure has not been registered
      *      on this XML-RPC server.
      */
-    public function __unset($func)
-    {
+    public function __unset($func) {
         unset($this->_funcs[$func]);
     }
-
     /**
      * Return the number of XML-RPC procedures
      * currently registered on this server.
@@ -182,11 +154,9 @@ implements  Countable,
      *      Number of currently registered
      *      procedures on this server.
      */
-    public function count()
-    {
+    public function count() {
         return count($this->_funcs);
     }
-
     /**
      * Get an iterator over this server's
      * registered XML-RPC procedures.
@@ -195,11 +165,9 @@ implements  Countable,
      *      An iterator over this server's
      *      registered procedures.
      */
-    public function getIterator()
-    {
+    public function getIterator() {
         return new ArrayIterator($this->_funcs);
     }
-
     /**
      * Handles an XML-RPC request and returns a response
      * for that request.
@@ -207,44 +175,33 @@ implements  Countable,
      * \retval XRL_ResponseInterface
      *      The response for that request. This response
      *      may indicate either success or failure of the
-     *      Remote Procedure Call 
+     *      Remote Procedure Call
      */
-    public function handle($data = NULL)
-    {
-        if ($data === NULL)
-            $data = file_get_contents('php://input');
-
-        $factory    = $this['XRL_EncoderFactoryInterface'];
-        $encoder    = $factory->createEncoder();
+    public function handle($data = NULL) {
+        if ($data === NULL) $data = file_get_contents('php://input');
+        $factory = $this['XRL_EncoderFactoryInterface'];
+        $encoder = $factory->createEncoder();
         assert($encoder instanceof XRL_EncoderInterface);
-
-        $factory    = $this['XRL_DecoderFactoryInterface'];
-        $decoder    = $factory->createDecoder();
+        $factory = $this['XRL_DecoderFactoryInterface'];
+        $decoder = $factory->createDecoder();
         assert($decoder instanceof XRL_DecoderInterface);
-
         try {
-            $request    = $decoder->decodeRequest($data);
-            $procedure  = $request->getProcedure();
-
+            $request = $decoder->decodeRequest($data);
+            $procedure = $request->getProcedure();
             if (!isset($this->_funcs[$procedure])) {
-                throw new BadFunctionCallException(
-                    "No such procedure ($procedure)"
-                );
+                throw new BadFunctionCallException("No such procedure ($procedure)");
             }
-
-            $callable   = $this->_funcs[$procedure];
-            $params     = $request->getParams();
-            $result     = $callable->invokeArgs($params);
-            $response   = $encoder->encodeResponse($result);
+            $callable = $this->_funcs[$procedure];
+            $params = $request->getParams();
+            $result = $callable->invokeArgs($params);
+            $response = $encoder->encodeResponse($result);
         }
-        catch (Exception $result) {
-            $response   = $encoder->encodeError($result);
+        catch(Exception $result) {
+            $response = $encoder->encodeError($result);
         }
-
         $factory = $this['XRL_ResponseFactoryInterface'];
         $returnValue = $factory->createResponse($response);
         assert($returnValue instanceof XRL_ResponseInterface);
         return $returnValue;
     }
 }
-

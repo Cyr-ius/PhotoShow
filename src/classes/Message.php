@@ -1,11 +1,16 @@
 <?php
 /**
+<<<<<<< HEAD:src/classes/Message.php
  * This file implements the class JS.
  * 
+=======
+ * This file implements unit tests for Settings class
+ *
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4:src/tests/SettingsTest.php
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -26,13 +31,19 @@
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
  * @copyright 2011 Thibaud Rohmer
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
-
 /**
  * JS Files
  *
+<<<<<<< HEAD:src/classes/Message.php
  * Form for editing files. With JS.
+=======
+ * I used that for some debug. It's incomplete and I guess
+ * It would be better to have a proper framework for unit
+ * test on PHP website. Anyway, it does not harm anyone for now
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4:src/tests/SettingsTest.php
  *
  * @category  Website
  * @package   Photoshow
@@ -41,6 +52,7 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
+<<<<<<< HEAD:src/classes/Message.php
 class Message
 {
 	public function __construct(){
@@ -59,6 +71,18 @@ class Message
 		</div>
 		";
 	}
+=======
+require_once (realpath(dirname(__FILE__) . "/TestUnit.php"));
+class SettingsTest extends TestUnit {
+    /**
+     * test set_lang
+     * @test
+     */
+    public function test_set_lang() {
+        Settings::set_lang("francais");
+        $this->assertEquals(Settings::_("settings", "noregister"), "Bloquer les inscriptions");
+    }
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4:src/tests/SettingsTest.php
 }
 
 ?>

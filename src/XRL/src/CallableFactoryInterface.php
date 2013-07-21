@@ -15,9 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-interface XRL_CallableFactoryInterface
-{
+interface XRL_CallableFactoryInterface {
     /**
      * Constructs a new callable object from any
      * PHP representation of a callable.
@@ -36,4 +34,3 @@ interface XRL_CallableFactoryInterface
      */
     public function fromPHP($callable);
 }
-

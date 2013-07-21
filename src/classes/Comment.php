@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class Comment.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -24,11 +24,12 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright 2011 Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright 2011 Thibaud Rohmer + 2013 Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
-
 /**
  * Comment
  *
@@ -37,10 +38,13 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright Thibaud Rohmer + Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
+<<<<<<< HEAD
 class Comment implements HTMLObject
 {
 	/// Login of the poster
@@ -94,5 +98,55 @@ class Comment implements HTMLObject
 		echo "<div class='content'>$content</div>\n";
 		echo "</div>\n";
 	}
+=======
+class Comment implements HTMLObject {
+    /// Login of the poster
+    public $login;
+    /// Date when the comment wat posted
+    public $date;
+    /// Content of the comment
+    public $content;
+    /// File
+    public $file;
+    /**
+     * Create comment
+     *
+     * @param string $login
+     * @param string $content
+     * @param string $date
+     * @author Thibaud Rohmer
+     */
+    public function __construct($login, $content, $date, $file = null) {
+        $this->login = $login;
+        $this->content = $content;
+        $this->date = $date;
+        $this->file = $file;
+    }
+    /**
+     * Display comment on website
+     *
+     * @return void
+     * @author Thibaud Rohmer
+     */
+    public function toHTML() {
+        $login = stripslashes(htmlentities($this->login, ENT_QUOTES, 'UTF-8'));
+        $content = stripslashes(htmlentities($this->content, ENT_QUOTES, 'UTF-8'));
+        $date = $this->date;
+        echo "<div class='comment'>\n";
+        // Not implemented yet.
+        if (false && (CurrentUser::$admin || $login == CurrentUser::$account->login)) {
+            echo "<div class='delete'>
+							<form action='?t=Adm&a=CDe' method='post'>
+								<input type='hidden' name='image' value='" . htmlentities(File::a2r($this->file), ENT_QUOTES, 'UTF-8') . "'>
+								<input type='hidden' name='date' value='$date'>
+								<input type='submit' value='x'>
+							</form>
+						</div>";
+        }
+        echo "<div class='login name'>$login</div>\n";
+        echo "<div class='content'>$content</div>\n";
+        echo "</div>\n";
+    }
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4
 }
 ?>

@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the cleaning script
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -26,9 +26,9 @@
  * @author    Franck Royer <royer.franck@gmail.com>
  * @copyright 2012 Thibaud Rohmer
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
-
 /**
  * Clean
  *
@@ -41,23 +41,13 @@
  * @package   Photoshow
  * @license   http://www.gnu.org/licenses/
  */
-
 // Include class files
-$toinclude = array( realpath(dirname(__FILE__)."/../classes/HTMLObject.php"),
-    realpath(dirname(__FILE__)."/../classes/Page.php"),
-    realpath(dirname(__FILE__)."/../classes/Video.php"),
-    realpath(dirname(__FILE__)."/../classes/File.php"),
-    realpath(dirname(__FILE__)."/../classes/Cleaning.php"),
-    realpath(dirname(__FILE__)."/../classes/Settings.php")
-);
-
-foreach ( $toinclude as $class_file ){
-    if(!include($class_file)){
-        throw new Exception("Cannot find ".$class_file." file");
+$toinclude = array(realpath(dirname(__FILE__) . "/../classes/HTMLObject.php"), realpath(dirname(__FILE__) . "/../classes/Page.php"), realpath(dirname(__FILE__) . "/../classes/Video.php"), realpath(dirname(__FILE__) . "/../classes/File.php"), realpath(dirname(__FILE__) . "/../classes/Cleaning.php"), realpath(dirname(__FILE__) . "/../classes/Settings.php"));
+foreach ($toinclude as $class_file) {
+    if (!include ($class_file)) {
+        throw new Exception("Cannot find " . $class_file . " file");
     }
 }
-
-
 // Perform the cleaning
 Cleaning::PerformClean();
 ?>

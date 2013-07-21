@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class AdminFiles.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -24,11 +24,12 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright 2011 Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright 2011 Thibaud Rohmer + 2013 Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
-
 /**
  * Admin Files
  *
@@ -37,50 +38,42 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright Thibaud Rohmer + Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
-class AdminFiles
-{
-	/// Delete form
-	private $delete;
-
-	/// Move form
-	private $move;
-
-	/// Upload form
-	private $upload;
-
-	/// Awesome JS form
-	private $JS;
-
-
- 	/**
- 	 * Initialise variables
- 	 * 
- 	 * @author Thibaud Rohmer
- 	 */
- 	public function __construct(){
- 		$this->delete 	= new AdminDelete();
- 		$this->move 	= new AdminMove();
- 		$this->upload 	= new AdminUpload();
- 		$this->JS 		= new JSFiles();
- 	}
-
-
- 	public function toHTML(){
- 		echo "<noscript>";
- 		echo "<div class='panel'>";
- 		$this->upload->toHTML();
- 		$this->move->toHTML();
- 		$this->delete->toHTML();
- 		echo "</div>";
- 		echo "</noscript>";
- 		echo "<div class='noscript_hidden'>";
- 		$this->JS->toHTML();
- 		echo "</div>";
- 	}
-
-
+class AdminFiles {
+    /// Delete form
+    private $delete;
+    /// Move form
+    private $move;
+    /// Upload form
+    private $upload;
+    /// Awesome JS form
+    private $JS;
+    /**
+     * Initialise variables
+     *
+     * @author Thibaud Rohmer
+     */
+    public function __construct() {
+        $this->delete = new AdminDelete();
+        $this->move = new AdminMove();
+        $this->upload = new AdminUpload();
+        $this->JS = new JSFiles();
+    }
+    public function toHTML() {
+        echo "<noscript>";
+        echo "<div class='panel'>";
+        $this->upload->toHTML();
+        $this->move->toHTML();
+        $this->delete->toHTML();
+        echo "</div>";
+        echo "</noscript>";
+        echo "<div class='noscript_hidden'>";
+        $this->JS->toHTML();
+        echo "</div>";
+    }
 }

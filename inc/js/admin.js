@@ -79,6 +79,7 @@ function init_admin(){
 		drop: 	function(event, ui){
 						var dragg = ui.draggable;
 						dragg.draggable('option','revert',false);
+<<<<<<< HEAD:src/js/admin.js
 						from  =  dragg.children('span.path').text();
 						to 	  = $(this).children("span.path").text();
 						if($(dragg).hasClass("item")){
@@ -101,15 +102,33 @@ function init_admin(){
 								refresh(data.uri);
 								get_message(data.result,data.desc);	
 							});
+=======
+						from  = dragg.children(".path").text();
+						to 	  = $(this).children(".path").text();
+
+						if($(dragg).hasClass("selected")){
+							$(".item.selected").each(function(){
+								from  = $(this).children(".path").text();
+								$(".panel,.linear_panel").load(".?t=Adm&a=Mov&j=Pan",{'pathFrom' : from,'pathTo' : to, 'move':'directory'},init_menu);	
+							});
+						}else{
+							if($(dragg).hasClass("item")){
+								$(".panel,.linear_panel").load(".?t=Adm&a=Mov&j=Pan",{'pathFrom' : from,'pathTo' : to, 'move':'directory'},init_menu);	
+							}else{
+								$(".menu").load(".?t=Adm&a=Mov&j=Men",{'pathFrom' : from,'pathTo' : to, 'move':'directory'},init_menu);						
+							}
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4:inc/js/admin.js
 						}
 				}
 	});	
 
+	$(".bin").unbind();
 	$(".bin").droppable({
 		hoverClass: "hovered",
 		drop: 	function(event, ui){
 						var dragg = ui.draggable;
 						dragg.draggable('option','revert',false);
+<<<<<<< HEAD:src/js/admin.js
 						file  = dragg.children('span.path').text();
 						var folder='';
 					//Delete  multiple files
@@ -135,6 +154,26 @@ function init_admin(){
 								refresh(data.uri);
 								get_message(data.result,data.desc);								
 							});							     	 
+=======
+
+						file  = dragg.children(".path").text();
+
+						if($(dragg).hasClass("selected")){
+							$(".item.selected").each(function(){
+								file  = $(this).children(".path").text();
+								$(".panel,.linear_panel").load("?t=Adm&a=Del&j=Pan",{'del' : file },init_panel);
+							});
+						}else{
+							if($(dragg).hasClass("item")){
+								$(".panel,.linear_panel").load("?t=Adm&a=Del&j=Pan",{'del' : file },init_panel);
+							}else{
+								$("#page").load("?t=Adm&a=Del&j=Pag",{'del' : file },function(){
+									init_panel();
+									init_infos();
+									init_admin();
+								});
+							}
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4:inc/js/admin.js
 						}
 					}
 				}
@@ -209,6 +248,7 @@ function init_admin(){
 		$(this.parentNode.parentNode.parentNode).modal('hide');
 	return false;	
 	});
+<<<<<<< HEAD:src/js/admin.js
 	
 	//Json with myModal page
 	$('#admintype-form,#adminrights-form,#admintokens-form').unbind();
@@ -245,6 +285,10 @@ function refresh(url){
 		$(".images .thumbnails").load(".?j=LinearP&f="+url,init);
 	}
 	update_url("?f="+url);
+=======
+
+	var multiselect = false;
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4:inc/js/admin.js
 }
 
 function init_infos(){
@@ -256,6 +300,7 @@ function init_infos(){
 	$('#button_comm').attr('data-href',$(location).attr('search')+"&t=Com");
 }
 
+<<<<<<< HEAD:src/js/admin.js
 function init_textinfo(){
 	
 	$("#edit_textinfo,#editti-form,#delti-form").unbind();
@@ -323,3 +368,42 @@ function init_list(){
 	});
 	$('.boardlines').tooltip({ selector: "a[rel=tooltip]",html:true,placement:"right" });
 }
+=======
+	
+
+	init_forms();
+
+}
+
+function init_forms(){
+	readyselect();
+	$(".adminrights form").submit(function(){
+		$.post($(this).attr('action') + "&j=Jud",$(this).serialize(),function(data){
+            //TODO: translate this, put the guest url here when it is token creation
+			alert("Rights have been set, my lord.");
+			$('.adminrights').html(data);
+			init_forms();
+		});
+		
+		return false;
+	});
+}
+
+function init_dropzone(){
+		$('.dropzone').fileUploadUI({
+		uploadTable: 		$('#files'),
+		downloadTable: 		$('#files'),
+		buildUploadRow: 	function (files, index) {
+			return $('<tr><td>' + files[index].name + '<\/td>' +
+					'<td class="file_upload_progress"><div><\/div><\/td>' +
+					'<td class="file_upload_cancel">' +
+					'<button class="ui-state-default ui-corner-all" title="Cancel">' +
+					'<span class="ui-icon ui-icon-cancel">Cancel<\/span>' +
+					'<\/button><\/td><\/tr>');
+		},
+		buildDownloadRow: 	function (file) {
+								return;
+							},
+	});
+}
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4:inc/js/admin.js

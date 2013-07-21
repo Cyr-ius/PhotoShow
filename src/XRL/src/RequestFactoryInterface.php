@@ -16,9 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-interface XRL_RequestFactoryInterface
-{
+interface XRL_RequestFactoryInterface {
     public function createRequest($method, array $params);
 }
-

@@ -28,11 +28,15 @@
  * @link	  http://github.com/thibaud-rohmer/PhotoShow
  */
 function init_admin(){
+<<<<<<< HEAD:src/js/menu.js
 // Dummy function
 }
 
 function init_plupload(){
 // Dummy function
+=======
+	// Dummy function
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4:inc/js/menu.js
 }
 
 function init_infos(){
@@ -66,6 +70,7 @@ if ($('.mCSB_container').length==0){
 		if ($(this).parent().parent().hasClass('root')) {
 			$(".submenu .selected").find('li').removeClass("active selected");
 		}
+<<<<<<< HEAD:src/js/menu.js
 		$(this).parent().parent('ul').find('li').removeClass("active selected");
 		$(this).parent().addClass("active selected");	
 		url = $(this).attr("href");
@@ -75,6 +80,28 @@ if ($('.mCSB_container').length==0){
 		$('.panel').load(url+"&j=Pan",function(){
 			$('.loading').hide();
 			$('.panel').show('fast',function(){init();});
+=======
+
+
+		update_url($(this).attr("href"),$(this).text());
+		return false;
+	});
+	init_panel();
+
+	init_menubar();
+}
+
+
+function init_menubar(){
+	$("#menubar a").unbind();
+
+	$("#menubar a.login").click(function(){
+		$(".panel").load("?j=Log",function(){
+			$(".inline").first().click(function(){
+				$(".panel").load("?j=Reg");
+				return false;
+			});
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4:inc/js/menu.js
 		});
 	return false;
 	});

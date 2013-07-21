@@ -16,7 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 /**
  * \brief
  *      Class used to represent anything that is callable.
@@ -24,15 +23,11 @@
  * This class can represent a wild range of callable items
  * supported by PHP (functions, lambdas, methods, closures, etc.).
  */
-class       XRL_Callable
-implements  XRL_CallableInterface
-{
+class XRL_Callable implements XRL_CallableInterface {
     /// Inner callable object, as used by PHP.
     protected $_callable;
-
     /// Human representation of the inner callable.
     protected $_representation;
-
     /**
      * Constructs a new callable object, abstracting
      * differences between the different constructs
@@ -50,95 +45,63 @@ implements  XRL_CallableInterface
      *      More information on the callback pseudo-type can be found here:
      *      http://php.net/language.pseudo-types.php#language.types.callback
      */
-    public function __construct($callable)
-    {
-        if (!is_callable($callable, FALSE, $representation))
-            throw new InvalidArgumentException('Not a valid callable');
-
+    public function __construct($callable) {
+        if (!is_callable($callable, FALSE, $representation)) throw new InvalidArgumentException('Not a valid callable');
         // This happens for anonymous functions
         // created with create_function().
-        if (is_string($callable) && $representation == "")
-            $representation = $callable;
-
-        $this->_callable        = $callable;
-        $this->_representation  = $representation;
+        if (is_string($callable) && $representation == "") $representation = $callable;
+        $this->_callable = $callable;
+        $this->_representation = $representation;
     }
-
-    static public function fromPHP($callable)
-    {
+    static public function fromPHP($callable) {
         return new self($callable);
     }
-
     /// \copydoc XRL_CallableInterface::getCallable()
-    public function getCallable()
-    {
+    public function getCallable() {
         return $this->_callable;
     }
-
     /// \copydoc XRL_CallableInterface::getRepresentation()
-    public function getRepresentation()
-    {
+    public function getRepresentation() {
         return $this->_representation;
     }
-
     /// \copydoc XRL_CallableInterface::invoke()
-    public function invoke(/* ... */)
-    {
+    public function invoke( /* ... */
+    ) {
         // HACK:    we use debug_backtrace() to get (and pass along)
         //          references for call_user_func_array().
-
         // Starting with PHP 5.4.0, it is possible to limit
         // the number of stack frames returned.
-        if (version_compare(PHP_VERSION, '5.4', '>='))
-            $bt = debug_backtrace(0, 1);
+        if (version_compare(PHP_VERSION, '5.4', '>=')) $bt = debug_backtrace(0, 1);
         // Starting with PHP 5.3.6, the first argument
         // to debug_backtrace() is a bitmask of options.
-        else if (version_compare(PHP_VERSION, '5.3.6', '>='))
-            $bt = debug_backtrace(0);
-        else
-            $bt = debug_backtrace(FALSE);
-
-        if (isset($bt[0]['args']))
-            $args =& $bt[0]['args'];
-        else
-            $args = array();
+        else if (version_compare(PHP_VERSION, '5.3.6', '>=')) $bt = debug_backtrace(0);
+        else $bt = debug_backtrace(FALSE);
+        if (isset($bt[0]['args'])) $args = & $bt[0]['args'];
+        else $args = array();
         return call_user_func_array($this->_callable, $args);
     }
-
     /// \copydoc XRL_CallableInterface::invokeArgs()
-    public function invokeArgs(array &$args)
-    {
+    public function invokeArgs(array & $args) {
         return call_user_func_array($this->_callable, $args);
     }
-
     /// \copydoc XRL_CallableInterface::__invoke()
-    public function __invoke(/* ... */)
-    {
+    public function __invoke( /* ... */
+    ) {
         // HACK:    we use debug_backtrace() to get (and pass along)
         //          references for call_user_func_array().
-
         // Starting with PHP 5.4.0, it is possible to limit
         // the number of stack frames returned.
-        if (version_compare(PHP_VERSION, '5.4', '>='))
-            $bt = debug_backtrace(0, 1);
+        if (version_compare(PHP_VERSION, '5.4', '>=')) $bt = debug_backtrace(0, 1);
         // Starting with PHP 5.3.6, the first argument
         // to debug_backtrace() is a bitmask of options.
-        else if (version_compare(PHP_VERSION, '5.3.6', '>='))
-            $bt = debug_backtrace(0);
-        else
-            $bt = debug_backtrace(FALSE);
-
-        if (isset($bt[0]['args']))
-            $args =& $bt[0]['args'];
-        else
-            $args = array();
+        else if (version_compare(PHP_VERSION, '5.3.6', '>=')) $bt = debug_backtrace(0);
+        else $bt = debug_backtrace(FALSE);
+        if (isset($bt[0]['args'])) $args = & $bt[0]['args'];
+        else $args = array();
         return call_user_func(array($this, 'invokeArgs'), $args);
     }
-
     /// \copydoc XRL_CallableInterface::__toString()
-    public function __toString()
-    {
+    public function __toString() {
         return $this->_representation;
     }
 }
-

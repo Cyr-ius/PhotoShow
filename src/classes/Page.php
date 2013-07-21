@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class Page.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -24,11 +24,12 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright 2011 Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright 2011 Thibaud Rohmer + 2013 Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
-
 /**
  * Page
  *
@@ -38,10 +39,13 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright Thibaud Rohmer + Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
+<<<<<<< HEAD
 
 abstract class Page implements HTMLObject
 {
@@ -85,5 +89,55 @@ abstract class Page implements HTMLObject
             }
 			echo "</head>";
 		}
+=======
+abstract class Page implements HTMLObject {
+    /**
+     * Generate an insanely beautiful header.
+     * TODO: Title
+     *
+     * @return void
+     * @author Thibaud Rohmer
+     */
+    public function header($head_content = NULL) {
+        #echo "<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>\n";
+        echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>\n";
+        echo "<html xmlns='http://www.w3.org/1999/xhtml'>";
+        echo "<head>\n";
+        echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>\n";
+        echo "<title>" . Settings::$name . "</title>\n";
+        echo "<meta name='author' content='Thibaud Rohmer + Psychedelys'/>\n";
+        echo "<link rel='icon' type='image/ico' href='" . Settings::$self_path . "inc/favico.ico'/>";
+        /// CSS
+        echo "<link rel='stylesheet' href='" . Settings::$self_path . "inc/stylesheets/main.css' type='text/css' media='screen' charset='utf-8'/>\n";
+        echo "<link rel='stylesheet' href='" . Settings::$self_path . "inc/stylesheets/page.css' type='text/css' media='screen' charset='utf-8'/>\n";
+        echo "<link rel='stylesheet' href='" . Settings::$self_path . "inc/stylesheets/panels.css' type='text/css' media='screen' charset='utf-8'/>\n";
+        echo "<link rel='stylesheet' href='" . Settings::$self_path . "inc/stylesheets/forms.css' type='text/css' media='screen' charset='utf-8'/>\n";
+        /// Trick to hide "only-script" parts
+        //echo "<noscript><style type='text/css'>.noscript_hidden { display: none; }</style></noscript>";
+        /// JS
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "inc/js/jquery.js'/>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "inc/js/jquery-ui.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "inc/js/mousewheel.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "inc/js/jquery.scrollTo.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "inc/js/jquery.fileupload.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "inc/js/menu.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "inc/js/panel.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "inc/js/slideshow.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "inc/js/image_panel.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "inc/js/keyboard.js'></script>\n";
+        echo "<script type='text/javascript' src='" . Settings::$self_path . "inc/js/select.js'></script>\n";
+        if (CurrentUser::$admin || CurrentUser::$uploader) {
+            echo "<link rel='stylesheet' href='" . Settings::$self_path . "inc/stylesheets/fileupload-ui.css' type='text/css' media='screen' charset='utf-8'>\n";
+            echo "<link rel='stylesheet' href='" . Settings::$self_path . "inc/stylesheets/admin.css' type='text/css' media='screen' charset='utf-8'>\n";
+            echo "<script type='text/javascript' src='" . Settings::$self_path . "inc/js/jquery.fileupload-ui.js'></script>\n";
+            echo "<script type='text/javascript' src='" . Settings::$self_path . "inc/js/admin.js'></script>\n";
+        }
+        // Add specific head content if needed
+        if ($head_content) {
+            echo $head_content;
+        }
+        echo "</head>";
+    }
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4
 }
 ?>

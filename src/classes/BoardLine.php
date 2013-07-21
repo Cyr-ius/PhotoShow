@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class BoardLine.
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE:
- * 
+ *
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -24,11 +24,12 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright 2011 Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright 2011 Thibaud Rohmer + 2013 Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
-
 /**
  * BoardLine
  *
@@ -37,10 +38,13 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @copyright Thibaud Rohmer
+ * @author    Psychedelys <psychedelys@gmail.com>
+ * @copyright Thibaud Rohmer + Psychedelys
  * @license   http://www.gnu.org/licenses/
- * @link      http://github.com/thibaud-rohmer/PhotoShow
+ * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
+ * @link      http://github.com/psychedelys/PhotoShow
  */
+<<<<<<< HEAD
 class BoardLine implements HTMLObject
 {
 	/// Array of the items
@@ -117,6 +121,63 @@ class BoardLine implements HTMLObject
 			$item->set_width($this->ratio);
 			
 	}
+=======
+class BoardLine implements HTMLObject {
+    /// Array of the items
+    public $items = array();
+    /// Sum of the ratios of the contents
+    public $ratio;
+    /**
+     * Create BoardLine
+     *
+     * @author Thibaud Rohmer
+     */
+    public function __construct() {
+        /// Initialize total ratio
+        $this->ratio = 0;
+    }
+    /**
+     * Display Boardline on website
+     *
+     * @return void
+     * @author Thibaud Rohmer
+     */
+    public function toHTML() {
+        echo "<div class='line'>\n";
+        /// Output all items of the board
+        foreach ($this->items as $item) $item->toHTML();
+        echo "</div>\n";
+    }
+    /**
+     * Append an item to the board
+     *
+     * @param string $file
+     * @param string $ratio
+     * @return void
+     * @author Thibaud Rohmer
+     */
+    public function add_item($file, $ratio) {
+        /// Check item
+        if (!File::Type($file)) {
+            return;
+        }
+        /// Append item
+        $this->items[] = new BoardItem($file, $ratio);
+        /// Update total ratio
+        $this->ratio = $ratio + $this->ratio;
+    }
+    /**
+     * Complete a line, and calculate
+     * the width of each item depending
+     * on their ratio
+     *
+     * @return void
+     * @author Thibaud Rohmer
+     */
+    public function end_line() {
+        /// Set the width of each item
+        foreach ($this->items as $item) $item->set_width($this->ratio);
+    }
+>>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4
 }
-
 ?>
