@@ -8,7 +8,7 @@ a {
 	color:inherit;
 }
 
-.panel , .bigpanel {
+.panel {
 	right:0px;
 	bottom:0;
 	top:50px;
@@ -16,6 +16,14 @@ a {
 	overflow-x:hidden;
 	z-index:-1;
 	margin-left:0px !important;
+}
+
+.bigpanel {
+	right:0px;
+	bottom:0;
+	top:50px;
+	position:fixed;
+	overflow:hidden;
 }
 
 .page {
@@ -56,7 +64,7 @@ a {
 	display: none;
     box-shadow: 0 2px 5px #111111;
     height: 60px;
-	bottom: 30px;
+	bottom: 150px;
     left: 0;
     margin-left: auto;
     margin-right: auto;
@@ -160,15 +168,16 @@ li.selected > a.thumbnail {
 /* Linear_Panel */
 
 .linear_panel {
-	overflow-y: hidden;
-	overflox-x: auto;
+	overflow: hidden;
 	white-space: nowrap;
 	bottom:0px;
 	position:absolute;
 	left:0;
 	right:0;
 	margin-right:20px;
+	margin-left:20px;
 	height:120px;
+	text-align:center;
 	}
 
 .linear_panel ul li {
@@ -182,12 +191,13 @@ li.selected > a.thumbnail {
 		float: none;
 }
 
+/*
 .linear_panel ul {
  	margin:0;
 	padding:0;
 	display:inline-block;
 }
-
+*/
 .linear_panel .thumbnail > img {
 	height : 90px;
  	min-width : 90px;
@@ -200,7 +210,7 @@ li.selected > a.thumbnail {
 /* Image Panel */
 .image_panel {
 	position:absolute;
-	bottom:120px;
+	bottom:150px;
 	left:0;
 	right:0;
 	top:0;
@@ -227,10 +237,11 @@ li.selected > a.thumbnail {
 /* Image_Bar */
 .image_bar {
     bottom: 0;
-    left: 20px;
+    left: 0px;
     position: absolute;
     right: 0px;
     text-align: center;
+    margin-bottom : 110px;
 }
 
 .image_bar li {
@@ -238,14 +249,16 @@ li.selected > a.thumbnail {
     padding-right : 20px;
 }
 
+/* Image */
+
 .bigimage, .bigvideo {
-    bottom: 25px;
+    bottom: 0px;
     overflow: hidden;
     position: absolute;
     text-align: center;
     top: 0px;
-	left:0px;
-	right:0px;
+    left:0px;
+    right:0px;
 }
 
 /* Menu */
@@ -336,35 +349,32 @@ li.submenu.selected > ul  {
 }
 
 /* responsive */
-@media (max-width: 979px) {
-  .menu, .image_panel, .panel, .image_bar, .bigimage, .bigpanel, .linear_panel {
-        position:static;
-		overflow:auto;
-    }
-	.linear_panel {
-		overflow-y:hidden;
-	}
-	
-}
-
-@media (min-width: 768px) and (max-width: 979px) {
-}
-
-@media (max-width: 767px) {
-  .nav-menu, .nav-menu.collapse {
-    height: 0;
-    overflow: hidden;
-	}	
-	
-	.btn-navbar-menu {
-		display:block;
-	}		
-}
-
-@media (min-width: 768px) {
-  .nav-menu, .nav-menu.collapse {
+@media (min-width: 979px) {
+ .nav-menu, .nav-menu.collapse {
     height: auto !important;
     overflow: visible !important;
   }
-  
+}
+
+
+@media (max-width: 978px) {
+
+  #menu, .image_panel, .bigimage , .image_bar, .panel, .bigimage, .bigpanel, .linear_panel {
+        position:static;
+	overflow-y:auto;
+	overflow-x : hidden;
+	margin-bottom:0;
+    }
+
+  .nav-menu, .nav-menu.collapse {
+    height: 0;
+    overflow: hidden;
+   }	
+
+  .btn-navbar-menu {
+    display:block;
+   }
+   #menu , #ImageItem img {
+    width:100%;
+   }
 }

@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class RegisterPage.
- *
+ * 
  * PHP versions 4 and 5
  *
  * LICENSE:
- *
+ * 
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -24,12 +24,11 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @author    Psychedelys <psychedelys@gmail.com>
- * @copyright 2011 Thibaud Rohmer + 2013 Psychedelys
+ * @copyright 2011 Thibaud Rohmer
  * @license   http://www.gnu.org/licenses/
- * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
- * @link      http://github.com/psychedelys/PhotoShow
+ * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
+
 /**
  * RegisterPage
  *
@@ -40,13 +39,10 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @author    Psychedelys <psychedelys@gmail.com>
- * @copyright Thibaud Rohmer + Psychedelys
+ * @copyright Thibaud Rohmer
  * @license   http://www.gnu.org/licenses/
- * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
- * @link      http://github.com/psychedelys/PhotoShow
+ * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-<<<<<<< HEAD
 
 
 class RegisterPage extends Page
@@ -103,85 +99,6 @@ class RegisterPage extends Page
 		echo "</div>\n";
 		echo "</fieldset>\n";
 		echo "</form>\n";	
-=======
-class RegisterPage extends Page {
-    private $admin_account;
-    private $included;
-    /**
-     * Create Register Page
-     *
-     * @author Thibaud Rohmer
-     */
-    public function __construct($admin_account = false, $included = false) {
-        $this->admin_account = $admin_account;
-        $this->included = $included;
-    }
-    /**
-     * Display Register Page on website
-     *
-     * @return void
-     * @author Thibaud Rohmer
-     */
-    public function toHTML() {
-        if (Settings::$forcehttps && (!isset($_SERVER["HTTPS"]) || !$_SERVER["HTTPS"]) && (!isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) || ($_SERVER["HTTP_X_FORWARDED_PROTO"] != "https"))) {
-            header("HTTP/1.1 301 Moved Permanently");
-            header("Location: https://" . Settings::$self_url . Settings::$self_path . $_SERVER["REQUEST_URI"]);
-            exit();
-        } elseif (Settings::$noregister) {
-            header("HTTP/1.1 501 Not Authorised");
-            exit();
-        } else {
-            if (!$this->included) {
-                echo "<div class='center'>\n";
-                $this->header();
-                if ($this->admin_account) {
-                    echo "<h1>" . Settings::_("register", "mainacc") . "</h1>";
-                } else {
-                    echo "<h1>" . Settings::_("register", "register") . "</h1>";
-                }
-                echo "<form method='post' action='?t=Reg'>\n";
-            } else {
-                echo "<form class='adduser' method='post' action='?t=Adm&a=AAc'>\n";
-            }
-            echo "<div class='section'><h2>" . Settings::_("account", "createaccount") . "</h2>";
-            /// Login
-            echo "<fieldset>
-                <div class='fieldname'>
-                    <span>" . Settings::_("register", "logintxt") . "</span>
-                </div>
-                <div class='fieldoptions'>
-                    <input type='text' name='login' value=''>
-                </div>
-            </fieldset>\n";
-            /// Password
-            echo "<fieldset>
-                <div class='fieldname'>
-                    <span>" . Settings::_("register", "passtxt") . "</span>
-                </div>
-                <div class='fieldoptions'>
-                    <input type='password' name='password' value=''>
-                </div>
-            </fieldset>\n";
-            /// Verif
-            echo "<fieldset>
-                <div class='fieldname'>
-                    <span>" . Settings::_("register", "veriftxt") . "</span>
-                </div>
-                <div class='fieldoptions'>
-                    <input type='password' name='verif' value=''>
-                </div>
-            </fieldset>\n";
-            echo "<fieldset class='alignright'><input type='submit' value='" . Settings::_("register", "submit") . "'> ";
-            if (!$this->included) {
-                echo Settings::_("register", "or") . " <a class='inline' href='.'>" . Settings::_("register", "back") . "</a>";
-            }
-            echo "</fieldset></form>\n";
-            echo "</div>";
-            if (!$this->included) {
-                echo "</div>\n";
-            }
-        }
->>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4
     }
 }
 ?>

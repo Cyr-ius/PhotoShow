@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class Menubar.
- *
+ * 
  * PHP versions 4 and 5
  *
  * LICENSE:
- *
+ * 
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -24,12 +24,11 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @author    Psychedelys <psychedelys@gmail.com>
- * @copyright 2011 Thibaud Rohmer + 2013 Psychedelys
+ * @copyright 2011 Thibaud Rohmer
  * @license   http://www.gnu.org/licenses/
- * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
- * @link      http://github.com/psychedelys/PhotoShow
+ * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
+
 /**
  * Menubar
  *
@@ -38,13 +37,10 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @author    Psychedelys <psychedelys@gmail.com>
- * @copyright Thibaud Rohmer + Psychedelys
+ * @copyright Thibaud Rohmer
  * @license   http://www.gnu.org/licenses/
- * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
- * @link      http://github.com/psychedelys/PhotoShow
+ * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-<<<<<<< HEAD
 
 class MenuBar implements HTMLObject{
 	
@@ -73,7 +69,7 @@ class MenuBar implements HTMLObject{
 	public function toHTML(){
 	
 		echo "
-		<div class='navbar navbar-fixed-top menubar'>
+		<div class='navbar navbar-fixed-top'>
 			<div class='navbar-inner'>
 				<div class='container-fluid'><!--/.nav-collapse -->
 					<a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'>
@@ -133,51 +129,5 @@ class MenuBar implements HTMLObject{
 		</div>";
 		}
 		//echo "<a href='?a=rss'>RSS <img src='./inc/rss.png' height='11px'></a>\n";
-=======
-class MenuBar implements HTMLObject {
-    /// True if user is logged in
-    private $logged_in = false;
-    /// True if user is admin
-    private $admin = false;
-    /**
-     * Create menubar
-     *
-     * @return void
-     * @author Thibaud Rohmer
-     */
-    public function __construct() {
-    }
-    /**
-     * Display Menubar on website
-     *
-     * @return void
-     * @author Thibaud Rohmer
-     */
-    public function toHTML() {
-        echo "<div id='menubar'>\n";
-        echo "<div class='align_left'>\n";
-        echo "<a href='.'>PhotoShow</a>\n";
-        if (isset(CurrentUser::$account)) {
-            // User logged in
-            echo "<div class='menubar-button'>- " . Settings::_("menubar", "logged") . " <a href='?t=Acc'>" . htmlentities(CurrentUser::$account->login, ENT_QUOTES, 'UTF-8') . "</a></div>\n";
-            echo "</div><div class='align_right'>\n";
-            echo "<a href='?t=Log'>" . Settings::_("menubar", "logout") . "</a>\n";
-            if (CurrentUser::$admin) {
-                echo "<a href='?t=Adm'>" . Settings::_("menubar", "admin") . "</a>\n";
-            }
-        } else {
-            // User not logged in
-            echo "</div><div class='align_right'>\n";
-            echo "<a class='login' href='?t=Log'>" . Settings::_("menubar", "login") . "</a>\n";
-            if (!Settings::$noregister) {
-                echo "<a class='register' href='?t=Reg'>" . Settings::_("menubar", "register") . "</a>\n";
-            }
-        }
-        //echo "<a href='?a=rss'>RSS <img src='".Settings::$self_path."/inc/rss.png' height='11px'></a>\n";
-        echo "</div>\n";
-        echo "<span>" . Settings::_("menubar", "powered") . " <a href='http://www.photoshow-gallery.com'>PhotoShow</a> - ©2011 Rohmer + ©2013 Psychedelys</span>";
-        echo "</div>\n";
-    }
->>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4
 }
 ?>

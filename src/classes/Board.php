@@ -1,12 +1,12 @@
 <?php
 /**
  * This file implements the class Board.
- *
+ * 
  *
  * PHP versions 4 and 5
  *
  * LICENSE:
- *
+ * 
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -28,6 +28,7 @@
  * @license	   http://www.gnu.org/licenses/
  * @link	   http://github.com/thibaud-rohmer/PhotoShow
  */
+
 /**
  * Board
  *
@@ -43,12 +44,13 @@
  * @license	   http://www.gnu.org/licenses/
  * @link	   http://github.com/thibaud-rohmer/PhotoShow
  */
-class Board implements HTMLObject {
-    /// Board title : name of the directory listed
-    private $title;
-    /// Header
-    public $header_content;
-<<<<<<< HEAD
+class Board implements HTMLObject
+{
+	/// Board title : name of the directory listed
+	private $title;
+    
+	/// Header
+	public $header_content;
 	
 	/// Path to listed directory
 	private $path;
@@ -69,7 +71,7 @@ class Board implements HTMLObject {
 	private $boardfolders=array();
 	
 	/// Comments
-	private $comm;
+	//~ private $comm;
 
 	/**
 	 * Board constructor
@@ -98,72 +100,44 @@ class Board implements HTMLObject {
 		$pageURL 	=	Settings::$site_address."/?f=".urlencode(File::a2r($this->path));
 		//~ $this->comm	=	new Comments($this->path);
 
-=======
-    /// Path to listed directory
-    private $path;
-    /// Paths to the files in the directory
-    private $files;
-    /// Paths to the directories in the directory
-    private $dirs;
-    /// Board header, containing the title and some buttons
-    private $header;
-    /// Array of each line of the grid
-    private $boardlines = array();
-    /// Array of the folders
-    private $boardfolders = array();
-    /**
-     * Board constructor
-     *
-     * @param string $path
-     * @author Thibaud Rohmer
-     */
-    public function __construct($path = NULL) {
-        if (!isset($path)) {
-            $path = CurrentUser::$path;
-        }
-        $this->analyzed = array();
-        $this->path = $path;
-        // If $path is a file, list directory containing the file
-        if (is_file($path)) {
-            $this->path = dirname($path);
-        }
-        $this->title = basename($this->path);
-        $this->header = new BoardHeader($this->title, $this->path);
-        $this->files = Menu::list_files($this->path);
-        $this->dirs = Menu::list_dirs($this->path);
-        $pageURL = Settings::$site_address . "/?f=" . urlencode(File::a2r($this->path));
->>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4
         // generate the header - opengraph metatags for facebook
-        $this->page_header = "<meta property=\"og:url\" content=\"" . $pageURL . "\"/>\n" . "<meta property=\"og:site_name\" content=\"" . Settings::$name . "\"/>\n" . "<meta property=\"og:type\" content=\"article\"/>\n" . "<meta property=\"og:title\" content=\"" . Settings::$name . ": " . File::a2r($this->path) . "\"/>\n";
-        if (Settings::$fbappid) {
-            $this->page_header.= "<meta property=\"fb:app_id\" content=\"" . Settings::$fbappid . "\"/>\n";
+        $this->page_header = "<meta property=\"og:url\" content=\"".$pageURL."\"/>\n"
+            ."<meta property=\"og:site_name\" content=\"".Settings::$name."\"/>\n"
+            ."<meta property=\"og:type\" content=\"article\"/>\n"
+            ."<meta property=\"og:title\" content=\"".Settings::$name.": ".File::a2r($this->path)."\"/>\n";
+        if (Settings::$fbappid){
+            $this->page_header .= "<meta property=\"fb:app_id\" content=\"".Settings::$fbappid."\"/>\n";
         }
-        if (!empty($this->files)) {
+
+        if (!empty($this->files))
+        {
             $i = 0;
-            foreach ($this->files as $file) {
-                if ($i > 9) {
+            foreach($this->files as $file){
+                if ( $i > 9){
                     break;
                 }
-                if (Judge::is_public($file)) {
-                    $this->page_header.= "<meta property=\"og:image\" content=\"" . Settings::$site_address . "/?t=Thb&amp;f=" . urlencode(File::a2r($file)) . "\"/>\n";
+                if (Judge::is_public($file))
+                {
+                    $this->page_header .= "<meta property=\"og:image\" content=\"".Settings::$site_address."/?t=Thb&f=".urlencode(File::a2r($file))."\"/>\n";
                     $i++;
                 }
             }
-        } else { // No files in the directory, getting thumbnails from sub-directories
+        }
+        else{ // No files in the directory, getting thumbnails from sub-directories
             $i = 0;
-            foreach ($this->dirs as $d) {
-                if ($i > 9) {
+            foreach($this->dirs as $d){
+                if ( $i > 9){
                     break;
                 }
                 $img = Judge::searchDir($d, true);
-                if ($img) {
-                    $this->page_header.= "<meta property=\"og:image\" content=\"" . Settings::$site_address . "/?t=Thb&amp;f=" . urlencode(File::a2r($img)) . "\"/>\n";
+                if ($img)
+                {
+                    $this->page_header .= "<meta property=\"og:image\" content=\"".Settings::$site_address."/?t=Thb&f=".urlencode(File::a2r($img))."\"/>\n";
                     $i++;
                 }
             }
         }
-<<<<<<< HEAD
-		$this->foldergrid();
+		
 	}
 	
 	/**
@@ -172,12 +146,14 @@ class Board implements HTMLObject {
 	 * @return void
 	 * @author Thibaud Rohmer
 	 */
-	public function toHTML(){		
+	public function toHTML(){	
+	
 		// Output header
 		$this->header->toHTML();
 		echo "<span class='currentpath hide'>".File::a2r(CurrentUser::$path)."</span>";
 
 		//Display album
+		$this->foldergrid();
 		if(sizeof($this->boardfolders)>0){
 			echo "<div class='well albums'>\n";
 			echo "<legend><h4>".Settings::_("board","albums")."</h4></legend>\n";
@@ -190,29 +166,26 @@ class Board implements HTMLObject {
 		}
 		
 		///Display BoardLine (content images + videos)
+		$rslt_grid = $this->grid($this->files);
 		echo "<div class='boardlines'>\n";
-			$this->grid("Image");
-			if(sizeof($this->boardlines)>0){
+			if(count($rslt_grid) >0){
 				echo "<div class='well images'>\n";
 				echo "<legend><h4>".Settings::_("board","images")."</h4></legend>\n";
-				echo "<ul class='thumbnails'>\n";			
+				echo "<ul class='thumbnails'>\n";				
 				// Output grid
-				foreach($this->boardlines as $boardline){
-					$boardline->toHTML();
+				foreach($rslt_grid  as $boarditem){
+					if ($boarditem->type == 'Image')
+					$boarditem->toHTML();
 				}
 				echo "</ul>\n";
 				echo "</div>\n";
-			}
-
-			$this->boardlines = array();
-			$this->grid("Video");
-			if(sizeof($this->boardlines)>0){
 				echo "<div class='well videos'>\n";
 				echo "<legend><h4>".Settings::_("board","videos")."</h4></legend>";
 				echo "<ul class='thumbnails'>\n";
 				// Output grid
-				foreach($this->boardlines as $boardline){
-					$boardline->toHTML();
+				foreach($rslt_grid  as $boarditem){
+					if ($boarditem->type == 'Video')
+					$boarditem->toHTML();
 				}
 				echo "</ul>\n";			
 				echo "</div>\n";
@@ -221,51 +194,34 @@ class Board implements HTMLObject {
 	}
 	
 	/**
-	 * Generate the grid, line by line
+	 * Generate la grille et inclut la grille dans le BoardLines (voir 228)
 	 *
 	 * @return void
 	 * @author Thibaud Rohmer
 	 */
-	private function grid($type="Image"){
-		// Create line
-		$bl =	new BoardLine();
+	public function grid($files){
+
 		$notempty = false;
+		$items = array();
 		
-		foreach($this->files as $file){
+		foreach($files as $file){
 
 			// Check rights
 			if(!(Judge::view($file))){
 				continue;
 			}
 			
-			if (File::Type($file) != $type){
+			if(!File::Type($file)){
 				continue;
 			}
-
-			// Calculate file ratio
-			if(Settings::$thumbs_fixed_width){
-				$ratio = 1.5;
-			}else{
-				$ratio	=	$this->ratio($file);
-			}
-			
-			// Create new line when sum 
-			// of ratios reaches 11
-			if($bl->ratio + $ratio > 11){
-				$bl->end_line();
-				$this->boardlines[] = $bl;
-				$bl =	new BoardLine();
-				$notempty = false;
-			}
-			
+		
 			// Add item to the line
-			$bl->add_item($file,$ratio);
+			$items[] =  new BoardItem($file);
 			$notempty = true;
 		}
-		$bl->end_line();
 
 		if($notempty){
-			$this->boardlines[] = $bl;
+			return $items;
 		}
 	}
 	
@@ -296,152 +252,4 @@ class Board implements HTMLObject {
 			$this->boardfolders = array_reverse($this->boardfolders);
 		}
 	}
-
-
-	/**
-	 * Calculate item ratio.
-	 * - Image -> floor(width/height) + 1
-	 * - Autre -> 2
-	 *
-	 * @param string $file 
-	 * @return void
-	 * @author Thibaud Rohmer
-	 */
-	public function ratio($file){
-		// Calculate ratio
-		list($x,$y) = getimagesize($file);
-
-		// Non-image file : ratio = 2
-		if( ! File::Type($file) || File::Type($file) != "Image" || $y == 0 ){
-			return 2;
-		}
-		
-		return floor($x/$y)+1;
-
-	}
-=======
-        // Generate the grid
-        //~ $this->grid();
-        $this->foldergrid();
-    }
-    /**
-     * Display board on website
-     *
-     * @return void
-     * @author Thibaud Rohmer
-     */
-    public function toHTML() {
-        // Output header
-        $this->header->toHTML();
-        echo "<div id='selection_overlay'></div>\n";
-        echo "<div class='select'></div>\n";
-        if (sizeof($this->boardfolders) > 0) {
-            echo "<h2>" . Settings::_("board", "albums") . "</h2>";
-            foreach ($this->boardfolders as $boardfolder) {
-                $boardfolder->toHTML();
-            }
-        }
-        $this->grid("Image");
-        if (sizeof($this->boardlines) > 0) {
-            echo "<h2>" . Settings::_("board", "images") . "</h2>";
-        }
-        // Output grid
-        foreach ($this->boardlines as $boardline) {
-            $boardline->toHTML();
-        }
-        $this->boardlines = array();
-        $this->grid("Video");
-        if (sizeof($this->boardlines) > 0) {
-            echo "<h2>" . Settings::_("board", "videos") . "</h2>";
-        }
-        // Output grid
-        foreach ($this->boardlines as $boardline) {
-            $boardline->toHTML();
-        }
-    }
-    /**
-     * Generate the grid, line by line
-     *
-     * @return void
-     * @author Thibaud Rohmer
-     */
-    private function grid($type = "Image") {
-        // Create line
-        $bl = new BoardLine();
-        $notempty = false;
-        foreach ($this->files as $file) {
-            // Check rights
-            if (!(Judge::view($file))) {
-                continue;
-            }
-            if (File::Type($file) != $type) {
-                continue;
-            }
-            // Calculate file ratio
-            if (Settings::$thumbs_fixed_width) {
-                $ratio = 1.5;
-            } else {
-                $ratio = $this->ratio($file);
-            }
-            // Create new line when sum
-            // of ratios reaches 11
-            if ($bl->ratio + $ratio > 11) {
-                $bl->end_line();
-                $this->boardlines[] = $bl;
-                $bl = new BoardLine();
-                $notempty = false;
-            }
-            // Add item to the line
-            $bl->add_item($file, $ratio);
-            $notempty = true;
-        }
-        $bl->end_line();
-        if ($notempty) {
-            $this->boardlines[] = $bl;
-        }
-    }
-    /**
-     * Generate a foldergrid
-     *
-     * @return void
-     * @author Thibaud Rohmer
-     */
-    private function foldergrid() {
-        foreach ($this->dirs as $d) {
-            $firstImg = Judge::searchDir($d);
-            if (!(Judge::view($d) || $firstImg)) {
-                continue;
-            }
-            $f = Menu::list_files($d, true);
-            if (CurrentUser::$admin || CurrentUser::$uploader || sizeof($f) > 0) {
-                if ($firstImg) {
-                    $f[0] = $firstImg;
-                }
-                $item = new BoardDir($d, $f);
-                $this->boardfolders[] = $item;
-            }
-        }
-        if (Settings::$reverse_menu) {
-            $this->boardfolders = array_reverse($this->boardfolders);
-        }
-    }
-    /**
-     * Calculate item ratio.
-     * - Image -> floor(width/height) + 1
-     * - Autre -> 2
-     *
-     * @param string $file
-     * @return void
-     * @author Thibaud Rohmer
-     */
-    private function ratio($file) {
-        // Calculate ratio
-        list($x, $y) = getimagesize($file);
-        // Non-image file : ratio = 2
-        if (!File::Type($file) || File::Type($file) != "Image" || $y == 0) {
-            return 2;
-        }
-        return floor($x / $y) + 1;
-    }
->>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4
 }

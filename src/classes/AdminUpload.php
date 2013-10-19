@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class AdminUpload.
- *
+ * 
  * PHP versions 4 and 5
  *
  * LICENSE:
- *
+ * 
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -24,12 +24,11 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @author    Psychedelys <psychedelys@gmail.com>
- * @copyright 2011 Thibaud Rohmer + 2013 Psychedelys
+ * @copyright 2011 Thibaud Rohmer
  * @license   http://www.gnu.org/licenses/
- * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
- * @link      http://github.com/psychedelys/PhotoShow
+ * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
+
 /**
  * AdminUpload
  *
@@ -38,13 +37,10 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @author    Psychedelys <psychedelys@gmail.com>
- * @copyright Thibaud Rohmer + Psychedelys
+ * @copyright Thibaud Rohmer
  * @license   http://www.gnu.org/licenses/
- * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
- * @link      http://github.com/psychedelys/PhotoShow
+ * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-<<<<<<< HEAD
  class AdminUpload
  {
  	/// Directories where we can upload
@@ -70,12 +66,8 @@
  	 * @author Thibaud Rohmer
  	 */
  	public function upload(){
- 		$allowedExtensions = array("tiff","jpg","jpeg","gif","png");
-		
-		/// Just to be really sure ffmpeg is enabled - necessary to generate thumbnail jpg and webm
-		if (Settings::$encode_video) {
-			array_push($allowedExtensions,"flv","mov","mpg","mp4","ogv","mts","3gp","webm","avi","wmv","mpeg");
-		}
+ 		
+		//$allowedExtensions = array("tiff","jpg","jpeg","gif","png","flv","mov","mpg","mp4","ogv","mts","3gp","webm","avi","wmv","mpeg");
 
 		$already_set_rights = false;
  		/// Just to be really sure... 
@@ -85,6 +77,7 @@
 							"desc"=>"Error : No Rights");		
  			return;
  		}
+		
  		/// Set upload path
  		$path = stripslashes(File::r2a($_POST['path']));
  		/// Create dir and update upload path if required
@@ -106,6 +99,7 @@
  			}
  			$already_set_rights = true;
  		}
+		
 		if(!isset($_FILES["file"])) {	
 			Json::$json = array("action"=>"AdminUpload",
 							"result"=>0,
@@ -113,10 +107,10 @@
 							"desc"=>"Folder Create");							
  			return;
 		}
- 		/// Treat uploaded files
- 		 //~ foreach ($_FILES["file"]["error"] as $key => $error) {
-			// Check that file is uploaded
-		    if ($error == UPLOAD_ERR_OK) {
+		
+
+		// Check that file is uploaded and Treat uploaded file
+		if ($error == UPLOAD_ERR_OK) {
 
 			// Name of the stored file
 			$tmp_name = $_FILES["file"]["tmp_name"];
@@ -125,7 +119,7 @@
 			$info = pathinfo($name);
 			$base_name =  basename($name,'.'.$info['extension']);
 			// Check filetype
-			if(!in_array(strtolower($info['extension']),$allowedExtensions)){
+			if(!in_array(strtolower($info['extension']),Settings::$allowedExtensions)){
 				continue;
 			}
 			
@@ -137,9 +131,12 @@
 			}
 
 			// Save the files
-			if(move_uploaded_file($tmp_name, "$path/$name")){
-				$done .= "Successfully uploaded $name";					
-				Video::FastEncodeVideo("$path/$name");			 
+			if(!move_uploaded_file($tmp_name, "$path/$name")){
+				error_log("ERROR/AdminUpload : save uploaded $name refused");
+				Json::$json = array("action"=>"AdminUpload",
+					"result"=>1,
+					"desc"=>"Error : Upload error");
+				return;
 			}
 			// Setup rights
 			if(!$already_set_rights && !isset($_POST['inherit'])){
@@ -149,18 +146,19 @@
 					Judge::edit("$path/$name",$_POST['users'],$_POST['groups']);					
 				}
 			}
+			
 			Json::$json = array("action"=>"AdminUpload",
 				"result"=>0,
 				"uri"=>urlencode(File::a2r("$path/$name")),
 				"desc"=>"File save :".$name);
+				return;
 			
-		  } else { 
+		} else { 
 				Json::$json = array("action"=>"AdminUpload",
 					"result"=>1,
-					"desc"=>"Error : Upload error");					
-		  }
-		  return;
-		 //~ }
+					"desc"=>"Error : Upload error");
+				return;
+		}
 	}
 
  	/**
@@ -189,137 +187,3 @@
  	}
  }
  ?>
-=======
-class AdminUpload {
-    /// Directories where we can upload
-    public $dirs = array();
-    /// What have we done ?
-    public $done;
-    /// Currently selected dir
-    private $selected_dir;
-    /**
-     * Create upload page
-     *
-     * @author Thibaud Rohmer
-     */
-    public function __construct() {
-        /// Get all subdirs
-        $list_dirs = Menu::list_dirs(Settings::$photos_dir, true);
-        foreach ($list_dirs as $dir) {
-            $this->dirs[] = File::a2r($dir);
-        }
-        if (isset(CurrentUser::$path)) {
-            $this->selected_dir = File::a2r(CurrentUser::$path);
-        }
-    }
-    /**
-     * Upload files on the server
-     *
-     * @author Thibaud Rohmer
-     */
-    public function upload() {
-        $allowedExtensions = array("tiff", "jpg", "jpeg", "gif", "png");
-        /// Just to be really sure ffmpeg is enabled - necessary to generate thumbnail jpg and webm
-        if (Settings::$encode_video) {
-            array_push($allowedExtensions, "flv", "mov", "mpg", "mp4", "ogv", "mts", "3gp", "webm");
-        }
-        $already_set_rights = false;
-        /// Just to be really sure...
-        if (!(CurrentUser::$admin || CurrentUser::$uploader)) {
-            return;
-        }
-        /// Set upload path
-        $path = stripslashes(File::r2a($_POST['path']));
-        /// Create dir and update upload path if required
-        if (strlen(stripslashes($_POST['newdir'])) > 0 && !strpos(stripslashes($_POST['newdir']), '..')) {
-            $path = $path . "/" . stripslashes($_POST['newdir']);
-            if (!file_exists($path)) {
-                @mkdir($path, 0750, true);
-                @mkdir(File::r2a(File::a2r($path), Settings::$thumbs_dir), 0750, true);
-            }
-            /// Setup rights
-            if (!isset($_POST['inherit'])) {
-                if (isset($_POST['public'])) {
-                    Judge::edit($path);
-                } else {
-                    Judge::edit($path, $_POST['users'], $_POST['groups']);
-                }
-            }
-            $already_set_rights = true;
-        }
-        if (!isset($_FILES["images"])) return;
-        /// Treat uploaded files
-        foreach ($_FILES["images"]["error"] as $key => $error) {
-            // Check that file is uploaded
-            if ($error == UPLOAD_ERR_OK) {
-                // Name of the stored file
-                $tmp_name = $_FILES["images"]["tmp_name"][$key];
-                // Name on the website
-                $name = $_FILES["images"]["name"][$key];
-                $info = pathinfo($name);
-                $base_name = basename($name, '.' . $info['extension']);
-                // Check filetype
-                if (!in_array(strtolower($info['extension']), $allowedExtensions)) {
-                    continue;
-                }
-                // Rename until this name isn't taken
-                $i = 1;
-                while (file_exists("$path/$name")) {
-                    $name = $base_name . "-" . $i . "." . $info['extension'];
-                    $i++;
-                }
-                // Save the files
-                if (move_uploaded_file($tmp_name, "$path/$name")) {
-                    //	$done .= "Successfully uploaded $name";
-                    Video::FastEncodeVideo("$path/$name");
-                }
-                /// Setup rights
-                if (!$already_set_rights && !isset($_POST['inherit'])) {
-                    if (isset($_POST['public'])) {
-                        Judge::edit("$path/$name");
-                    } else {
-                        Judge::edit("$path/$name", $_POST['users'], $_POST['groups']);
-                    }
-                }
-            }
-        }
-    }
-    /**
-     * Display upload page on website
-     *
-     * @author Thibaud Rohmer
-     */
-    public function toHTML() {
-        echo "<h1>Upload</h1>";
-        echo "<form action='?t=Adm&a=Upl' method='post' enctype='multipart/form-data'>";
-        echo "<fieldset><span>Images</span><div><input  name='images[]' type='file' multiple /></div></fieldset>";
-        echo "<fieldset><span>Location</span><div><select name='path'>";
-        echo "<option value='.'>.</option>";
-        foreach ($this->dirs as $dir) {
-            if ($dir == $this->selected_dir) {
-                $selected = "selected";
-            } else {
-                $selected = "";
-            }
-            echo "<option value='" . htmlentities($dir, ENT_QUOTES, 'UTF-8') . "' $selected>" . htmlentities($dir, ENT_QUOTES, 'UTF-8') . "</option>\n";
-        }
-        echo "</select></div></fieldset>";
-        echo "<fieldset><span>New Dir</span><div><input name='newdir' type='text' /></div></fieldset>";
-        echo "<fieldset><span>Rights</span><div><label><input type='checkbox' name='inherit' checked /> Inherit</label></div></fieldset>";
-        echo "<fieldset><span>Public</span><div><label><input type='checkbox' name='public' checked /> Public</label></div></fieldset>";
-        echo "<fieldset><span>Groups</span><div>";
-        foreach (Group::findAll() as $group) {
-            echo "<label><input type='checkbox' name='groups[]' value='" . htmlentities($group['name'], ENT_QUOTES, 'UTF-8') . "' checked /> " . htmlentities($group['name'], ENT_QUOTES, 'UTF-8') . " </label>";
-        }
-        echo "</div></fieldset>";
-        echo "<fieldset><span>Users</span><div>";
-        foreach (Account::findAll() as $account) {
-            echo "<label><input type='checkbox' name='users[]' value='" . htmlentities($account['login'], ENT_QUOTES, 'UTF-8') . "' checked /> " . htmlentities($account['login'], ENT_QUOTES, 'UTF-8') . " </label>";
-        }
-        echo "</div></fieldset>";
-        echo "<fieldset><input type='submit' class='button blue' /></fieldset>";
-        echo "</form>";
-    }
-}
-?>
->>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4

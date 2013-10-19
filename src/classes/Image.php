@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class Image.
- *
+ * 
  * PHP versions 4 and 5
  *
  * LICENSE:
- *
+ * 
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -24,12 +24,11 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @author    Psychedelys <psychedelys@gmail.com>
- * @copyright 2011 Thibaud Rohmer + 2013 Psychedelys
+ * @copyright 2011 Thibaud Rohmer
  * @license   http://www.gnu.org/licenses/
- * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
- * @link      http://github.com/psychedelys/PhotoShow
+ * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
+
 /**
  * Image
  *
@@ -39,13 +38,10 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @author    Psychedelys <psychedelys@gmail.com>
- * @copyright Thibaud Rohmer + Psychedelys
+ * @copyright Thibaud Rohmer
  * @license   http://www.gnu.org/licenses/
- * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
- * @link      http://github.com/psychedelys/PhotoShow
+ * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-<<<<<<< HEAD
 
 class Image implements HTMLObject
 {
@@ -92,6 +88,8 @@ class Image implements HTMLObject
 		}else{
 			$this->t = "Img";
 		}
+		
+
 	}
 	
 	
@@ -103,75 +101,21 @@ class Image implements HTMLObject
 	 */
 	public function toHTML(){
 	
-		echo "<div style='    
+		echo "<div 
+		class='bigimage'
+		style='    
 		background-attachment: scroll;
 		background-clip: border-box;
 		background-origin: padding-box;
 		background-position: center center;
 		background-repeat: no-repeat;
-		background-size: contain;
-		height: 100%;		
-		max-width: 2048px;
+		background-size: contain;	
 		background-image:url(\"?t=".$this->t."&f=".$this->fileweb."\");
 		'>\n";
-		echo "<a href='?f=".$this->dir."'><img width='100%' height='100%' style='opacity:0;' src='inc/loading.gif' alt=''></a>\n";
+		echo "<a href='?f=".$this->dir."'><img style='width:100%;height:100%;' src='../inc/spacer.gif'></a>\n";
 		echo "</div>\n";
 
 	}
-=======
-class Image implements HTMLObject {
-    /// URLencoded version of the relative path to file
-    static public $fileweb;
-    /// URLencoded version of the relative path to directory containing file
-    private $dir;
-    /// Width of the image
-    private $x;
-    /// Height of the image
-    private $y;
-    /// Force big image or not
-    private $t;
-    /**
-     * Create image
-     *
-     * @param string $file
-     * @author Thibaud Rohmer
-     */
-    public function __construct($file = NULL, $forcebig = false) {
-        /// Check file type
-        if (!isset($file) || !File::Type($file) || File::Type($file) != "Image") return;
-        /// Set relative path (url encoded)
-        $this->fileweb = urlencode(File::a2r($file));
-        /// Set relative path to parent dir (url encoded)
-        $this->dir = urlencode(dirname(File::a2r($file)));
-        /// Get image dimensions
-        list($this->x, $this->y) = getimagesize($file);
-        /// Set big image
-        if ($forcebig) {
-            $this->t = "Big";
-        } else {
-            $this->t = "Img";
-        }
-    }
-    /**
-     * Display the image on the website
-     *
-     * @return void
-     * @author Thibaud Rohmer
-     */
-    public function toHTML() {
-        echo "<div id='image_big' ";
-        echo "style='";
-        echo " max-width:" . $this->x . "px;";
-        echo " background: black url(\"?t=" . $this->t . "&amp;f=$this->fileweb\") no-repeat center center;";
-        echo " background-size: contain;";
-        echo " -moz-background-size: contain;";
-        echo " height:100%;";
-        echo "'>";
-        echo "<a href='?f=$this->dir'>";
-        echo "<img src='" . Settings::$self_path . "/inc/img.png' height='100%' width='100%' style='opacity:0;'>";
-        echo "</a>";
-        echo "</div>";
-    }
->>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4
 }
+
 ?>

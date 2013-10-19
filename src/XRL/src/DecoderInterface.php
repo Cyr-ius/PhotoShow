@@ -15,7 +15,10 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
-interface XRL_DecoderInterface {
+
+interface XRL_DecoderInterface
+{
     public function decodeRequest($data);
     public function decodeResponse($data);
 }
+

@@ -1,11 +1,11 @@
 <?php
 /**
  * This file implements the class ImageBar.
- *
+ * 
  * PHP versions 4 and 5
  *
  * LICENSE:
- *
+ * 
  * This file is part of PhotoShow.
  *
  * PhotoShow is free software: you can redistribute it and/or modify
@@ -24,29 +24,25 @@
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @author    Psychedelys <psychedelys@gmail.com>
- * @copyright 2011 Thibaud Rohmer + 2013 Psychedelys
+ * @copyright 2011 Thibaud Rohmer
  * @license   http://www.gnu.org/licenses/
- * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
- * @link      http://github.com/psychedelys/PhotoShow
+ * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
+
 /**
  * ImageBar
  *
  * The ImageBar contains some buttons insanely awesome
  * buttons, incredibly usefull. Yeah, it rocks.
- *
+ * 
  *
  * @category  Website
  * @package   Photoshow
  * @author    Thibaud Rohmer <thibaud.rohmer@gmail.com>
- * @author    Psychedelys <psychedelys@gmail.com>
- * @copyright Thibaud Rohmer + Psychedelys
+ * @copyright Thibaud Rohmer
  * @license   http://www.gnu.org/licenses/
- * @oldlink   http://github.com/thibaud-rohmer/PhotoShow
- * @link      http://github.com/psychedelys/PhotoShow
+ * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-<<<<<<< HEAD
 class ImageBar
 {
 
@@ -60,19 +56,16 @@ class ImageBar
 	 * @author Thibaud Rohmer
 	 */
 	public function __construct($fs=false){
-
-		$file = urlencode(File::a2r(CurrentUser::$path));
-		$this->buttons['prev'] = array('icon'=>"icon-step-backward","url"=>"?p=p&f=".$file);
-		$this->buttons['linear'] = array('icon'=>"  icon-camera","url"=> "?f=".$file);
-		$this->buttons['back'] = array('icon'=>" icon-th","url"=>"?f=".urlencode(File::a2r(dirname(CurrentUser::$path))));
-		if(!Settings::$nodownload){
-			$this->buttons['img'] = array('icon'=>"icon-picture","url"=>"?t=Big&f=".$file);
-			$this->buttons['get'] = array('icon'=>"icon-download-alt","url"=>"?t=BDl&f=".$file);
-		}
 		
-		$this->buttons['slideshow'] = array('icon'=>" icon-play","url"=> "?f=".$file);
-		//~ $this->buttons['fullscreen'] = array('icon'=>" icon-fullscreen","url"=> "?f=".$file);
-		$this->buttons['next'] = array('icon'=>"icon-step-forward","url"=>"?p=n&f=".$file);
+		$this->buttons['prev'] = array('icon'=>"icon-step-backward","url"=>"?p=p");
+		$this->buttons['linear'] = array('icon'=>"  icon-camera","url"=> "");
+		$this->buttons['back'] = array('icon'=>" icon-th","url"=>"");
+		if(!Settings::$nodownload){
+			$this->buttons['img'] = array('icon'=>"icon-picture","url"=>"");
+			$this->buttons['get'] = array('icon'=>"icon-download-alt","url"=>"");
+		}
+		$this->buttons['slideshow'] = array('icon'=>" icon-play","url"=> "");
+		$this->buttons['next'] = array('icon'=>"icon-step-forward","url"=>"?p=n");
 		
 	}
 
@@ -82,48 +75,15 @@ class ImageBar
 	 * @author Thibaud Rohmer
 	 */
 	 public function toHTML(){
+		echo "<div class='image_bar'>\n";
+		echo "<ul>\n";
 	 	foreach($this->buttons as $key=>$value){
 	 		echo "<li id='$key'><a href='".$value['url']."' alt='$key'><i  class='".$value['icon']." icon-white'></i></a></li>";
 	 	}
+		echo "</ul>\n";
+		echo "</div>\n";		
 	 }
 
-=======
-class ImageBar {
-    /// Buttons to display
-    private $buttons = array();
-    /**
-     * Create the ImageBar
-     *
-     * @author Thibaud Rohmer
-     */
-    public function __construct($fs = false) {
-        $file = urlencode(File::a2r(CurrentUser::$path));
-        //		if($fs){
-        //			$t = "?t=Fs&amp;";
-        //		}else{
-        $t = "?";
-        //		}
-        $this->buttons['prev'] = $t . "p=p&amp;f=" . $file;
-        $this->buttons['back'] = "?f=" . urlencode(File::a2r(dirname(CurrentUser::$path)));
-        if (!Settings::$nodownload) {
-            $this->buttons['img'] = "?t=Big&amp;f=" . $file;
-            $this->buttons['get'] = "?t=BDl&amp;f=" . $file;
-        }
-        $this->buttons['next'] = $t . "p=n&amp;f=" . $file;
-        $this->buttons['slideshow'] = $t . "f=" . $file;
-    }
-    /**
-     * Display ImageBar on Website
-     *
-     * @author Thibaud Rohmer
-     */
-    public function toHTML() {
-        foreach ($this->buttons as $name => $url) {
-            echo "<span id='$name'><a href='$url'>" . Settings::_("imagenav", $name) . "</a></span>";
-            //echo "<span id='$name'><a href='$url'>$name</a></span>";
-            
-        }
-    }
->>>>>>> 3fbb242568a4ddc60dee5d2c019391f366ad63d4
 }
+
 ?>

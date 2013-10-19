@@ -13,7 +13,7 @@ class Scripts
 		
 		<!-- Framwork JQUERY 1.10 -->
 		<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js'></script>
-		<script src='http://code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
+		<script src='http://codeorigin.jquery.com/ui/1.10.3/jquery-ui.min.js'></script>
 		
 		<!-- Framework BootStrap 2.3.2 -->
 		<script src='inc/bootstrap/js/bootstrap.min.js'></script>
@@ -27,9 +27,15 @@ class Scripts
 		
 		<!-- MouseWhell -->
 		<script src='inc/jquery.mousewheel.js'></script>
+
+		<!-- History (BUG IE pushstate) -->
+		<script src='inc/history.min.js'></script>
 		
 		<!-- JQuery plugin : API Fullscreen for slideshow -->
 		<script src='inc/jquery.fullscreen.js'></script>
+		
+		<!-- JQuery plugin : Transition Effects -->
+		<script src='inc/jquery.cycle2.min.js'></script>		
 
 		<!-- JQuery plugin : ScrollStop  -->
 		<script src='inc/jquery.scrollstop.js'></script>

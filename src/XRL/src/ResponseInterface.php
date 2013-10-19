@@ -15,7 +15,9 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
-interface XRL_ResponseInterface {
+
+interface XRL_ResponseInterface
+{
     public function __string();
     public function publish();
 }

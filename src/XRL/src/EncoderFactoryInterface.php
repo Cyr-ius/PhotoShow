@@ -15,6 +15,9 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
-interface XRL_EncoderFactoryInterface {
+
+interface XRL_EncoderFactoryInterface
+{
     public function createEncoder();
 }
+

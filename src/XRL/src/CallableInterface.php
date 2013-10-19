@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /**
  * \brief
  *      Interface for something that can be called.
@@ -24,7 +25,8 @@
  * (with the usual array representation used by PHP), a closure
  * (when using PHP >= 5.3.0), etc.
  */
-interface XRL_CallableInterface {
+interface XRL_CallableInterface
+{
     /**
      * Returns the callable object in its raw form
      * (as used by PHP).
@@ -49,6 +51,7 @@ interface XRL_CallableInterface {
      *      Both of these are only possible with PHP >= 5.3.0.
      */
     public function getCallable();
+
     /**
      * Returns a human representation of this callable.
      * For (anonymous) functions, this is a string containing
@@ -61,6 +64,7 @@ interface XRL_CallableInterface {
      *      Human representation of this callable.
      */
     public function getRepresentation();
+
     /**
      * Implementation of the __invoke() magic method.
      *
@@ -77,8 +81,8 @@ interface XRL_CallableInterface {
      *          $c(42);
      *      \endcode
      */
-    public function __invoke( /* ... */
-    );
+    public function __invoke(/* ... */);
+
     /**
      * Invokes the callable object represented by this
      * instance.
@@ -94,8 +98,8 @@ interface XRL_CallableInterface {
      *      This method is smart enough to preserve
      *      references.
      */
-    public function invoke( /* ... */
-    );
+    public function invoke(/* ... */);
+
     /**
      * Invokes the callable object represented by this
      * instance, using the given array as a list of arguments.
@@ -111,7 +115,8 @@ interface XRL_CallableInterface {
      *      This method is smart enough to preserve
      *      references.
      */
-    public function invokeArgs(array & $args);
+    public function invokeArgs(array &$args);
+
     /**
      * Alias for XRL_CallableInterface::getRepresentation().
      *

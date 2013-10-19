@@ -15,8 +15,13 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
-class XRL_PrettyEncoderFactory implements XRL_EncoderFactoryInterface {
-    public function createEncoder() {
+
+class       XRL_PrettyEncoderFactory
+implements  XRL_EncoderFactoryInterface
+{
+    public function createEncoder()
+    {
         return new XRL_Encoder(XRL_Encoder::OUTPUT_PRETTY);
     }
 }
+

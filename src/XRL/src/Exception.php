@@ -16,10 +16,14 @@
     You should have received a copy of the GNU General Public License
     along with XRL.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /**
  * \brief
  *      An exception that is used to represent
  *      XML-RPC errors.
  */
-class XRL_Exception extends Exception {
+class   XRL_Exception
+extends Exception
+{
 }
+

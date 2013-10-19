@@ -83,56 +83,16 @@ class Linear_panel implements HTMLObject
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){		
-
-		$this->grid = $this->linear_grid();
-		foreach($this->boardlines as $boardline){
+		$rslt_grid = Board::grid($this->files);
+		echo "<div id='linear_panel' class='linear_panel'>";
+		echo "<div id='sscrollLeft' style='position: fixed; margin-left: -20px; padding-top: 50px;height:120px'><span class='icon-backward'></span></div>";
+		echo "<div id='sscrollRight' style='position: fixed; right: 0px; padding-top: 50px;height:120px'><span class='icon-forward'></span></div>";
+		echo "<ul class='thumbnails'>\n";
+		foreach($rslt_grid as $boardline){
 			$boardline->toHTML();
 		}
+		echo "</ul>\n";
+		echo "</div>\n";
 	}
-	
-	/**
-	 * Generate Public grid, line by line
-	 *
-	 * @return void
-	 * @author Cédric Levasseur
-	 */
-	private function linear_grid(){
-
-		// Create line
-		$bl =	new BoardLine();
-		$notempty = false;
-
-		foreach($this->files as $file){
-			// Check rights
-			if(!(Judge::view($file))){
-				continue;
-			}
-			// Calculate file ratio
-			if(Settings::$thumbs_fixed_width){
-				$ratio = 1.5;
-
-			}else{
-				$ratio	=	Board::ratio($file);
-			}
-
-			// Create new line when sum 
-			// of ratios reaches 11
-			if($bl->ratio + $ratio > 11){
-				$bl->end_line();
-				$this->boardlines[] = $bl;
-				$bl =	new BoardLine();
-				$notempty = false;
-			}
-			
-			// Add item to the line
-			$bl->add_item($file,$ratio);
-			$notempty = true;
-		}
-		$bl->end_line();
-
-		if($notempty){
-			$this->boardlines[] = $bl;
-		}
-	}	
 
 }
