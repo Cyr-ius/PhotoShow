@@ -11,6 +11,12 @@ Multi format supported : images (library GD required) and videos (binary ffmpeg 
 
 Propulsed with Jquery 1.10 , BootStrap 2.3.2
 
+## Demonstration
+
+http://photoshow-revolution.ipocus.net
+user : demo
+pwd : demo123
+
 ## Installation
 
 ### Copy the repository
