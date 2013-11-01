@@ -78,7 +78,7 @@ class Comments implements HTMLObject
 		/// Set variables
 		$this->file	=	$file;
 		//~ $settings	=	new Settings();
-		$basefile	= 	new File($file);
+		$basefile		= 	new File($file);
 		$basepath	=	File::a2r($file);
 
 		/// Urlencode basepath
@@ -170,7 +170,12 @@ class Comments implements HTMLObject
 			"uri"=>".?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Com",						
 			"desc"=>"Delete comment successfull");			
 	}
-
+	
+	/**
+	 * Save a comment for item  in $file
+	 * 
+	 * @author Thibaud Rohmer
+	 */	
 	public function save(){
 		
 		$xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><comments></comments>');
@@ -204,7 +209,6 @@ class Comments implements HTMLObject
 	 */
 	private function parse_comments_file(){
 		$xml		=	simplexml_load_file($this->commentsfile);
-		
 		foreach( $xml as $comm ){
 			$this->comments[]=new Comment((string)$comm->login,(string)$comm->content,(string)$comm->date,$this->file);
 		}

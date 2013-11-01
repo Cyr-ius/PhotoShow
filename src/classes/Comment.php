@@ -78,7 +78,7 @@ class Comment implements HTMLObject
 	 */
 	public function toHTML(){
 		$login		=	stripslashes(htmlentities( $this->login , ENT_QUOTES ,'UTF-8'));
-		$content	=	stripslashes(htmlentities( $this->content , ENT_QUOTES ,'UTF-8'));
+		$content		=	stripslashes(htmlentities( $this->content , ENT_QUOTES ,'UTF-8'));
 		$date		=	$this->date;
 
 		echo "<div class='comment alert alert-info'>\n";

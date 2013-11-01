@@ -72,17 +72,17 @@ function init_hiders(){
 		title = $(this).attr('data-title');
 		url = $(this).attr('data-href');		 
 		$(target+"Label").text(title);
-		$(target+' .modal-body').load(url,init_admin);
+		$(target+' .modal-body').load(url,init_actions);
 	 });
 	 
-	$("a[data-type=account] , a[data-type=register],a[data-type=login]").unbind();
-	$("a[data-type=account] , a[data-type=register],a[data-type=login]").click(function() {
-		target = $(this).attr('data-target');
-		title = $(this).attr('data-title');
-		url = $(this).attr('data-href');		 
-		$(target+"Label").text(title);
-		$(target+' .modal-body').load(url,init_actions);
-	 });	
+	//~ $("a[data-type=account],a[data-type=register],a[data-type=login],a[data-type=comments]").unbind();
+	//~ $("a[data-type=account],a[data-type=register],a[data-type=login],a[data-type=comments]").click(function() {
+		//~ target = $(this).attr('data-target');
+		//~ title = $(this).attr('data-title');
+		//~ url = $(this).attr('data-href');		 
+		//~ $(target+"Label").text(title);
+		//~ $(target+' .modal-body').load(url,init_actions);
+	 //~ });	
 	
 	$(".dir_img").unbind();
 	$(".dir_img").mouseover(function(e){
@@ -192,6 +192,8 @@ function init_actions() {
 		});
 	return false;	
 	});	
+	
+	init_admin();
 }
 
 function scrollbar(class_pane,h_bool){

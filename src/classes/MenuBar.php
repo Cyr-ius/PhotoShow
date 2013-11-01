@@ -110,7 +110,7 @@ class MenuBar implements HTMLObject{
 									echo "<li><a id='button_download' href='?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Zip'><i class='icon-download'></i> ".Settings::_("boardheader","download")."</a></li>";
 									}	
 									if(!Settings::$nocomments){
-									echo "<li><a id='button_comm' href='#' data-href='?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Com' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("comments","comments")."'><i class='icon-comment'></i> ".Settings::_("comments","comments")."</a></li>\n";						
+									echo "<li><a id='button_comm' href='#' data-href='?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Com' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("comments","comments")."'data-type='comments'><i class='icon-comment'></i> ".Settings::_("comments","comments")."</a></li>\n";						
 									}	
 									echo "<li><a id='button_exif' href='#'><i class='icon-info-sign'></i> Exif</a></li>\n";						
 								echo "</ul>";
