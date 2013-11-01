@@ -97,6 +97,7 @@ function init_image_bar(){
 					$('.exif').show();
 				});
 			}
+		init_image_bar();			
 		}); 
 		
 	return false;
@@ -142,6 +143,7 @@ function init_image_bar(){
 			if(slideshow_status == 1){
 				hide_links();
 			}
+			init_image_bar();
 		});	
 		
 	return false;
@@ -170,9 +172,10 @@ function init_image_bar(){
 					$('.exif').show();
 				});
 			}
-		if(slideshow_status == 1){
-			hide_links();
-		}
+			if(slideshow_status == 1){
+				hide_links();
+			}
+		init_image_bar();
 		});	
 		
 	return false;

@@ -153,7 +153,7 @@ class CurrentUser
 
 				case "Page"	:
 				case "Img"	:
-				case "Vid"	:
+				case "Vid"		:
 				case "Thb"	:	CurrentUser::$action=$_GET['t'];
 								break;
 
@@ -190,14 +190,10 @@ class CurrentUser
 				case "MyA"	:	if(isset($_POST['old_password'])){
 									Account::edit($_POST['login'],$_POST['old_password'],$_POST['password'],$_POST['name'],$_POST['email'],NULL,$_POST['language']);
 									unset($_POST['old_password']);
-									//CurrentUser::init();
-									//return;
 								}
 								
 								if(isset($_POST['edit'])){
 									Account::edit($_POST['login'],$_POST['old_password'],$_POST['password'],$_POST['name'],$_POST['email'],NULL,$_POST['language']);
-									//CurrentUser::init();
-									//return;
 								}
 								
 								CurrentUser::$action = "MyA";

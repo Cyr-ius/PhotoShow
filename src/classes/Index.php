@@ -90,11 +90,9 @@ class Index
 							break;
 			
 			case "BDl":		Provider::Image(CurrentUser::$path,false,true,true,true);
-							error_log('BDI');
 							break;
 
 			case "Big":		Provider::Image(CurrentUser::$path,false,true);
-							error_log('Big');
 							break;
 
 			case "Thb":		Provider::Image(CurrentUser::$path,true);

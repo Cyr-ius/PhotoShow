@@ -53,8 +53,8 @@ class BoardItem implements HTMLObject
 	/// Type of the file
 	public $type;
 	
-	/// Item width
-	//~ public $width;
+	/// Query path
+	private $filepath;
 	
 	/**
 	 * Construct BoardItem
@@ -67,6 +67,15 @@ class BoardItem implements HTMLObject
 		$this->path 	= 	$file;
 		$this->file	=	urlencode(File::a2r($file));
 		$this->type	=	File::Type($file);
+		
+		///Check Token
+		if (isset($_GET["token"])) {
+			$this->token = $_GET["token"];
+			$this->filepath = "?t=Thb&f=".$this->file."&token=".$this->token;
+		} else {
+			$this->filepath = "?t=Thb&f=".$this->file;
+		}
+		
 	}
 	
 	/**
@@ -85,7 +94,7 @@ class BoardItem implements HTMLObject
 		echo ">\n";
 		echo "\t\t<a class='thumbnail' href='?f=".$this->file."' rel='tooltip' data-title='    <img style=\"opacity:1;max-width:400px;max-height:400px;\"  src=\"?t=Img&f=".$this->file."\">      '>";
 		//~ echo "<img class='loadimg' src='./inc/spacer.gif' style='background: url(\"?".$getfile."\") no-repeat center center; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;'>";
-		echo "<img class='lazy' src='./inc/spacer.gif' data-original='?t=Thb&f=".$this->file."'>";
+		echo "<img class='lazy' src='./inc/spacer.gif' data-original='".$this->filepath."'>";
 		echo "</a>\n";
 		echo 	"\t\t<span class='name hide'>".htmlentities(basename($this->path), ENT_QUOTES ,'UTF-8')."</span>\n";
 		echo 	"\t\t<span class='path hide'>".htmlentities(File::a2r($this->path), ENT_QUOTES ,'UTF-8')."</span>\n";

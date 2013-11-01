@@ -225,6 +225,13 @@ class Video implements HTMLObject
             }
         }
     }
+    
+    public static function Thumb($file,$thumb_path_jpg) {
+            $offset = Video::GetDuration($file)/2;
+            $dimensions = Video::GetScaledDimension($file, 320);
+            $u=Settings::$ffmpeg_path.' -itsoffset -'.$offset.'  -i "'.$file.'" -vcodec mjpeg -vframes 1 -an -f rawvideo -s '.$dimensions['x'].'x'.$dimensions['y'].' -y "'.$thumb_path_jpg.'"';
+             exec($u);
+    }
 
 	/**
 	 * Check if a job is running for the conversion

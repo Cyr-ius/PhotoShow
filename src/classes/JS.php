@@ -55,19 +55,13 @@ class JS extends Page
 
 		if(isset($_GET['j'])){
 			switch($_GET['j']){
-
+				case "ImI"	:
 				case "Pan"	:	if(is_file(CurrentUser::$path)){
 									$b = new ImagePanel(CurrentUser::$path);
 									$b->toHTML();
 								}else{
 									$b = new Board(CurrentUser::$path);
 									$b->toHTML();
-								}
-								break;
-								
-				case "ImI"	:	if(is_file(CurrentUser::$path)){
-									$ii = new Image(CurrentUser::$path);
-									$ii->toHTML();
 								}
 								break;
 

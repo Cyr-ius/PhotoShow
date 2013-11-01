@@ -60,6 +60,12 @@ class Image implements HTMLObject
 	/// Force big image or not
 	private $t;
 	
+	///Token
+	private $token;
+	
+	///File path
+	private $filepath;
+	
 	
 	/**
 	 * Create image
@@ -89,6 +95,14 @@ class Image implements HTMLObject
 			$this->t = "Img";
 		}
 		
+		///Check Token
+		if (isset($_GET["token"])) {
+			$this->token = $_GET["token"];
+			$this->filepath = "?t=".$this->t."&f=".$this->fileweb."&token=".$this->token;
+		} else {
+			$this->filepath = "?t=".$this->t."&f=".$this->fileweb;
+		}
+		
 
 	}
 	
@@ -110,7 +124,7 @@ class Image implements HTMLObject
 		background-position: center center;
 		background-repeat: no-repeat;
 		background-size: contain;	
-		background-image:url(\"?t=".$this->t."&f=".$this->fileweb."\");
+		background-image:url(\"".$this->filepath."\");
 		'>\n";
 		echo "<a href='?f=".$this->dir."'><img style='width:100%;height:100%;' src='../inc/spacer.gif'></a>\n";
 		echo "</div>\n";
