@@ -29,8 +29,6 @@
  * @link      http://github.com/thibaud-rohmer/PhotoShow-v2
  */
 
-ini_set('upload_max_filesize','200M');
-ini_set('post_max_size','200M');
 ini_set('max_execution_time', 60);
 
 /// Start session

@@ -114,15 +114,8 @@ class Provider
 		if( !Judge::view($file)){
 		    return;
 		}
-
-		/// Check item
-		$file_type = File::Type($file);
-		if (!$file_type == "Video"){
-		    error_log('ERROR/Provider.php: Vid called on a non-video file '.$file);
-		    return;
-		}
-
-		Video::FastEncodeVideo($file);
+		
+		//Video::FastEncodeVideo($file);
 
 		$basefile		= 	new File($file);
 		$basepath	=	File::a2r($file);
@@ -132,7 +125,12 @@ class Provider
 		    error_log('ERROR/Provider::Video - path:'.$path.' does not exist, using '.$file);
 		    return;
 		}
-
+		
+		/// Check file type
+		if(!isset($path) || !File::Type($path) || File::Type($path) != "Video") {
+			return;
+		}		
+		
 		$expires = 60*60*24*14;
 		$last_modified_time = filemtime($path); 
 		$etag = md5_file($file); 
@@ -180,7 +178,7 @@ class Provider
 			
 			/// Create thumbnail for a video
 			if (File::Type($file) =='Video') {
-				Video::Thumb($file,$path);
+				Video::Thumb($file);
 			}			
 			
 		}
@@ -244,10 +242,8 @@ class Provider
 
 		if(!$large){
 			if ($thumb){
-				error_log('Thumb');
 			    $path = Provider::thumb($file);
 			}else{
-				error_log('Small');
 			    $path = Provider::small($file);
 			}
 		}

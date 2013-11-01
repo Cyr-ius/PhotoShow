@@ -220,14 +220,13 @@ class Menu implements HTMLObject
 		/// Directory content
 		$dir_content = scandir($dir);
 
-        if (empty($dir_content)){
-            // Directory is empty or no right to read
-            return $list;
-        }
+		if (empty($dir_content)){
+		    // Directory is empty or no right to read
+		    return $list;
+		}
 		
 		/// Check each content
 		foreach ($dir_content as $content){
-			
 			/// Content isn't hidden and is a file
 			if($content[0] != '.' || $hidden){
 				if(is_file($path=$dir."/".$content)){
@@ -241,16 +240,12 @@ class Menu implements HTMLObject
 						}
 					}
 				}else{
-
 					if($rec){
 						$list = array_merge($list,Menu::list_files($dir."/".$content,true));
 					}
-
 				}
 			}
-		
 		}
-
 		/// Return files list
 		return $list;
 	}

@@ -44,7 +44,11 @@
 class Video implements HTMLObject
 {
 	/// URLencoded version of the relative path to file
-	static public $fileweb;
+	static private $fileweb;
+	static private $targetpath;
+	static private $filename;
+	static private $extension;
+	
      
 	/**
 	 * Create Video
@@ -62,12 +66,20 @@ class Video implements HTMLObject
 		if(!isset($file) || !File::Type($file) || File::Type($file) != "Video") {
 			return;
 		}
-		/// File object
+		/// Absolute file path
 		$this->file = $file;
 		
 		/// Set relative path (url encoded)
 		$this->fileweb	=	urlencode(File::a2r($file));
 		
+		///Set target path
+		$this->targetpath = Settings::$thumbs_dir.dirname(File::a2r($file));
+		
+		///Set filename without extension
+		$this->filename = File::name($this->file);
+		
+		///Set  extension
+		$this->extension = File::extension($this->file);
 	}
 	
 	/**
@@ -169,68 +181,54 @@ class Video implements HTMLObject
         //error_log('DEBUG/Video: *scaled* dimension of '.$file.' is '.$dimensions['x'].'x'.$dimensions['y']);
         return $dimensions;
     }
-	
-	
 	/**
-	 * Asynchronous Convert all Video format 
-	 *   
-	 * Use ffmpeg for conversion
-	 * @return void
-	 * @author Cédric Levasseur
-	 */
-    public static function FastEncodeVideo($file) {
-	
-        /// Check item
-        if(!File::Type($file) || File::Type($file) != "Video"){
-            return;
-        }
-
-        $file_file	       = new File($file);
-        $thumb_path_no_ext = Settings::$thumbs_dir.dirname(File::a2r($file))."/".$file_file->name;
-        $thumb_path_video   = $thumb_path_no_ext.'.'.Settings::$encode_type;	
-        $thumb_path_jpg    = $thumb_path_no_ext.'.jpg';	
-
-
-        // Check if thumb folder exist
-        if(!file_exists(dirname($thumb_path_video))){
-            @mkdir(dirname($thumb_path_video),0755,true);
-        }
-
-
-        if (!file_exists($thumb_path_jpg) || filectime($file) > filectime($thumb_path_jpg)) {
-            //Create Thumbnail jpg in Thumbs folder
-            //TODO: scaled thumbnail would be better
-
-            $offset = self::GetDuration($file)/2;
-            $dimensions = self::GetScaledDimension($file, 320);
-            
-            $u=Settings::$ffmpeg_path.' -itsoffset -'.$offset.'  -i "'.$file.'" -vcodec mjpeg -vframes 1 -an -f rawvideo -s '.$dimensions['x'].'x'.$dimensions['y'].' -y "'.$thumb_path_jpg.'"';
-             exec($u);
-        }
-
-        if (self::NoJob($file))// We check that first to allow the clean of old job files
-        {
-            if (!file_exists($thumb_path_video) || filectime($file) > filectime($thumb_path_video)){
-                if ($file_file->extension !=Settings::$encode_type) {
+	* Envoce video
+	*
+	* @param string $file 
+	* @author Cédric Levasseur
+	*/
+    public static function Encode($file) {
+	// We check that first to allow the clean of old job files
+	if (self::NoJob($file)) {
+		$video = new Video($file);
+	        // Check if thumb folder exist
+		if(!file_exists($video->targetpath)){
+			@mkdir($video->targetpath,0755,true);
+		}
+	     $target = $video->targetpath."/".$video->filename.'.'.Settings::$encode_type;
+            if (!file_exists($target) || filectime($file) > filectime($target)){
+                if ($video->extension !=Settings::$encode_type) {
                     ///Convert video to Thumbs folder
                     //TODO: Max job limit
-                    $u = Settings::$ffmpeg_path.' -i "'.$file.'" '.Settings::$ffmpeg_option.' -y "'.$thumb_path_video.'"';		
+                    $u = Settings::$ffmpeg_path.' -i "'.$file.'" '.Settings::$ffmpeg_option.' -y "'.$target.'"';		
                     $pid = self::ExecInBackground($u);
                     self::CreateJob($file, $pid);
                 }
                 else {
                     ///Copy original video to Thumbs folder
-                    copy($file,$thumb_path_video);
+                    copy($file,$target);
                 }
             }
         }
     }
-    
-    public static function Thumb($file,$thumb_path_jpg) {
-            $offset = Video::GetDuration($file)/2;
-            $dimensions = Video::GetScaledDimension($file, 320);
-            $u=Settings::$ffmpeg_path.' -itsoffset -'.$offset.'  -i "'.$file.'" -vcodec mjpeg -vframes 1 -an -f rawvideo -s '.$dimensions['x'].'x'.$dimensions['y'].' -y "'.$thumb_path_jpg.'"';
-             exec($u);
+	/**
+	* Create Thumbnail  for a video file
+	*
+	* @param string $file 
+	* @author Cédric Levasseur
+	*/    
+    public static function Thumb($file) {
+	$video = new Video($file);
+	// Check if thumb folder exist
+	if(!file_exists($video->targetpath)){
+		@mkdir($video->targetpath,0755,true);
+	}
+	$target = $video->targetpath."/".$video->filename.'_thumb.jpg';
+	$offset = Video::GetDuration($file)/2;
+	$dimensions = Video::GetScaledDimension($file, 320);
+	$u=Settings::$ffmpeg_path.' -itsoffset -'.$offset.'  -i "'.$file.'" -vcodec mjpeg -vframes 1 -an -f rawvideo -s '.$dimensions['x'].'x'.$dimensions['y'].' -y "'.$target.'"';
+	exec($u);
+	self::Encode($file);
     }
 
 	/**
@@ -312,13 +310,13 @@ class Video implements HTMLObject
     //TODO: center the video on y axis
     public function VideoDiv($width='',$height='100%',$control=false){
 	$c = null;
-	self::FastEncodeVideo($this->file);
+	//~ self::FastEncodeVideo($this->file);
 	$wh = ' height="'.$height.'" width="'.$width.'"';
         if ($control) {
             $c = ' controls="controls"';
         }
 	//~ echo '<div class="videoUiWrapper">';
-        echo '<video height="100%"'.$c.'><source src="?t=Vid&f='.$this->fileweb.'" type="video/mp4" />';
+        echo '<video height="100%"'.$c.'><source src="?t=Vid&f='.$this->fileweb.'" type="video/'.Settings::$encode_type.'" />';
         echo 'Your browser does not support the video tag.<br />';
         echo 'Please upgrade your brower or Download the codec <a href="http://tools.google.com/dlpage/webmmf">Download</a>';
         echo '</video>';

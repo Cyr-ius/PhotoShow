@@ -8,7 +8,7 @@ function init_plupload() {
 		drop_element : 'dropzone',
 		multiple_queues : true,
 		multipart_params : {path: $('span.currentpath').text()},
-	        max_file_size : '50mb',
+	        max_file_size : '200mb',
 		unique_names : true,		
 		flash_swf_url : '/plupload/js/plupload.flash.swf',
 		silverlight_xap_url : '/plupload/js/plupload.silverlight.xap',
