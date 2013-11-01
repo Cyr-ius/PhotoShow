@@ -81,8 +81,8 @@ function init_hiders(){
 		title = $(this).attr('data-title');
 		url = $(this).attr('data-href');		 
 		$(target+"Label").text(title);
-		$(target+' .modal-body').load(url,init_login);
-	 });	 
+		$(target+' .modal-body').load(url,init_actions);
+	 });	
 	
 	$(".dir_img").unbind();
 	$(".dir_img").mouseover(function(e){
@@ -171,7 +171,7 @@ function init_hiders(){
 	});
 
 }
-function init_login() {
+function init_actions() {
 	$('#logins-form').unbind();
 	$('#logins-form').submit(function(){
 		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data){
@@ -180,6 +180,15 @@ function init_login() {
 				window.location.replace($(location).attr('search'));
 			}
 			
+		});
+	return false;	
+	});
+
+ 	$('#account-form,#comments-form').unbind();
+	$('#account-form,#comments-form').submit(function(){
+		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data,info){
+			$('#myModal .modal-body').load(data.uri);
+			get_message(data.result,data.desc);
 		});
 	return false;	
 	});	
