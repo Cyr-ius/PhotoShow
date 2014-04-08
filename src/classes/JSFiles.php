@@ -64,14 +64,14 @@ class JSFiles
 
 		/// Folder name
 		if(strlen($w)>1){
-		$ret .=	"<form class='rename'>
+		$ret .=	"<form id='rename-folder' class='rename'>
 				<fieldset class='".addslashes(htmlentities(File::a2r(dirname($dir)), ENT_QUOTES ,'UTF-8'))."'>
 					<input id='foldername' class='".addslashes(htmlentities($w, ENT_QUOTES ,'UTF-8'))."' type='text' value='".addslashes(htmlentities(basename($w), ENT_QUOTES ,'UTF-8'))."'>
 					<input type='submit' value='Rename'>
 				</fieldset>
 				</form>";
 		}
-		$ret .=	"<form class='create'>
+		$ret .=	"<form id='create-folder' class='create'>
 				<fieldset>
 					<input type='hidden' name='path' value='".addslashes(htmlentities($w, ENT_QUOTES ,'UTF-8'))."'>
 					<input id='foldername' name='newdir' type='text' value='New Folder'>

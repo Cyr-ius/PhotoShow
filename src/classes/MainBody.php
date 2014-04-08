@@ -88,7 +88,7 @@ class MainBody extends Page
 			
 		try{
 			$settings=new Settings();
-		}catch(FileException $e){
+		}catch(Exception $e){
 			// If Accounts File missing... Register !
 			$this->header();
 			new RegisterPage();
@@ -122,13 +122,16 @@ class MainBody extends Page
 	public function toHTML(){
 		$this->header($this->header_content);
 		echo "<body>";
+		//~ echo "<span id='key'>".CurrentUser::$account->key."</span>";
 		echo "<div id='mainpage'>";
 		$this->mainpage->toHTML();
 		echo "</div>";
 		$this->message->toHTML();	
 		$this->ma->toHTML();			
 		$this->mt->toHTML();
+		echo "<div id='scripts'>";
 		$this->scripts->toHTML();
+		echo "</div>";
 		echo "</body>\n";		
 	}
 }

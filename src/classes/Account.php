@@ -83,11 +83,9 @@ class Account extends Page
 	 * @author Thibaud Rohmer
 	 */
 	public function __construct($login=NULL,$key=NULL){
-		if(!isset($login) && !isset($key)) {
-			Json::$json = array("action"=>"Account",
-				"result"=>1,
-				"desc"=>"Login not found");			
-			return false;
+	
+		if(!isset($login) && !isset($key)) {			
+			return;
 		}
 		$xml_infos	=	CurrentUser::$accounts_file;
 		$xml		=	simplexml_load_file($xml_infos);
@@ -105,19 +103,11 @@ class Account extends Page
 				$this->groups 	= array();
 				foreach($account->groups->children() as $group){
 					$this->groups[] = (string)$group;
-				}	
-				Json::$json = array("action"=>"Account",
-					"result"=>0,
-					"uri"=>".?t=Adm&a=Acc",
-					"desc"=>"Operation on ".$login." account sucessfull");					
-				return true;
+				}					
+				return;
 			}
 		}
-		//throw new Exception("Login $login not found");		
-		Json::$json = array("action"=>"Account",
-			"result"=>1,
-			"desc"=>"Login not found");				
-		return false;
+		throw new jsonRPCException('Login not found');			
 	}
 	
 	/**
@@ -130,19 +120,15 @@ class Account extends Page
 	public static function create($login, $password, $verif, $groups=array(),$name='',$email=''){
 		// Check if login already exists
 		if(Account::exists($login) || (!CurrentUser::$admin && Settings::$noregister) || $password != $verif) {
-			Json::$json = array("action"=>"Account",
-				"result"=>1,
-				"desc"=>"Error : No Rights or Syntax error");
-			return false;
+			throw new jsonRPCException('User exists or no register rights');
 		}
+
 		// All users belong to the "user" group
 		$groups[]="user";
 
 		$xml_infos=CurrentUser::$accounts_file;
-		
+		//If no file then First Run Index::$welcome
 		if(!file_exists($xml_infos) || sizeof(Account::findAll()) == 0 ){
-			// No account
-
 			// Create accounts file
 			$xml	=	new SimpleXMLElement('<accounts></accounts>');
 			$xml->asXML($xml_infos);
@@ -151,12 +137,8 @@ class Account extends Page
 			$groups[] = "root";
 		}
 
-
 		if( preg_match("/[^a-z0-9]/i", $login) || strlen($password) < 6){
-			Json::$json = array("action"=>"Account",
-				"result"=>1,
-				"desc"=>"Error : Account (a-z et 0-9) or password inccorect (length > 6)");				
-			return false;
+			throw new jsonRPCException('Error : Account (a-z et 0-9) or password inccorect (length > 6)');
 		}
 
 		$acc			=	new Account();
@@ -167,11 +149,7 @@ class Account extends Page
 		$acc->email		=	$email;
 		$acc->language 	=	"";
 		$acc->key 		=	"";
-		$acc->save();
-		Json::$json = array("action"=>"Account",
-			"result"=>0,
-			"uri"=>".?t=Adm&a=AAc",
-			"desc"=>"Create Account for ".$login." sucessfull");					
+		$acc->save();		
 		return true;
 	}
 	
@@ -204,30 +182,24 @@ class Account extends Page
 			$this->key = $this->key();
 			$this->save();
 		}
-
 		return $this->key;
 	}
 
-	/**
-	 * Add a group to this user
-	 *
-	 * @param string $group 
-	 * @return void
-	 * @author Thibaud Rohmer
-	 */
-	public function add_group($group){
+	public function add_group($login,$group){
+		/// Only the admin can modify other accounts
+		if( !CurrentUser::$admin){
+			throw new jsonRPCException('Insufficients rights');
+		}	
+		$acc = new Account ($login);
 		// Check that this user doesn't already belong to this group
-		if(!in_array($group,$this->groups)){
-			$this->groups[]=$group;
+		if(!in_array($group,$acc->groups)){
+			$acc->groups[]=$group;
 			$g = new Group($group);
 			$g->save();
-		}
-		Json::$json = array("action"=>"Account",
-			"result"=>0,
-			"uri"=>".?t=Adm&a=EdA",
-			"desc"=>"Add account in group ".$group." sucessfull");					
-		return;		
-	}
+			$acc->save();
+			return true;
+		}			
+	}	
 	
 	/**
 	 * Remove a group from this user
@@ -236,18 +208,21 @@ class Account extends Page
 	 * @return void
 	 * @author Thibaud Rohmer
 	 */
-	public function remove_group($group){
-		// Check that this user belongs to this group
-		if(in_array($group,$this->groups)){
-			$id=array_search($group,$this->groups);
-			unset ( $this->groups[$id] );
-		}
-		Json::$json = array("action"=>"Account",
-			"result"=>0,
-			"uri"=>".?t=Adm&a=AGR",
-			"desc"=>"Remove account in group ".$group." sucessfull");					
-		return;			
-	}
+	public function remove_group($login,$group){
+		/// Only the admin can modify other accounts
+		if( !CurrentUser::$admin){
+			throw new jsonRPCException('Insufficient rights');
+		}	
+		$acc = new Account ($login);
+		// Check that this user doesn't already belong to this group
+		if(in_array($group,$acc->groups)){
+			$id=array_search($group,$acc->groups);
+			unset ($acc->groups[$id] );
+			$acc->save();
+			return true;
+		} 
+	}	 
+
 	/**
 	 * Change password from this user
 	 *
@@ -256,12 +231,8 @@ class Account extends Page
 	 * @author Thibaud Rohmer
 	 */	
 	public function change_password($login,$old_password,$password){
-	
 		if( !CurrentUser::$admin && $login != CurrentUser::$account->login ){
-			Json::$json = array("action"=>"Account",
-				"result"=>1,
-				"desc"=>"Error : Insufficence rights for ".$login);	
-			return;
+			throw new jsonRPCException('Insufficient rights');
 		}
 		
 		if (CurrentUser::$admin){
@@ -269,15 +240,17 @@ class Account extends Page
 			if(isset($password) && strlen($password) > 4 ){
 				$acc->password = Account::password($password);
 				$acc->save();
-			}			
-		} 
+			}
+			return true;
+		}  else { return false;}
 		
 		if ($login = CurrentUser::$account->login && Account::password($old_password) != CurrentUser::$account->password )  {
 			if(isset($password) && strlen($password) > 4 ){
 				CurrentUser::$account->password = Account::password($password);
 				CurrentUser::$account->save();
 			}
-		}		
+			return true;
+		} else { return false;}
 	}
 	
 
@@ -287,11 +260,10 @@ class Account extends Page
 	 * @return void
 	 * @author Thibaud Rohmer
 	 */
-	public function save(){
+	private function save(){
 
 		$xml_infos	=	CurrentUser::$accounts_file;
 		$xml		=	simplexml_load_file($xml_infos);
-			
 		foreach( $xml as $acc ){
 			if((string)$acc->login == $this->login){
 				$account=$acc;
@@ -329,7 +301,7 @@ class Account extends Page
 			}
 		}
 		// Saving into file
-		$xml->asXML($xml_infos);	
+		$xml->asXML($xml_infos);
 	}
 
 	/**
@@ -345,10 +317,7 @@ class Account extends Page
 	public static function edit($login=NULL, $old_password=NULL, $password=NULL, $name=NULL, $email=NULL, $groups=array(), $language=NULL){
 		/// Only the admin can modify other accounts
 		if( !CurrentUser::$admin && $login != CurrentUser::$account->login ){
-			Json::$json = array("action"=>"Account",
-				"result"=>1,
-				"desc"=>"Error : No Rights for ".$login);	
-			return;
+			throw new jsonRPCException('Insufficient rights');
 		}
 
 		if(isset($login) && (preg_match("/[^a-z0-9]/i", $login) === 0) ){
@@ -359,14 +328,11 @@ class Account extends Page
 		
 		/// Check password
 		if (!CurrentUser::$admin && Account::password($old_password) != $acc->password )  {
-			Json::$json = array("action"=>"Account",
-				"result"=>1,
-				"desc"=>"Error : New and old password required ");	
-			return;
+			throw new jsonRPCException('Password error');				
+			//~ return false;
 		}
 		/// Edit attributes
 		if(isset($password) && strlen($password) > 4 ){
-			print_r('change password : '.$password);
 			$acc->password = Account::password($password);
 		}
 
@@ -387,11 +353,8 @@ class Account extends Page
 		}
 
 		/// Save account
-		$acc->save();
-		Json::$json = array("action"=>"Account",
-			"result"=>0,
-			"desc"=>"Account ".$login." modifed sucessful");			
-		return;	
+		$acc->save();	
+		return true;	
 	}
 	
 	/**
@@ -402,6 +365,11 @@ class Account extends Page
 	 * @author Thibaud Rohmer
 	 */
 	public static function delete($login){
+		/// Only the admin can delete other accounts
+		if( !CurrentUser::$admin){
+			throw new jsonRPCException('Insufficients rights');
+		}
+	
 		$xml_infos 	=	CurrentUser::$accounts_file;
 		$xml		=	simplexml_load_file($xml_infos);
 		
@@ -413,12 +381,8 @@ class Account extends Page
 			}
 		$i++;
 		}
-		$xml->asXML($xml_infos);
-		Json::$json = array("action"=>"Account",
-			"result"=>0,
-			"uri"=>".?t=Adm&a=ADe",
-			"desc"=>"Delete Account for ".$login." sucessfull");			
-		return;		
+		$xml->asXML($xml_infos);		
+		return true;		
 	}
 
 	/**
@@ -446,15 +410,18 @@ class Account extends Page
 	}
 	
 	
-	public function get_acc(){			
+	public function get_acc($login){	
+		if( !CurrentUser::$admin && $login != CurrentUser::$account->login ){
+			throw new jsonRPCException('Insufficients rights');
+		}
+		$account = new Account($login);	
 		$acc=array();
-		$acc['login']		= $this->login;
-		$acc['password']	= $this->password;
-		$acc['name']		= $this->name;
-		$acc['email']		= $this->email;
-		$acc['language']	= $this->language;
-		$acc['key']			= $this->key;
-		$acc['groups']		= $this->groups;
+		$acc['login']		= $account->login;
+		$acc['name']		= $account->name;
+		$acc['email']		= $account->email;
+		$acc['language']	= $account->language;
+		$acc['key']		= $account->key;
+		$acc['groups']		= $account->groups;
 
 		return $acc;
 	}
@@ -470,7 +437,6 @@ class Account extends Page
 		
 		$xml_infos	=	CurrentUser::$accounts_file;
 		$xml		=	simplexml_load_file($xml_infos);
-
 		foreach( $xml as $account ){
 			$new_acc=array();
 			
@@ -511,16 +477,15 @@ class Account extends Page
 				}
 			}
 		}
-
 		return $rights;
 	}
 	 
 	 public function toHTML($addUser=null) {
 		echo "<div class='row-fluid'>\n";
 		if ($addUser) {
-			echo "<form id='adminaccount-form' class='form-horizontal' method='post' action='?t=Adm&a=Acc'>\n";
+			echo "<form id='adminaccount-form' class='form-horizontal' method='post' action='WS_Account.edit'>\n";
 		}else{
-			echo "<form id='account-form' class='form-horizontal' method='post' action='?t=MyA'>\n";
+			echo "<form id='account-form' class='form-horizontal' method='post' action='WS_Account.edit'>\n";
 		}	 
 		echo "<legend>".Settings::_("account","account")."</legend>\n";		
 		echo "<fieldset>\n";			

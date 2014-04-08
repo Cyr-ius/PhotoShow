@@ -214,7 +214,7 @@ class Judge
 	 * @return void
 	 * @author Thibaud Rohmer
 	 */
-	public function save(){
+	private function save(){
 		
 		/// Create xml
 		$xml		=	new SimpleXMLElement('<rights></rights>');
@@ -250,10 +250,7 @@ class Judge
 
 		/// Just to be sure, check that user is admin
 		if(!CurrentUser::$admin) {
-			Json::$json = array("action"=>"Judge",
-				"result"=>1,
-				"desc"=>"Error : No Rights");			
-			return;
+			throw new jsonRPCException('Insufficients rights');
 		}
 
 		// Create new Judge, no need to read its rights
@@ -272,11 +269,7 @@ class Judge
 		
 		// Save the Judge
 		$rights->save();
-		Json::$json = array("action"=>"Judge",
-			"result"=>0,
-			"uri"=>".?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Rights",
-			"desc"=>"Edit permissions succesfull");	
-		return;
+		return true;
 	}
 	
 	/**
@@ -366,7 +359,7 @@ class Judge
 
 	public function toHTML() {
 		echo "<div class='row-fluid'>";
-		echo "<form id='admintype-form' class='form-inline' action='?f=$this->webpath&t=Adm&a=RTy' method='post'>\n";
+		echo "<form id='admintype-form' class='form-inline' action='WS_Judge.rights' method='post'>\n";
 		echo "<fieldset>\n";
 		
 		if($this->public){
@@ -376,6 +369,7 @@ class Judge
 			echo "</div>";		
 			echo "</fieldset>\n";
 			echo "<input type='hidden' name='type' value='Pri'></input>";
+			echo "<input type='hidden' name='path' value='".CurrentUser::$path."'/>";
 			echo "</form>";
 			return;
 		}else{
@@ -384,12 +378,17 @@ class Judge
 			echo "<button type='button' class='btn btn-primary '>".Settings::_("judge","gopub")."</button>";	
 			echo "</div>";			
 			echo "<input type='hidden' name='type' value='Pub'></input>";
+			echo "<input type='hidden' name='path' value='".CurrentUser::$path."'/>";			
 		}
-
+		
 		echo "</fieldset>\n";
 		echo "</form>";
-		echo "<form id='adminrights-form' class='form-horizontal' action='?f=$this->webpath&t=Adm&a=Rig' method='post'>\n";
+		echo "<form id='adminrights-form' class='form-horizontal' action='WS_Judge.rights' method='post'>\n";
 		echo "<fieldset>\n";
+		echo "<input type='hidden' name='type' value='Pri'></input>";	
+		echo "<input type='hidden' name='path' value='".CurrentUser::$path."'/>";			
+		echo "<input type='hidden' name='users' value=''/>";			
+		echo "<input type='hidden' name='groups' value=''/>";			
 		echo "<legend>".Settings::_("judge","accounts")."</legend>\n";
 
 		foreach(Account::findAll() as $account){
@@ -400,7 +399,7 @@ class Judge
 				$checked = "";
 			}
 
-			echo "<div><label><input type='checkbox' value='".$account['login']."' name='users[]' $checked >".htmlentities($account['login'], ENT_QUOTES ,'UTF-8')."</label></div>";
+			echo "<div><label><input type='checkbox' value='".$account['login']."' name='users' $checked >".htmlentities($account['login'], ENT_QUOTES ,'UTF-8')."</label></div>";
 		}
 		
 		echo "<legend>".Settings::_("judge","groups")."</legend>\n";		
@@ -415,15 +414,11 @@ class Judge
 				$checked = "";
 			}
 
-			echo "<div><label><input type='checkbox' value='".$group['name']."' name='groups[]' $checked > ".htmlentities($group['name'], ENT_QUOTES ,'UTF-8')." </label></div>";
+			echo "<div><label><input type='checkbox' value='".$group['name']."' name='groups' $checked > ".htmlentities($group['name'], ENT_QUOTES ,'UTF-8')." </label></div>";
 		}
-		echo "<input type='hidden' name='type' value='Pri'></input>";			
 		echo "<fieldset>\n
 			</form>\n
 			</div>\n";			
 	}
-	
-
-
 }
 ?>

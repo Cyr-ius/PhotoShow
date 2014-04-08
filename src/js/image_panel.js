@@ -49,7 +49,6 @@ function init_image_panel(){
 	}
 	
 	init_image_bar();
-	
 	$('img.lazy').lazyload({effect : "fadeIn",container:$(".linear_panel"),threshold : 200});
 	
 	// On mousewheelling
@@ -66,6 +65,8 @@ function init_image_panel(){
  * Initialise the image bar
  */
 function init_image_bar(){
+
+	$('#spacer').heightauto();
 
 	// On clicking the bigimage
 	$(".bigimage a, .image_bar #back").unbind();
@@ -197,6 +198,9 @@ function init_image_bar(){
 		clearInterval(scrollLeftLoop);
 	});	
 	
+	//~ $('video').mediaelementplayer({defaultVideoHeight: '100%'});
+
+   
 	$(".linear_panel").scrollTo($(".linear_panel .selected")).scrollTo("-="+($(".linear_panel").width()-145)/2);	
 	init_slideshow_panel();	
 	

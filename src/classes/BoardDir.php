@@ -53,6 +53,9 @@ class BoardDir implements HTMLObject
 	/// Images representing the dir
 	public $images;
 	
+	/// Number of albums
+	public $count_albums;
+	
 	/**
 	 * Construct BoardItem
 	 *
@@ -63,6 +66,8 @@ class BoardDir implements HTMLObject
 	public function __construct($dir,$img=array()){
 		$this->path 	= 	$dir;
 		$this->url		=	urlencode(File::a2r($dir));
+		$this->count_albums=count(Menu::list_dirs(dirname($this->path)));	
+		
 		if(sizeof($img) == 0){
 			$this->images 	= array();
 		}else{
@@ -87,7 +92,7 @@ class BoardDir implements HTMLObject
 			$getafile=	"";
 		}	
 
-		echo "\t<li class='dir_img img-rounded ui-draggable ui-droppable directory' style='
+		echo "\t<li class='img-rounded directory' style='
 				margin-bottom:50px;
 				background: 		url(\"$getfile\") no-repeat center center;
 				-webkit-background-size: cover;

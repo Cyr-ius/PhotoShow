@@ -91,12 +91,9 @@ class CurrentUser
 
 		CurrentUser::$tokens_file	=	Settings::$conf_dir."/guest_tokens.xml";
 
+		/// Authentiated User
 		if(isset($_GET['login']) && isset($_GET['pass'])){
-			try{
-				CurrentUser::login(stripslashes($_GET['login']),stripslashes($_GET['pass']));
-			}catch(Exception $e){
-
-			}
+			CurrentUser::login(stripslashes($_GET['login']),stripslashes($_GET['pass']));
 		}
 	
 		///Check Token
@@ -153,108 +150,59 @@ class CurrentUser
 
 				case "Page"	:
 				case "Img"	:
-				case "Vid"		:
+				case "Vid"	:
+				case "Reg"	:
+				case "Log"	:
+				case "Com"	:
+				case "Rights"	:
+				case "Token"	:
+				case "Exif"	:
+				case "MyA"	:
+				case "Adm"	:
+				case "MkD"	:
+				case "MvD"	:
 				case "Thb"	:	CurrentUser::$action=$_GET['t'];
 								break;
-
 				case "Big"	:
 				case "BDl"	:
 				case "Zip"	:	if(!Settings::$nodownload){
 									CurrentUser::$action=$_GET['t'];
 								}
 								break;
-
-
-				case "Reg"	:	if(isset($_POST['login']) && isset($_POST['password'])){
-									Account::create($_POST['login'],$_POST['password'],$_POST['verif']);
-									CurrentUser::login($_POST['login'],$_POST['password']);
-									break;
-								}
-
-				case "Log"	:	if(isset($_SESSION['login'])){
-									CurrentUser::logout();
-									break;
-								}
-
-								if(isset($_POST['login']) && isset($_POST['password'])){
-									CurrentUser::login($_POST['login'],$_POST['password']);
-								}
-
-								if(!isset(CurrentUser::$account)){
-									CurrentUser::$action = $_GET['t'];
-								}
-
-								break;
-								
-
-				case "MyA"	:	if(isset($_POST['old_password'])){
-									Account::edit($_POST['login'],$_POST['old_password'],$_POST['password'],$_POST['name'],$_POST['email'],NULL,$_POST['language']);
-									unset($_POST['old_password']);
-								}
-								
-								if(isset($_POST['edit'])){
-									Account::edit($_POST['login'],$_POST['old_password'],$_POST['password'],$_POST['name'],$_POST['email'],NULL,$_POST['language']);
-								}
-								
-								CurrentUser::$action = "MyA";
-								break;
-
-				case "Adm"	:	if(CurrentUser::$admin || CurrentUser::$uploader){
-									CurrentUser::$action = "Adm";
-								}
-								break;
-
-				case "Com"	:	Comments::add(CurrentUser::$path,$_POST['content'],$_POST['login']);
-								CurrentUser::$action = "Com";
-								break;
-
-				case "Rights"	:	CurrentUser::$action = "Rights";
-								break;
-								
-				case "Token"	:	CurrentUser::$action = "Token";
-								break;
-								
-				case "Exif"	:	CurrentUser::$action = "Exif";
-								break;	
-
-				case "MkD"	:	CurrentUser::$action = "MkD";
-								break;
-								
-				case "MvD"	:	CurrentUser::$action = "MvD";
-								break;	
-				
 				default		:	CurrentUser::$action = "Page";
 								break;
 			}
 		}else{
 			CurrentUser::$action = "Page";
 		}
+		
 
-		if(isset($_GET['a']) && CurrentUser::$action != "Adm"){
-			if(CurrentUser::$admin || CurrentUser::$uploader){
-				new Admin();
-			}
-		}
+
+		//~ if(isset($_GET['a']) && CurrentUser::$action != "Adm"){
+			//~ if(CurrentUser::$admin || CurrentUser::$uploader){
+				//~ new Admin();
+			//~ }
+		//~ }
 
 		if(isset($_GET['j'])){
 			CurrentUser::$action =	"JS";
 		}
-
 
 		/// Set default action
 		if(!isset(CurrentUser::$action)){
 			CurrentUser::$action = "Page";
 		}
 
-		/// Throw exception if accounts file is missing
-		if(!file_exists(CurrentUser::$accounts_file)){
-			throw new Exception("Accounts file missing",69);
-		}
-
 		/// Create Group File if it doesn't exist
 		if(!file_exists(CurrentUser::$groups_file)){
 			Group::create_group_file();
 		}
+		
+		/// Throw exception if accounts file is missing
+		if(!file_exists(CurrentUser::$accounts_file)){
+			//~ throw new Exception("Accounts file missing",69);
+			Index::$welcome = true;
+		}		
 
 		if(isset(CurrentUser::$account)){
 			CurrentUser::$admin = in_array("root",CurrentUser::$account->groups);
@@ -270,9 +218,7 @@ class CurrentUser
 	 * @author Thibaud Rohmer
 	 */
 	public static function login($login,$password){
-
 		CurrentUser::$admin	=	false;
-
 		$acc =	new Account($login);
 
 		// Check password
@@ -281,10 +227,7 @@ class CurrentUser
 			CurrentUser::$account	=	$acc;
 			$_SESSION['token']      =   NULL;
 		}else{
-			// Wrong password
-			Json::$json = array("action"=>"CurrentUser",
-				"result"=>1,
-				"desc"=>"Error : user or password incorrect");							
+			// Wrong password						
 			return false;
 		}
 		if(in_array('root',$acc->groups)){
@@ -293,10 +236,6 @@ class CurrentUser
 		if(in_array('uploaders',$acc->groups)){
 			CurrentUser::$uploader = true;
 		}
-		Json::$json = array("action"=>"CurrentUser",
-			"result"=>0,
-			"pathn"=>File::a2r(CurrentUser::$path),
-			"desc"=>"Authnetification sucessfull");
 		return true;
 	}
 
@@ -343,6 +282,7 @@ class CurrentUser
 		CurrentUser::$admin 	= false;
 		CurrentUser::$uploader 	= false;
 		session_unset();
+		return true;
 	}
 
 }

@@ -123,7 +123,11 @@ class Settings extends Page
 	static private $l33t 		=	false;
 	
 	/// Extensions
-	static public $allowedExtensions = array("tiff","jpg","jpeg","gif","png","flv","mov","mpg","mp4","ogv","mts","3gp","webm","avi","wmv","mpeg");
+	static public $allowedExtImages = array("tiff","jpg","jpeg","gif","png");
+	static public $allowedExtVideos = array("flv","mov","mpg","mp4","ogv","ogg","mts","3gp","webm","avi","wmv","mpeg");
+	static public $allowedExtFiles = array("zip");
+	static public $allowedExtensions = array();
+
 
 	/**** Other ****/
 
@@ -156,7 +160,8 @@ class Settings extends Page
 	 * 
 	 */
 	public function __construct(){
-		$this->folders = Menu::list_dirs(Settings::$photos_dir,true);
+		//~ $this->folders = Menu::list_dirs(Settings::$photos_dir,true);
+		//~ $allowedExtensions = array_merge($allowedExtImages,$allowedExtVideos,$allowedExtFiles);	
 	}
 
 	/**
@@ -172,8 +177,6 @@ class Settings extends Page
 		/// Settings already created
 		if(Settings::$photos_dir !== NULL && !$forced) return;
 
-		
-
 		/// Load config.php file 
 		if (!isset($config_file)){
 		    $config_file		=	realpath(dirname(__FILE__)."/../../config.php");
@@ -183,12 +186,12 @@ class Settings extends Page
 		}
 
 		/// Setup variables
-		Settings::$photos_dir			=	$config->photos_dir;
+		Settings::$photos_dir		=	$config->photos_dir;
 		Settings::$ps_generated		=	$config->ps_generated;
 		Settings::$thumbs_dir		=	$config->ps_generated."/Thumbs/";
 		Settings::$conf_dir			=	$config->ps_generated."/Conf/";
-		Settings::$admin_settings_file	= $config->ps_generated."/Conf/admin_settings.ini";
-		Settings::$timezone 			= $config->timezone;
+		Settings::$admin_settings_file	= 	$config->ps_generated."/Conf/admin_settings.ini";
+		Settings::$timezone 		= 	$config->timezone;
 
 		/// Set TimeZone
 		date_default_timezone_set(Settings::$timezone);
@@ -212,7 +215,7 @@ class Settings extends Page
 			}
 		}
 
-		// Get Admin Settings
+		// Get Admin Settings in file
 		if(file_exists(Settings::$admin_settings_file)){
 			$admin_settings = parse_ini_file(Settings::$admin_settings_file);
 
@@ -235,10 +238,17 @@ class Settings extends Page
 				Settings::$site_address	=	Settings::$site_address."/";
 			}
 			
-			if(isset($admin_settings['allowedExtensions'])){
-				Settings::$allowedExtensions	=	explode(',',$admin_settings['allowedExtensions']);
+			if(isset($admin_settings['allowedExtImages'])){
+				Settings::$allowedExtImages	=	explode(',',$admin_settings['allowedExtImages']);
 			}			
-
+			if(isset($admin_settings['allowedExtVideos'])){
+				Settings::$allowedExtVideos	=	explode(',',$admin_settings['allowedExtVideos']);
+			}
+			if(isset($admin_settings['allowedExtFiles'])){
+				Settings::$allowedExtFiles	=	explode(',',$admin_settings['allowedExtFiles']);
+			}	
+			
+			Settings::$allowedExtensions = array_merge(Settings::$allowedExtImages,Settings::$allowedExtVideos,Settings::$allowedExtFiles);			
 			Settings::$like 			=	isset($admin_settings['like']);
 			Settings::$plusone 		=	isset($admin_settings['plusone']);
 			Settings::$noregister	=	isset($admin_settings['noregister']);
@@ -361,7 +371,9 @@ class Settings extends Page
 	    "thumbs_fixed_width",
             "loc",
             "l33t",
-	    "allowedExtensions",
+	    "allowedExtImages",
+	    "allowedExtVideos",
+	    "allowedExtFiles",
             "reverse_menu",
             "hide_menu",
 	    "encode_video",
@@ -377,11 +389,7 @@ class Settings extends Page
 			}
 		}
 		fclose($f);
-		Settings::init(true);	
-		Json::$json = array("action"=>"Settings",
-					"result"=>0,
-					"uri"=>".?t=Adm&a=Set",
-					"desc"=>"Save settings");				
+		Settings::init(true);					
 	}
 
 	/**
@@ -404,10 +412,6 @@ class Settings extends Page
 			/// Generate webimg
 			Provider::image($file,false,false,false);
 		}
-		Json::$json = array("action"=>"Settings",
-					"result"=>0,
-					"uri"=>".?t=Adm&a=Set",
-					"desc"=>"Generate Thumbnails finished");
 		return;
 	}
 	
@@ -422,10 +426,6 @@ class Settings extends Page
 		foreach($files as $file){
 			@unlink($file);
 		}	
-		Json::$json = array("action"=>"Settings",
-			"result"=>0,
-			"uri"=>".?t=Adm&a=Set",
-			"desc"=>"Cleanup Thumbnails finished");	
 		return;
 	}	
 
@@ -437,7 +437,7 @@ class Settings extends Page
 	echo "<div class='row-fluid'>\n";
 		echo "<h3>".Settings::_("settings","settings")."</h3>\n";
 		echo "<div class='well'>\n";
-		echo "<form id='setting-form' class='form-horizontal' action='?t=Adm&a=Set' method='post'>\n";
+		echo "<form id='setting-form' class='form-horizontal' action='WS_MgmtFF.saveset' method='post'>\n";
 		echo "<legend>Global</legend>\n";
 		echo "<fieldset>\n";
 		/// Site Title
@@ -471,9 +471,6 @@ class Settings extends Page
 		echo "<label for='site_address' class='control-label'>".Settings::_("settings","site_address")."</label>";
 		echo "<div class='controls'><input id='site_address' class='input-large' type='text' name='site_address' value='".htmlentities(Settings::$site_address, ENT_QUOTES ,'UTF-8')."'></div>\n";
 		echo "</div>\n";		
-		echo "<div class='controls controls-row'>\n";
-		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("settings","submit")."'>\n";
-		echo "</div>\n";
 		echo "</fieldset>\n";	
 
 		///Infos
@@ -506,13 +503,14 @@ class Settings extends Page
 		echo "<legend>Extensions</legend>\n";
 		echo "<fieldset>\n";
 		echo "<div class='control-group'>\n";
-		echo "<label for='allowedExtensions' class='control-label'>".Settings::_("settings","extensions")."</label>";
-		echo "<div class='controls'><input id='allowedExtensions' class='input-xxlarge' type='text' name='allowedExtensions' value='".htmlentities(implode(',',Settings::$allowedExtensions), ENT_QUOTES ,'UTF-8')."'></div>\n";		
+		echo "<label for='allowedExtImages' class='control-label'>".Settings::_("settings","extImages")."</label>";
+		echo "<div class='controls'><input id='allowedExtImages' class='input-xxlarge' type='text' name='allowedExtImages' value='".htmlentities(implode(',',Settings::$allowedExtImages), ENT_QUOTES ,'UTF-8')."'></div>\n";		
+		echo "<label for='allowedExtVideos' class='control-label'>".Settings::_("settings","extVideos")."</label>";
+		echo "<div class='controls'><input id='allowedExtVideos' class='input-xxlarge' type='text' name='allowedExtVideos' value='".htmlentities(implode(',',Settings::$allowedExtVideos), ENT_QUOTES ,'UTF-8')."'></div>\n";		
+		echo "<label for='allowedExtFiles' class='control-label'>".Settings::_("settings","extFiles")."</label>";
+		echo "<div class='controls'><input id='allowedExtFiles' class='input-xxlarge' type='text' name='allowedExtFiles' value='".htmlentities(implode(',',Settings::$allowedExtFiles), ENT_QUOTES ,'UTF-8')."'></div>\n";		
 		echo "</div>\n";
 		echo "</fieldset>\n";
-
-
-
 		echo "<legend>Options</legend>\n";
 		echo "<fieldset>\n";
 		echo "<div class='control-group'>\n";
@@ -550,9 +548,6 @@ class Settings extends Page
 		echo "<div class='control-group'>\n";		
 		echo "<label for='sens' class='control-label'>".Settings::_("settings","sens")."</label>";
 		echo "<div class='controls'><input id='sens' class='input-large' type='text' name='max_img_dir' value='".htmlentities(Settings::$max_img_dir, ENT_QUOTES ,'UTF-8')."'></div>\n";
-		echo "</div>\n";
-		echo "<div class='controls controls-row'>\n";
-		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("settings","submit")."'>\n";
 		echo "</div>\n";		
 		echo "</fieldset>\n";		
 
@@ -568,10 +563,7 @@ class Settings extends Page
 		echo "<div class='control-group'>\n";		
 		echo "<label for='fbappid' class='control-label'>".Settings::_("settings","facebook_appid")."</label>";
 		echo "<div class='controls'><input id='fbappid' class='input-large' type='text' name='fbappid' value='".htmlentities(Settings::$fbappid, ENT_QUOTES ,'UTF-8')."'></div>\n";
-		echo "</div>\n";		
-		echo "<div class='controls controls-row'>\n";
-		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("settings","submit")."'>\n";
-		echo "</div>\n";		
+		echo "</div>\n";				
 		echo "</fieldset>\n";		
 		
 		echo "<legend>Video</legend>\n";
@@ -588,7 +580,7 @@ class Settings extends Page
 		echo "<div class='controls'>";
 			echo "<select id='encode_type' name='encode_type' class='input-xxlarge'>\n";
 				if (Settings::$encode_type=='mp4') {echo "<option value='mp4' selected>mp4</option>\n"; } else {echo "<option value='mp4'>mp4</option>\n";}
-				if (Settings::$encode_type=='ogg') {echo "<option value='ogg' selected>ogg</option>\n"; } else {echo "<option value='ogv'>ogv</option>\n";}
+				if (Settings::$encode_type=='ogg') {echo "<option value='ogg' selected>ogg</option>\n"; } else {echo "<option value='ogg'>ogg</option>\n";}
 				if (Settings::$encode_type=='webm') {echo "<option value='webm' selected>webm</option>\n"; } else {echo "<option value='webm'>webm</option>\n";}
 			echo "</select>\n";
 		echo "</div>\n";
@@ -602,24 +594,21 @@ class Settings extends Page
 		echo "<div class='control-group'>\n";		
 		echo "<label for='ffmpeg_option' class='control-label'>".Settings::_("settings","ffmpeg_option")."</label>";
 		echo "<div class='controls'><input id='ffmpeg_option' class='input-xxlarge' type='text' name='ffmpeg_option' value='".htmlentities(Settings::$ffmpeg_option, ENT_QUOTES ,'UTF-8')."'></div>\n";
-		echo "</div>\n";
-		echo "<div class='controls controls-row'>\n";
-		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("settings","submit")."'>\n";
-		echo "</div>\n";		
+		echo "</div>\n";	
 		echo "</fieldset>\n";		
 		echo "</form>\n";			
 		echo "</div>\n";
 
 		echo "<h3>".Settings::_("settings","admthumbs")."</h3>\n";
 		echo "<div class='well'>\n";
-		echo "<form id='gthumb-form' class='form-horizontal' action='?t=Adm&a=GTh' method='post'>\n";
+		echo "<form id='gthumb-form' class='form-horizontal' action='WS_MgmtFF.mgmt_thumbs' method='post'>\n";
 			echo "<fieldset>\n";
 				echo "<div class='control-group'>\n";		
 					echo "<label for='ffmpeg_path' class='control-label'>".Settings::_("settings","folder")."</label>";
 					echo "<div class='controls'>";
 						echo "<select name='path' class='input-xxlarge'>";
 						echo "<option value='.'>".Settings::_("settings","all")."</option>";
-							foreach($this->folders as $f){
+							foreach(Menu::list_dirs(Settings::$photos_dir,true) as $f){
 								$p = htmlentities(File::a2r($f), ENT_QUOTES ,'UTF-8');
 								echo "<option value=\"".addslashes($p)."\">".basename($p)."</option>";
 							}
@@ -627,8 +616,8 @@ class Settings extends Page
 					echo "</div>\n";
 				echo "</div>\n";
 				echo "<div class='control-group'>\n";
-					echo "<label class='checkbox'><input type='checkbox' name='DAl'>".Settings::_("settings","delthumb")."</label>\n";
-					echo "<label class='checkbox'><input type='checkbox' name='GAl'>".Settings::_("settings","genthumb")."</label>\n";
+					echo "<label class='checkbox'><input type='checkbox' name='type[]' value='clean'>".Settings::_("settings","delthumb")."</label>\n";
+					echo "<label class='checkbox'><input type='checkbox' name='type[]' value='create'>".Settings::_("settings","genthumb")."</label>\n";
 
 				echo "</div>\n";
 				echo "<div class='controls controls-row'>\n";

@@ -68,6 +68,7 @@ if ($('.mCSB_container').length==0){
 		}
 		$(this).parent().parent('ul').find('li').removeClass("active selected");
 		$(this).parent().addClass("active selected");	
+		//~ $(this).parent().draggable('disable');
 		url = $(this).attr("href");
 		update_url(url);
 		$('.bigpanel,.panel').hide();

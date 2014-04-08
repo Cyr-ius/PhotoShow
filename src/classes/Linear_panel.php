@@ -83,15 +83,19 @@ class Linear_panel implements HTMLObject
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){		
-		$rslt_grid = Board::grid($this->files);
-		echo "<div id='linear_panel' class='linear_panel'>";
-		echo "<div id='sscrollLeft' style='position: fixed; margin-left: -20px; padding-top: 50px;height:120px'><span class='icon-backward'></span></div>";
-		echo "<div id='sscrollRight' style='position: fixed; right: 0px; padding-top: 50px;height:120px'><span class='icon-forward'></span></div>";
-		echo "<ul class='thumbnails'>\n";
-		foreach($rslt_grid as $boardline){
+	    $rslt_grid = Board::grid($this->files);
+	    echo "<div id='linear_panel' class='linear_panel'>\n
+		<div id='sscrollLeft' style='position:fixed !important;margin-left:-20px;margin-top:50px;'><span class='icon-backward'></span></div>
+		<div id='sscrollRight' style='position:fixed !important;margin-left:-20px;margin-top:50px;right:0px;'><span class='icon-forward'></span></div>
+		<ul class='thumbnails'>\n";
+		foreach($rslt_grid['Images'] as $boardline){
 			$boardline->toHTML();
 		}
-		echo "</ul>\n";
+		foreach($rslt_grid['Videos'] as $boardline){
+			$boardline->toHTML();
+		}		
+		echo "</ul>\n";	
+		echo "";
 		echo "</div>\n";
 	}
 

@@ -71,10 +71,10 @@
  		echo "<div style='text-align:center;'>";
 		echo "<p><img src='inc/me.jpg' width='150px' align='center' style='border-radius:5px; -moz-border-radius:5px;'></p>";
  		echo "<ul class='breadcrumb'>";
- 		echo "<li><a href='mailto:thibaud.rohmer@gmail.com'>Email</a></li>\n";
+ 		echo "<li><a href='mailto:cedric.levasseur@ipocus.net'>Email</a></li>\n";
  		echo "<li><a href='http://twitter.com/#osi_iien'>Twitter</a></li>\n";
- 		echo "<li><a href='https://github.com/thibaud-rohmer/'>GitHub</a></li>\n";
- 		echo "<li><a href='https://plus.google.com/114933352963292387937/about'>Google Profile</a></li>\n";
+ 		echo "<li><a href='https://github.com/Cyr-ius/PhotoShow'>GitHub</a></li>\n";
+ 		//~ echo "<li><a href='https://plus.google.com/114933352963292387937/about'>Google Profile</a></li>\n";
  		echo "</ul>\n";
 		echo "</div>\n";		
 
@@ -84,14 +84,14 @@
  		echo "<li>Tweet/Post/Blog/Whatever about it (#photoshow)</li>\n";
  		echo "<li></li>";
 		echo "</ul>\n";		
-		echo "<ul style='text-align:center;'>";
- 		echo '<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-		<input type="hidden" name="cmd" value="_s-xclick">
-		<input type="hidden" name="hosted_button_id" value="EJCH63L4226YN">
-		<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-		<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-		</form>';
-		echo "</ul>\n";
+		//~ echo "<ul style='text-align:center;'>";
+ 		//~ echo '<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+		//~ <input type="hidden" name="cmd" value="_s-xclick">
+		//~ <input type="hidden" name="hosted_button_id" value="EJCH63L4226YN">
+		//~ <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+		//~ <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+		//~ </form>';
+		//~ echo "</ul>\n";
 		echo "</div>\n";
 
  	}

@@ -143,38 +143,14 @@ class File
 
 		$ext	=	self::Extension($file);
 		if(!isset($ext)){
-			return "folder";
+			return "Folder";
 		}
-
-		$types	=	array();
-		
-		$types['Image'][]	=	"png";
-		$types['Image'][]	=	"jpg";
-		$types['Image'][]	=	"jpeg";
-		$types['Image'][]	=	"tiff";
-		$types['Image'][]	=	"gif";
-		
-		$types['Video'][]	=	"flv";
-		$types['Video'][]	=	"mov";
-		$types['Video'][]	=	"mpg";
-		$types['Video'][]	=	"mp4";		
-		$types['Video'][]	=	"ogv";		
-		$types['Video'][]	=	"mts";		
-		$types['Video'][]	=	"3gp";		
-		$types['Video'][]	=	"webm";			
-		$types['Video'][]	=	"avi";			
-		$types['Video'][]	=	"wmv";			
-		$types['Video'][]	=	"mpeg";			
-		
-		
-		$types['File'][]	=	"xml";
-		
-		/// Find file type
-		foreach($types as $type=>$typetab){
-			if(in_array($ext,$typetab)){
-				return $type;
-			}
-		}
+		if (in_array($ext,Settings::$allowedExtImages)) 
+			return "Image";
+		if (in_array($ext,Settings::$allowedExtVideos))
+			return "Video";
+		if (in_array($ext,Settings::$allowedExtFiles) || $ext=='xml')
+			return "File";
 		return 0;
 
 	}
@@ -199,7 +175,7 @@ class File
 		if($rf==$rd) return "";
 		
 		if( substr($rf,0,strlen($rd)) != $rd ){
-			throw new Exception("This file $file is not inside the photos folder $dir !<br/>");
+			throw new jsonRPCException("This file $file is not inside the photos folder $dir !<br/>");
 		}
 		return ( substr($rf,strlen($rd) + 1 ) );
 	}

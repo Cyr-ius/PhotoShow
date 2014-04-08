@@ -111,6 +111,7 @@ class Provider
 	 */
 	public static function Video($file){
 
+		
 		if( !Judge::view($file)){
 		    return;
 		}
@@ -125,16 +126,17 @@ class Provider
 		    error_log('ERROR/Provider::Video - path:'.$path.' does not exist, using '.$file);
 		    return;
 		}
-		
+		error_log($path);
+		error_log(File::Type($path));
 		/// Check file type
 		if(!isset($path) || !File::Type($path) || File::Type($path) != "Video") {
 			return;
 		}		
-		
+		error_log('la');
 		$expires = 60*60*24*14;
 		$last_modified_time = filemtime($path); 
 		$etag = md5_file($file); 
-
+		error_log('READ/Provider::Video -Read '.$file);
 		header("Last-Modified: " .  gmdate('D, d M Y H:i:s', $last_modified_time) . " GMT");
 		header("Pragma: public");
 		header("Etag: $etag"); 

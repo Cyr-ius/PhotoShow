@@ -51,17 +51,7 @@ class Index
 	function __construct(){
 		/// Initialize variables
 		Settings::init();
-		
-		/// CurrentUser init() , load CurrentUser + Admin
-		try{
-			/// Initialize CurrentUser
-			CurrentUser::init();
-		}catch(Exception $e){
-			//~ $page = new RegisterPage(true);
-			//~ $page->toHTML();
-			//~ return;
-			Index::$welcome = true;
-		}
+		CurrentUser::init();
 
 		/// Check what to do
 		switch (CurrentUser::$action){
@@ -79,7 +69,7 @@ class Index
 							$page->toHTML();
 							break;
 							
-			case "AddAcc":	$page = new RegisterPage();
+			case "AddAcc"	:	$page = new RegisterPage();
 							$page->toHTML('AddAcc');
 							break;
 
@@ -136,9 +126,9 @@ class Index
 							$page->toHTML();
 							break;
 
-			case "JSon"	:	$page = new Json();
-							$page->toHTML();
-							return;
+			//~ case "JSon"	:	$page = new Json();
+							//~ $page->toHTML();
+							//~ return;
 		}
 	}
 }

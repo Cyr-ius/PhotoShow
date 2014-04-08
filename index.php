@@ -65,6 +65,7 @@ function my_autoload($class){
 	}else{
 		return FALSE;
 	}
+        require_once dirname(__FILE__).'/src/json-rpc/jsonRPC2Server.php';	
 }
 
 spl_autoload_register("my_autoload");
@@ -98,8 +99,7 @@ if (!get_magic_quotes_gpc()){
 
 if (!isset($_SESSION['login'])) {session_unset();}
 
-
-if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'text/xml'){
+if(preg_match("/application\/json/",$_SERVER['CONTENT_TYPE'])){
 	new API();
 }else{
 	new Index();

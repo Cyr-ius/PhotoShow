@@ -84,8 +84,8 @@ class Comment implements HTMLObject
 		echo "<div class='comment alert alert-info'>\n";
 		// Not implemented yet.
 		if(CurrentUser::$admin || $login == CurrentUser::$account->login){
-		echo "<form id='delcomment-form' action='?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Adm&a=CDe' method='post'>
-			<input type='hidden' id='path' name='path' value='".htmlentities(File::a2r($this->file), ENT_QUOTES ,'UTF-8')."'>
+		echo "<form id='delcomment-form' action='WS_Comment.delete' method='post'>
+			<input type='hidden' id='path' name='path' value='".htmlentities(CurrentUser::$path, ENT_QUOTES ,'UTF-8')."'>
 			<input type='hidden' id='date' name='date' value='$date'>
 			<button type='submit' class='close'>x</button>
 			</form>";

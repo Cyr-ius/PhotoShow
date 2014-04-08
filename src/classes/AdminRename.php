@@ -41,33 +41,23 @@
  */
 class AdminRename
 {
-	private $j;
-	private $isfile = false;
-
 	public function __construct(){
-
-		$file = CurrentUser::$path;
-		$this->file = $file;
-		if(is_file($this->file)){
-			$this->isfile = true;
-		}
-		$this->j = new Judge($this->file);
 	}
 	
 	public function toHTML(){
 		/// Folder name
 		echo "<div class='row-fluid'> \n
-		<form id='renamefolder-form' class='form-horizontal' action='?f=".urlencode(File::a2r($this->file))."&a=Mov' method='post'>\n
+		<form id='renamefolder-form' class='form-horizontal' action='WS_MgmtFF.rename' method='post'>\n
 		<fieldset>\n
 		<div class='control-group'>\n
 		<label for='folderrename' class='control-label'>".Settings::_("adminpanel","name")."</label>\n
-		<div class='controls'><input  id='folderrename' class='input-large' type='text' name='pathTo' value=\"".htmlentities(basename(File::a2r($this->file)), ENT_QUOTES ,'UTF-8')."\"></div>\n
+		<input type='hidden' name='pathFrom' value=\"".htmlentities(File::a2r(CurrentUser::$path), ENT_QUOTES ,'UTF-8')."\">
+		<div class='controls'><input  id='folderrename' class='input-large' type='text' name='pathTo' value=\"".htmlentities(basename(File::a2r(CurrentUser::$path)), ENT_QUOTES ,'UTF-8')."\"></div>\n
 		</div>\n
 		<div class='controls controls-row'>\n
 		<input class='btn btn-primary' type='submit' value='".Settings::_("adminpanel","rename")."'>
 		</div>\n					
-		<input type='hidden' name='move' value='rename'>
-		<input type='hidden' name='pathFrom' value=\"".htmlentities(File::a2r($this->file), ENT_QUOTES ,'UTF-8')."\">	
+			
 		</fieldset>\n
 		</form>\n
 		</div>\n";

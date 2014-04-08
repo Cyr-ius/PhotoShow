@@ -72,9 +72,9 @@ class RegisterPage extends Page
     public function toHTML($addUser=null){
 
 		if ($addUser) {
-			echo "<form id='adminregister-form' class='form-horizontal adduser' method='post' action='?t=Adm&a=AAc'>\n";
+			echo "<form id='adminregister-form' class='form-horizontal adduser' method='post' action='WS_Account.create'>\n";
 		}else{
-			echo "<form id='register-form' class='form-horizontal' method='post' action='?t=Reg'>\n";
+			echo "<form id='register-form' class='form-horizontal' method='post' action='WS_Account.register'>\n";
 		}
 		echo "<fieldset>\n";
 		echo "<legend>".Settings::_("account","createaccount")."</legend>\n";

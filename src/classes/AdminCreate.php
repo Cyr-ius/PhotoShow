@@ -41,31 +41,22 @@
  */
 class AdminCreate
 {
-	private $j;
-	private $isfile = false;
-
 	public function __construct(){
-
-		$file = CurrentUser::$path;
-		$this->file = $file;
-		if(is_file($this->file)){
-			$this->isfile = true;
-		}
-		$this->j = new Judge($this->file);
 	}
 	
 	public function toHTML() {
 		echo "<div class='row-fluid'>\n
-		<form id='createfolder-form' class='form-horizontal' action='?a=Upl&f=".urlencode(File::a2r($this->file))."' method='post'>\n
+		<form id='createfolder-form' class='form-horizontal' action='WS_MgmtFF.create' method='post'>\n
 		<fieldset>\n
 		<div class='control-group'>\n
 		<label for='foldername' class='control-label'>".Settings::_("adminpanel","name")."</label>\n
 		<div class='controls'><input class='input-large'  id='foldername' name='newdir' type='text' value='".Settings::_("adminpanel","new")."'></div>\n
+                <input type='hidden' name='path' value=\"".htmlentities(File::a2r(CurrentUser::$path), ENT_QUOTES ,'UTF-8')."\">
+		<div class='controls'><label class='checkbox'><input class='input-large'  id='folder_inherit' name='folder_inherit' type='checkbox' value='true' checked=checked />".Settings::_("settings","inherits_folder")."</label></div>\n
 		</div>\n
 		<div class='controls controls-row'>\n
 		<input class='btn btn-primary' type='submit' value='".Settings::_("adminpanel","create")."'>
 		</div>\n				
-		<input type='hidden' name='path' value=\"".htmlentities(File::a2r($this->file), ENT_QUOTES ,'UTF-8')."\">
 		</fieldset>
 		</form>
 		</div>";

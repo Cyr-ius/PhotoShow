@@ -117,26 +117,25 @@ class MainPage extends Page
 			if ($menu){ $this->menubar->toHTML();}
 		echo "</div>\n";
 
-		echo "<div id='content' class='container-fluid'>\n";
-			echo "<div class='row-fluid'>\n";
+		echo "<div id='content' class=''>\n";
+			echo "<div class=''>\n";
 				/// Start menu
-				echo "<div id='menu' class='span2 well menu'>\n";
+				echo "<div id='menu' class='well menu'>\n";
 				$this->menu->toHTML();
 				echo "</div>\n";
 				/// Stop menu		
-				echo "<div class='span10 loading hide'></div>";
-				echo "<div class='span10 bigpanel $this->bigpanel_visible'>\n";
+				echo "<div class='loading hide' style='width:81%;'></div>";
+				echo "<div class='bigpanel $this->bigpanel_visible' style='width:81%;'>\n";
 					echo "<div class='image_panel'>\n";
 					$this->image_panel->toHTML();
 					echo "</div>\n";
 					echo "<div class='well exif '></div>";
 					$this->imagebar->toHTML();
 					$this->linear_panel->toHTML();
-					
-					
 				echo "</div>\n";
+				
 				///Panel (include boardheader(title+button) , album , images , videos , comments)
-				echo "<div class='span10 container-fluid panel $this->panel_visible'>\n";
+				echo "<div class='panel $this->panel_visible' style='width:81%;'>\n";
 					if (Index::$welcome) {
 						echo "<h2>Welcome to Photoshow </h2>\n";
 						echo "<div id='welcome' class='well'>\n";

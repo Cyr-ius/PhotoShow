@@ -77,7 +77,7 @@ class Group
 				return;
 			}
 		}
-		throw new Exception("$name not found");
+		//~ throw new Exception("$name not found");
 	}
 
 	/**
@@ -89,9 +89,11 @@ class Group
 	public static function create_group_file(){
 			$xml=new SimpleXMLElement('<groups></groups>');
 			$xml->asXML(CurrentUser::$groups_file);
+			CurrentUser::$admin =true;
 			Group::create("root");
 			Group::create("uploaders");
 			Group::create("user");
+			CurrentUser::$admin =false;
 	}
 
 	/**
@@ -103,8 +105,13 @@ class Group
 	 * @author Thibaud Rohmer
 	 */
 	public static function create($name,$rights=array()){
+
+		if( !CurrentUser::$admin){
+			throw new jsonRPCException('Insufficient rights');
+		}
+	
 		if(!isset($name)||strlen($name)<1){
-			return;
+			throw new jsonRPCException('Name is too short or empty');
 		}
 		/// Check that groups file exists
 		if(!file_exists(CurrentUser::$groups_file)){
@@ -112,7 +119,7 @@ class Group
 		}
 		/// Check that group doesn't already exist
 		if(self::exists($name))
-			throw new Exception("$name already exists");
+			throw new jsonRPCException("$name already exists");
 
 		/// Load file
 		$xml		=	simplexml_load_file(CurrentUser::$groups_file);
@@ -125,11 +132,7 @@ class Group
 			$xml_right->addChild($r);
 		
 		$xml->asXML(CurrentUser::$groups_file);
-		Json::$json = array("action"=>"Group",
-			"result"=>0,
-			"uri"=>".?t=Adm&a=GC",
-			"desc"=>"Create Group $name sucessful");
-		return;		
+		return true;		
 	}
 	
 	/**
@@ -140,6 +143,11 @@ class Group
 	 * @author Thibaud Rohmer
 	 */
 	public static function delete($groupname){
+
+		if( !CurrentUser::$admin){
+			throw new jsonRPCException('Insufficient rights');
+		}
+	
 		$xml_infos 	=	CurrentUser::$groups_file;
 		$xml		=	simplexml_load_file($xml_infos);
 		
@@ -156,14 +164,12 @@ class Group
 		
 		if($found){
 			unset($xml->group[$i]);
+		} else {
+			throw new jsonRPCException('Group not found');
 		}
 
 		$xml->asXML($xml_infos);
-		Json::$json = array("action"=>"Group",
-			"result"=>0,
-			"uri"=>".?t=Adm&a=GDe",
-			"desc"=>"Delete Group $groupname sucessful");
-		return;			
+		return true;			
 	}
 
 	/**
@@ -188,8 +194,6 @@ class Group
 				return;
 			}
 		}
-		
-		throw new Exception("$this->name not found");
 	}
 	
 	/**

@@ -44,21 +44,19 @@
  class AdminAccount
  {
 
- 	/**
- 	 * Create about page
- 	 * 
- 	 * @author Cédric Levasseur
- 	 */
- 	public function __construct($login=null,$key=null){
-		$this->AdminLogin = $login;
+ 	public function __construct(){
  	}
 
  	/**
- 	 * Display upload page on website
+ 	 * Display Admin Account page on website
  	 * 
  	 * @author Cédric Levasseur
  	 */
  	public function toHTML(){
+		if (!CurrentUser::$admin){
+		    // Only admin can see the tokens for now
+		    return false;
+		}
 		 echo "<div class='row-fluid'>";
 			 echo "<div class='span6 well'>";
 				echo "<form id='adminchoiceaccount-form' class='form-horizontal' method='post' action='?t=Adm&a=AcC'>\n";
@@ -68,23 +66,17 @@
 					echo "<div class='control-group'>\n";
 					echo "<label for='login' class='control-label'>".Settings::_("account","editing")."</label>";
 					echo "<div class='controls'>
-							<select name='login' class='span12'>";
+							<select name='login' class='span12'>
+                                                         <option>--- Choice ---</option>";
 							foreach(Account::findall() as $a){
-								echo "<option value=\"".addslashes($a['login'])."\"";
-								if($this->login == $a['login']){
-									echo " selected ";
-								}
-								echo ">".$a['login']."</option>";
+								echo '<option value="'.addslashes($a['login']).'">'.$a['login'].'</option>';
 							}
 					echo "</select>
 						</div>\n";
 					echo "</div>\n";
-					echo "<div class='controls controls-row'>\n";
-					echo "<input class='btn btn-primary' type='submit' value='".Settings::_("login","submit")."'>\n";
-					echo "</div>\n";
 					echo "</fieldset>\n";		
 				echo "</form>\n";			
-				$a = new Account($this->AdminLogin);
+				$a = new Account();
 				$a->toHTML('addUser');
 			 echo "</div>\n";
 			 echo "<div class='span6 well'>";

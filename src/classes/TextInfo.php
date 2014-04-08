@@ -54,48 +54,56 @@ class TextInfo
 	public function __construct($f){
 		
 		if(!file_exists($f)){
-			return;
+			$f = CurrentUser::$path;
 		}
-		$this->file = $f;
-		self::Get_File($f);
-		self::Get_Contains();
+
+		$rslt = self::get($f);
+		$this->author = $rslt->author;
+		$this->contain = $rslt->contain;
+		$this->title = $rslt->title;
 	}
 	
 	/**
 	 */
-	private function Get_File($f){
+	public function get_path($f){
 				
 		$basefile	= 	new File($f);
 		$basepath	=	File::a2r($f);
 
-		$this->filename = $basefile->name;
-		$this->webpath 	= urlencode($basepath);
+		$filename = $basefile->name;
+		$webpath 	= urlencode($basepath);
 
 		if(is_file($f)){
 			$textfile	=	dirname($basepath)."/.".basename($f)."_textexplain.xml";
 		}else{
 			$textfile	=	$basepath."/.textexplain.xml";
 		}
-		$this->path =	File::r2a($textfile,Settings::$thumbs_dir);
+		$path =	File::r2a($textfile,Settings::$thumbs_dir);
+		return $path;
 
 	}
 	
 	/**
 	 */
-	private function Get_Contains(){
-		if (is_file($this->path))  {
-			$xml			=	simplexml_load_file($this->path);
-			$this->title		=	htmlspecialchars($xml->title, ENT_QUOTES ,'UTF-8');
-			$this->author 	= 	htmlspecialchars($xml->author, ENT_QUOTES ,'UTF-8');
-			$this->contain	= 	htmlspecialchars($xml->contain, ENT_QUOTES ,'UTF-8');
+	public function get($f){
+		$path = self::get_path($f);
+		if (is_file($path))  {
+			$xml		=	simplexml_load_file($path);
+			$txti->title	=	htmlspecialchars($xml->title, ENT_QUOTES ,'UTF-8');
+			$txti->author	=	htmlspecialchars($xml->author, ENT_QUOTES ,'UTF-8');
+			$txti->contain	=	htmlspecialchars($xml->contain, ENT_QUOTES ,'UTF-8');
+			return $txti;
+		} else {
+			return false;
 		}
+	
 	}
 
 	/**
 	 */
-	public static function Save_File($f ,$title=null,$author=null,$contain=null){
+	public static function create($f ,$title=null,$author=null,$contain=null){
 		
-		$ti = new TextInfo($f);
+		$path = self::get_path($f);
 		
 		/// Create xml
 		$xml		=	new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><infos></infos>');
@@ -105,33 +113,26 @@ class TextInfo
 		$xml->addChild('author',$author);
 		$xml->addChild('contain',$contain);
 		
-		if(!file_exists(dirname($ti->path))){
-			@mkdir(dirname($ti->path),0755,true);
+		if(!file_exists(dirname($path))){
+			@mkdir(dirname($path),0755,true);
 		}
 		/// Save xml
-		$xml->asXML($ti->path);
-		Json::$json = array("action"=>"TextInfo",
-					"result"=>0,
-					"uri"=>urlencode(File::a2r(CurrentUser::$path)),						
-					"desc"=>"Save information for album");					
-		return;		
+		$xml->asXML($path);				
+		return true;		
 	}
 	
-	public static function Delete_File($f) {
+	public static function delete($f) {
 	
 		/// Just to be sure, check that user is admin
 		if(!CurrentUser::$admin)
-			return;
+			return false;
 	
-		$ti = new TextInfo($f);
-		if(file_exists($ti->path)){
-			@unlink($ti->path);
-		}
-		Json::$json = array("action"=>"TextInfo",
-					"result"=>0,
-					"uri"=>urlencode(File::a2r(CurrentUser::$path)),						
-					"desc"=>"Delete information for album");					
-		return;			
+		$path = self::get_path($f);
+		if(file_exists($path)){
+			@unlink($path);			
+			return true;				
+		}  else { return false;}
+		
 	
 	}
 	
@@ -141,11 +142,10 @@ class TextInfo
 		/// Just to be sure, check that user is admin
 		if(!CurrentUser::$admin)
 			return;
-
-		$ti = new TextInfo($f);
+		$ti = self::get($f);
 		if (!isset($ti->author)) { $ti->author = CurrentUser::$account->login; }
 		
-		echo "<form id='editti-form' class='form-horizontal' action='?f=".File::a2r($f)."&t=Adm&a=Tis' method='post'>\n";
+		echo "<form id='editti-form' class='form-horizontal' action='WS_Textinfo.create' method='post'>\n";
 		echo "<fieldset>\n";
 		echo "<legend>Information</legend>\n
 			<div class='control-group'>\n
@@ -166,7 +166,7 @@ class TextInfo
 			<input id='f' type='hidden' name='f' value='$f' />\n";
 		echo "</fieldset>\n";
 		echo "</form>\n";
-		echo "<form id='delti-form' class='form-horizontal' action='?f=".File::a2r($f)."&a=Tid' method='post'>\n
+		echo "<form id='delti-form' class='form-horizontal' action='WS_Textinfo.delete' method='post'>\n
 			<input id='f' type='hidden' name='f' value='$f' />\n
 			<input id='button_clean'  type='submit'  class='btn btn-warning' value='".Settings::_("textinfo","delete")."' data-loading-text='Deleting...'/>
 			</form>\n";
@@ -176,13 +176,14 @@ class TextInfo
 	 */
 	public function toHTML(){
 		
+		 new TextInfo();
 		if(CurrentUser::$admin) {
 			echo "<div  class='well textinfoadmin'>\n";
-			self::Edit_File($this->file);
+			self::Edit_File(CurrentUser::$path);
 			echo "</div>\n";
 		}
 		
-		if (is_file($this->path) && !empty($this->contain) )  {
+		if ($this->contain)  {
 			echo "<div  class='well textinfo'>\n";
 			echo "<span>".nl2br($this->contain)."<p style='font-size:12px;text-align:right'>$this->author</p></span>";
 			echo "</div>\n";

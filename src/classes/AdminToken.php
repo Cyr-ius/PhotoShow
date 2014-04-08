@@ -58,36 +58,36 @@
  	 * @author Cédric Levasseur
  	 */
  	public function toHTML(){
-        if (!CurrentUser::$admin){
-            // Only admin can see the tokens for now
-            return false;
-        }
-	
-        echo "<div class='row-fluid'>";
-        echo "<div class='span12'>";
-        echo "<h3>".Settings::_("token","tokens")."</h3>\n";
-        
-        // We still want to display the title so the page is not empty
-        if ( !file_exists(CurrentUser::$tokens_file)){
-            return false;
-        }
-            echo "<table class='table table-striped well'>";
-            echo "<tbody>";
-		foreach(GuestToken::findAll() as $t){
-		    echo "<tr>";
-		    echo "<td>".$t['key']."<br/>".$t['path']."<br/><a href='".GuestToken::get_url($t['key'])."' >".GuestToken::get_url($t['key'])."</a></td>";
-		    echo "<td>";
-		    echo "<form id='deltoken' class='form-horizontal'  action='?t=Adm&a=DTk' method='post'>\n";
-		    echo "<input type='hidden' name='tokenkey' value='".$t['key']."' />";
-		    echo "<input type='submit' class='btn btn-primary' value='".Settings::_("token","deletetoken")."' />";
-		    echo "</form>";
-		    echo "</td>";
-		    echo "</tr>";
+		if (!CurrentUser::$admin){
+		    // Only admin can see the tokens for now
+		    return false;
 		}
-        echo "</tbody>";
-        echo "</table>";
-        echo "</div>\n";	
-        echo "</div>\n";		
+		
+		echo "<div class='row-fluid'>";
+		echo "<div class='span12'>";
+		echo "<h3>".Settings::_("token","tokens")."</h3>\n";
+		
+		// We still want to display the title so the page is not empty
+		if ( !file_exists(CurrentUser::$tokens_file)){
+		    return false;
+		}
+		    echo "<table class='table table-striped well'>";
+		    echo "<tbody>";
+			foreach(GuestToken::findAll() as $t){
+			    echo "<tr>";
+			    echo "<td>".$t['key']."<br/>".$t['path']."<br/><a href='".GuestToken::get_url($t['key'])."' >".GuestToken::get_url($t['key'])."</a></td>";
+			    echo "<td>";
+			    echo "<form id='deltoken-form' class='form-horizontal'  action='WS_Token.delete' method='post'>\n";
+			    echo "<input type='hidden' name='tokenkey' value='".$t['key']."' />";
+			    echo "<input type='submit' class='btn btn-primary' value='".Settings::_("token","deletetoken")."' />";
+			    echo "</form>";
+			    echo "</td>";
+			    echo "</tr>";
+			}
+		echo "</tbody>";
+		echo "</table>";
+		echo "</div>\n";	
+		echo "</div>\n";		
  	}
 
  }

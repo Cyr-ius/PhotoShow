@@ -41,7 +41,7 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-class JS extends Page
+class JS 
 {
 	
 	private $toPrint;
@@ -50,12 +50,9 @@ class JS extends Page
 
 	public function __construct(){
 
-		/// Execute stuff automagically
-		new Admin();
-
 		if(isset($_GET['j'])){
 			switch($_GET['j']){
-				case "ImI"	:
+                                case "ImI"        :
 				case "Pan"	:	if(is_file(CurrentUser::$path)){
 									$b = new ImagePanel(CurrentUser::$path);
 									$b->toHTML();
@@ -69,28 +66,29 @@ class JS extends Page
 								$m->toHTML();
 								break;	
 
-				case "MenBar":	$m = new MenuBar();
+				case "MenBar"	:	$m = new MenuBar();
 								$m->toHTML();
 								break;	
 
-				case "Item"	:	$item= new BoardItem(CurrentUser::$path,0);
+				case "Item"	:	$item= new BoardItem(CurrentUser::$path);
 								$item->toHTML();
 								break;	
+                                                                
+				case "Album"	:	$abm= new BoardDir(CurrentUser::$path);
+								$abm->toHTML();
+								break;	                                                                
 								
 				case "LinearP"	:	$lip= new Linear_panel(CurrentUser::$path);
 								$lip->toHTML();
 								break;
 								
-				case "JSon"	:	$f = new Json();
-								$f->toHTML();
-								break;								
+				case "Script"	:	$lip= new Scripts(CurrentUser::$path);
+								$lip->toHTML();
+								break;																
 
 				default:		break;
 			}
 		}
-	}
-
-	public function toHTML(){
 	}
 }
 

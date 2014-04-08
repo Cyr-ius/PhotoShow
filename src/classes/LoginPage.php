@@ -62,7 +62,7 @@ class LoginPage extends Page
 	 */
 	public function toHTML(){
 
-		echo "<form id='logins-form' class='form-horizontal'  method='post' action='?t=Log'>\n";
+		echo "<form id='logins-form' class='form-horizontal'  method='post' action='WS_Account.login'>\n";
 		echo "<fieldset>\n";		
 		/// Login
 		echo "<div class='control-group'>\n";

@@ -74,71 +74,57 @@ function init_admin(){
 		revert: 		true
 	});	
 	
-	$(".submenu,.directory").droppable({
+	$(".bin,.submenu,.directory").droppable({
 		hoverClass: "hovered",
 		drop: 	function(event, ui){
 						var dragg = ui.draggable;
+						obj =  ui.draggable;
 						dragg.draggable('option','revert',false);
 						from  =  dragg.children('span.path').text();
 						to 	  = $(this).children("span.path").text();
+						if (to=="bin") { var method="WS_MgmtFF.delete";}else{ var method="WS_MgmtFF.move";}
 						if($(dragg).hasClass("item")){
 							if($(dragg).hasClass("selected")){
 								$(".panel .item.selected").each(function(){
 									from = $(this).children(".path").text();
-									$.post(".?t=Adm&a=Mov&j=JSon",{'pathFrom' : from,'pathTo' : to, 'move':'directory'},function(data){
-										refresh(data.uri);
-										get_message(data.result,data.desc);										
-									});	
+									var obj = $(this);
+									var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[from,to],"id":"1"});
+									$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+									.done(function(data){
+										if (!data.error) {
+											obj.parent().parent().remove();
+										} else {
+											get_message(1,data.error.data.fullMessage);
+										}
+									});										
 								});
 							} else {
-								$.post(".?t=Adm&a=Mov&j=JSon",{'pathFrom' : from,'pathTo' : to, 'move':'directory'},function(data){
-									refresh(data.uri);
-									get_message(data.result,data.desc);
-								});	
+								var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[from,to],"id":"1"});
+								$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+								.done(function(data){
+									if (!data.error) {
+										$('.thumbs').masonry('remove',obj).masonry('layout');
+									} else {
+										get_message(1,data.error.data.fullMessage);
+									}
+								});
 							}
 						} else {
-							$.post(".?t=Adm&a=Mov&j=JSon",{'pathFrom' : from,'pathTo' : to, 'move':'directory'},function(data){
-								refresh(data.uri);
-								get_message(data.result,data.desc);	
+							var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[from,to],"id":"1"});
+							$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+							.done(function(data){
+								if (!data.error) {
+									$('.menu span:contains('+from+')').parent().remove();
+									$('.albums span:contains('+from+')').parent().remove();
+									$('.thumbs').masonry('layout');
+									$(".menu").load(".?j=Men&f="+encodeURI(currentpath),init_menu);
+								} else {
+									get_message(1,data.error.data.fullMessage);
+								}
 							});
 						}
 				}
 	});	
-
-	$(".bin").droppable({
-		hoverClass: "hovered",
-		drop: 	function(event, ui){
-						var dragg = ui.draggable;
-						dragg.draggable('option','revert',false);
-						file  = dragg.children('span.path').text();
-						var folder='';
-					//Delete  multiple files
-					 if($(dragg).hasClass("selected")){
-						$(".panel .item.selected").each(function(){
-							file = $(this).children(".path").text();
-							$.post(".?t=Adm&a=Del&j=JSon",{'del' : file },function(data){
-								refresh(data.uri);
-								get_message(data.result,data.desc);
-							});					
-						});
-						
-					}else{ 
-						//Delete file
-						if($(dragg).hasClass("item")){
-							$.post(".?t=Adm&a=Del&j=JSon",{'del' : file },function(data){
-								refresh(data.uri);
-								get_message(data.result,data.desc);
-							});	
-						}else{
-							//Delete folder
-							$.post(".?t=Adm&a=Del&j=JSon",{'del' : file },function(data){
-								refresh(data.uri);
-								get_message(data.result,data.desc);								
-							});							     	 
-						}
-					}
-				}
-	});
 
 	$(".groupitem").droppable({
 		hoverClass:  "hovered",
@@ -148,25 +134,38 @@ function init_admin(){
 						dragg.draggable('option','revert',false);
 						acc = dragg.children(".name").text();
 						group = $(this).children(".name").text();
-						$.post(".?t=Adm&a=AGA&j=JSon",{'acc' : acc, 'group' : group },function(data){
-							$("#ModalAdmin .modal-body").load(data.uri,init_admin);
-						});
+						var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_Account.add_group","params":[acc,group],"id":"1"});
+						$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+						.done(function(data){
+							if (!data.error) {
+								$(target+' .modal-body').load($(window).attr("url"),init_admin);
+							} else {
+								get_message(1,data.error.data.fullMessage);
+							}
+						});						
 					}
 				}
 	})
 	
-	$('#Abo,#Sta,#VTk,#Set,#Acc,#EdA').unbind();
-	$('#Abo,#Sta,#VTk,#Set,#Acc,#EdA').click(function(){
-		$(target+' .modal-body').load($(this).attr('href'),init_admin);
-	return false;		
-	});
+	$("a[data-toggle=modaladmin]").unbind();
+	$("a[data-toggle=modaladmin]").click(function() {
+		target = $(this).attr('data-target');
+		url = $(this).attr('data-href');		 
+		$(target+' .modal-body').load(url,init_admin);
+	 });	
 	
 	$("#adminchoiceaccount-form").unbind();
-	$("#adminchoiceaccount-form").submit(function(){
-		$.post($(this).attr('action'),$(this).serialize(),function(data){
-			$(target+' .modal-body').html(data);
-			init_admin();
-		});
+	$("#adminchoiceaccount-form").change(function(){
+		$form = $(this);
+		var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_Account.get","params":$form.serializeObject(),"id":"1"});
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		.done(function(data){
+			if (!data.error) {
+				populateForm("#adminaccount-form", JSON.parse(JSON.stringify(data.result)));
+			} else {
+				get_message(1,data.error.data.fullMessage);
+			}
+		});			
 	return false;	
 	});	
 
@@ -175,79 +174,115 @@ function init_admin(){
 	$("#bin").click(function(){
 		$(".panel .item.selected").each(function(){
 			file = $(this).children(".path").text();
-			$(".panel").load("?t=Adm&a=Del&j=Pan",{'del' : file },init);
-		});	
+			var obj = $(this);
+			var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_MgmtFF.delete","params":[file],"id":"1"});
+			$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+			.done(function(data){
+				if (!data.error) {
+					obj.parent().parent().remove();
+				} else {
+					get_message(1,data.error.data.fullMessage);
+				}
+			});
+		});
 	return false;
 	});	
 	
 	// Button Clean thumbnails (Menubar)
 	$("#button_thb").unbind();
 	$("#button_thb").click(function(){
-		$.post('?t=Adm&a=DAl&j=JSon',{'cleanpath': $('span.currentpath').text()},function(data,info){
+		$.post('?t=Adm&a=DAl',{'cleanpath': $('span.currentpath').text()},function(data,info){
 			get_message(data.result,data.desc);
 		});
 	});		
 	
-	//Comments
-	$('#comments-form,#delcomment-form').unbind();
-	$('#comments-form,#delcomment-form').submit(function(){
-		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data,info){
-			if (data.result ==0) {
-				$('#myModal .modal-body').load(data.uri,init_admin);
+	//Reload Modal-body
+ 	$('#gthumb-form,#delcomment-form,#createtoken-form,#deltoken-form,#delacc-form,#rmgroup-form,#rmacc-form,#creategroup-form,#delgroup-form,#adminregister-form,#adminaccount-form').unbind();
+	$('#gthumb-form,#delcomment-form,#createtoken-form,#deltoken-form,#delacc-form,#rmgroup-form,#rmacc-form,#creategroup-form,#delgroup-form,#adminregister-form,#adminaccount-form').submit(function(){
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		.done(function(data){
+			if (!data.error) {
+				$(target+' .modal-body').load($(window).attr("url"),init_actions);
+				get_message(0,"Action successful");
+			} else {
+				get_message(1,data.error.data.fullMessage);
 			}
-			get_message(data.result,data.desc);
 		});
 	return false;	
 	});	
-
-	//Json with reload page
-	$('#createfolder-form,#renamefolder-form').unbind();
-	$('#createfolder-form,#renamefolder-form').submit(function(){
-		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data,info){
-			refresh(data.uri);
-			get_message(data.result,data.desc);		
-		});
-		$(this.parentNode.parentNode.parentNode).modal('hide');
+	
+	//Reload Modal-body (not Submit button)
+	$('#admintype-form').unbind();
+	$('#admintype-form').click(function(){
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		.done(function(data){
+			if (!data.error) {
+				$(target+' .modal-body').load($(window).attr("url"),init_actions);
+			} else {
+				get_message(1,data.error.data.fullMessage);
+			}
+		});		
 	return false;	
-	});
+	});	
+	
+	//Reload and Close Modal
+ 	$('#createfolder-form').unbind();
+	$('#createfolder-form').submit(function(){
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		.done(function(data){
+			if (!data.error) {
+				$.get('?j=Album&f='+data.result.path,function(data){
+					var $boxes = $(data);
+					$('.albums .thumbs').append($boxes).masonry( 'appended', $boxes ).parent().show(init);
+					$(".menu").load(".?j=Men&f="+encodeURI(currentpath),init_menu);
+				});
+			} else {
+				get_message(1,data.error.data.fullMessage);
+			}
+		});
+		$(target).modal('hide');
+	return false;	
+	});	
+	
+ 	$('#renamefolder-form').unbind();
+	$('#renamefolder-form').submit(function(){
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		.done(function(data){
+			if (!data.error) {
+				update_url("?f="+data.result.path,'new_path');
+				$(".panel").load(".?j=Pan&f="+data.result.path,init);
+				$(".menu").load(".?j=Men&f="+data.result.path,init_menu);				
+			} else {
+				get_message(1,data.error.data.fullMessage);
+			}
+		});
+		$(target).modal('hide');
+	return false;	
+	});	
 	
 	//Json with ModalAdmin page
-	$('#deltoken,#setting-form,#gthumb-form,#delthumb-form,#adminregister-form,.addgroup,.removegroup,.removeacc,#rmacc-form,#rmgroup-form,#adminaccount-form').unbind();
-	$('#deltoken,#setting-form,#gthumb-form,#delthumb-form,#adminregister-form,.addgroup,.removegroup,.removeacc,#rmacc-form,#rmgroup-form,#adminaccount-form').submit(function(){
-		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data,info){
-			if (data.result ==0) {
-				$("#menubar").load(".?j=MenBar",init);
-				$('#ModalAdmin .modal-body').load(data.uri,init_admin);
+	$('#adminrights-form,#setting-form').unbind();
+	$('#adminrights-form,#setting-form').change(function(){
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params": $(this).serializeArray(),"id":"1"});
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		.done(function(data){
+			if (!data.error) {
+				get_message(0,"Save successful");
+			} else {
+				get_message(1,data.error.data.fullMessage);
 			}
-			get_message(data.result,data.desc);
 		});
 	return false;	
 	});
 
-	//Json with myModal page
-	$('#adminrights-form input,#admintype-form button,#admintokens-form input').unbind();
-	$('#adminrights-form input,#admintype-form button,#admintokens-form input').click(function(){
-		$.post($(this.form).attr('action')+'&j=JSon',$(this.form).serialize(),function(data,info){
-			if (data.result ==0) {
-				$('#myModal .modal-body').load(data.uri,init_admin);
-			}
-			get_message(data.result,data.desc);
-		});
-	return false;	
-	});
+
 }
 
-function refresh(url){
-	$(".menu").load(".?j=Men&f="+url,init_menu);
-	if ($('.panel').is(':visible')) {
-		$(".panel").load(".?j=Pan&f="+url,init);
-	}
-	if ($('.bigpanel').is(':visible')) {
-		$("#image_panel").load(".?j=Pan&f="+url,init);
-		$(".images .thumbnails").load(".?j=LinearP&f="+url,init);
-	}
-	update_url("?f="+url);
-}
+
 
 function init_infos(){
 	$('#button_createdir').attr('data-href',$(location).attr('search')+"&t=MkD");
@@ -272,12 +307,17 @@ function init_textinfo(){
 	});
 	
 	$("#editti-form,#delti-form").submit(function(){
-		$.post($(this).attr('action')+'&j=Pan',$(this).serialize(),function(data,info){
-			$('.panel').html(data);
-			$('.textinfo').show("slide",{direction:"down"},600);
-			$('.textinfoadmin').hide("slide",{direction:"up"},600);
-			init();
-		});
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		.done(function(data){
+			if (!data.error) {
+				$('.panel').load($(location).attr('search')+"&j=Pan",init);
+				$('.textinfo').show("slide",{direction:"down"},600);
+				$('.textinfoadmin').hide("slide",{direction:"up"},600);
+			} else {
+				get_message(1,data.error.data.fullMessage);
+			}
+		});		
 	return false;	
 	});		
 	
@@ -288,10 +328,10 @@ function init_list(){
 	$('#view-list').addClass('active');
 	$('#view-thumb').removeClass('active');
 	var tr = '<thead><tr><th>Preview</th><th>Name</th><th>Path</th><th><input class=\'select_all\' type=\'checkbox\'/></th></tr></thead>';
-	$('.images .thumbnails').children('li').each(function(){
+	$('.images .thumbs').children('li').each(function(){
 		tr = tr+'<tr><td style=\'height: 120px; width: 120px;\'><li class=\'item \'>'+$(this).html()+'</li></td><td>'+$(this).children('.name').text()+'</td><td>'+$(this).children('.path').text()+'</td><td><input class=\'item_select\' type=\'checkbox\'/></td></tr>';
 	});
-	$('.videos .thumbnails').children('li').each(function(){
+	$('.videos .thumbs').children('li').each(function(){
 		tr = tr+'<tr ><td style=\'height: 120px; width: 120px;\'><li class=\'item \'>'+$(this).html()+'</li></td><td>'+$(this).children('.name').text()+'</td><td>'+$(this).children('.path').text()+'</td><td><input class=\'item_select\' type=\'checkbox\'/></td></tr>';
 	});	
 	
@@ -323,5 +363,5 @@ function init_list(){
 			$(".boardlines .item").removeClass('selected');			
 		}
 	});
-	$('.boardlines').tooltip({ selector: "a[rel=tooltip]",html:true,placement:"right" });
+	$('.boardlines').tooltip({selector: "a[rel=tooltip]"});
 }

@@ -56,6 +56,9 @@ class BoardItem implements HTMLObject
 	/// Query path
 	private $filepath;
 	
+	/// Number of items
+	public $count_items;
+	
 	/**
 	 * Construct BoardItem
 	 *
@@ -67,6 +70,7 @@ class BoardItem implements HTMLObject
 		$this->path 	= 	$file;
 		$this->file	=	urlencode(File::a2r($file));
 		$this->type	=	File::Type($file);
+		$this->count_items=count(Menu::list_dirs(dirname($this->path)));	
 		
 		///Check Token
 		if (isset($_GET["token"])) {
@@ -92,7 +96,7 @@ class BoardItem implements HTMLObject
 			echo " selected ";
 			}
 		echo ">\n";
-		echo "\t\t<a class='thumbnail' href='?f=".$this->file."' rel='tooltip' data-title='    <img style=\"opacity:1;max-width:400px;max-height:400px;\"  src=\"?t=Img&f=".$this->file."\">      '>";
+		echo "\t\t<a class='thumbnail' href='?f=".$this->file."' rel='tooltip' data-html='true' data-placement='right' data-original-title='<img src=\"?t=Img&f=".$this->file."\">'>";
 		//~ echo "<img class='loadimg' src='./inc/spacer.gif' style='background: url(\"?".$getfile."\") no-repeat center center; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;'>";
 		echo "<img class='lazy' src='./inc/spacer.gif' data-original='".$this->filepath."'>";
 		echo "</a>\n";

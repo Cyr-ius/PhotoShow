@@ -67,7 +67,7 @@ class MenuBar implements HTMLObject{
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){
-	
+
 		echo "
 		<div class='navbar navbar-fixed-top'>
 			<div class='navbar-inner'>
@@ -119,7 +119,7 @@ class MenuBar implements HTMLObject{
 						echo "<ul class='nav pull-right'>";
 							if(CurrentUser::$admin || CurrentUser::$uploader){
 							echo "<li class='hide uploadbtn'><a id='button_upload' href='#' ><i class='icon-upload'></i> ".Settings::_("adminpanel","upload")."</a></li>\n";	
-							echo "<li><a id='bin' class='btn btn-small  bin' style='padding-top:5px;padding-bottom:5px;margin-right:5px;'><i class=' icon-trash'></i></a></li>\n";							
+							echo "<li><a id='bin' class='btn btn-small  bin' style='padding-top:5px;padding-bottom:5px;margin-right:5px;'><span class='path hide'>bin</span><i class=' icon-trash'></i></a></li>\n";							
 							}
 						echo "</ul>";
 						echo"

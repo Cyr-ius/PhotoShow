@@ -50,7 +50,7 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-class Comments implements HTMLObject
+class Comments
 {
 	/// Array of the comments
 	private $comments=array();
@@ -99,6 +99,15 @@ class Comments implements HTMLObject
 			$this->parse_comments_file();
 		}
 	}
+	
+	public function get($file) {
+		$list_com = array();
+		$comments = new Comments($file);
+		foreach($comments->comments as $com){
+			$list_com[] =$com;
+		}
+		return $list_com;
+	}
 
 	/**
 	 * Add a comment for item $file
@@ -110,11 +119,8 @@ class Comments implements HTMLObject
 	 */
 	public static function add($file,$content,$login=""){
 		
-		if($content == ""){
-			Json::$json = array("action"=>"Comments",
-				"result"=>1,
-				"desc"=>"Comment is empty");		
-			return;
+		if($content == ""){		
+			return false;
 		}
 
 		if($login == ""){
@@ -134,8 +140,8 @@ class Comments implements HTMLObject
 		/// Append comment
 		$comments->comments[] = $new_comm;
 		$comments->save();
-
 		$comments->toMainCommentsFile(array_pop($comments->comments));
+		return true;
 	}
 
 
@@ -147,7 +153,7 @@ class Comments implements HTMLObject
 	 * @return void
 	 * @author Thibaud Rohmer
 	 */
-	public static function delete($path,$date){
+	public static function delete($date,$path){
 		$c 		=	new Comments($path);
 		$xml		=	simplexml_load_file($c->commentsfile);
 		$i=-1;
@@ -165,10 +171,7 @@ class Comments implements HTMLObject
 		}
 		/// Write xml
 		$xml->asXML($c->commentsfile);
-		Json::$json = array("action"=>"Comments",
-			"result"=>0,
-			"uri"=>".?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Com",						
-			"desc"=>"Delete comment successfull");			
+		return true;
 	}
 	
 	/**
@@ -176,7 +179,7 @@ class Comments implements HTMLObject
 	 * 
 	 * @author Thibaud Rohmer
 	 */	
-	public function save(){
+	private function save(){
 		
 		$xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><comments></comments>');
 
@@ -193,10 +196,6 @@ class Comments implements HTMLObject
 		}
 		/// Write xml
 		$xml->asXML($this->commentsfile);
-		Json::$json = array("action"=>"Comments",
-			"result"=>0,
-			"uri"=>".?f=".urlencode(File::a2r(CurrentUser::$path))."&t=Com",						
-			"desc"=>"Save comment successfull");		
 	}
 
 
@@ -233,9 +232,7 @@ class Comments implements HTMLObject
 		while($xml->count() > Settings::$max_comments){
 			unset($xml->comment[0]);
 		}
-
 		$xml->asXML($maincomm);
-
 	}
 
 
@@ -253,7 +250,7 @@ class Comments implements HTMLObject
 			}
 			if(!Settings::$nocomments){
 			echo "<div class='well'>";
-				echo "<form id='comments-form' action='?f=$this->webfile&t=Com' method='post'>\n";
+				echo "<form id='comments-form' action='WS_Comment.create' method='post'>\n";
 				echo "<fieldset>\n";
 				echo '<legend>'.Settings::_("comments","comments").'</legend>';
 					if(isset(CurrentUser::$account)){
@@ -273,6 +270,7 @@ class Comments implements HTMLObject
 					<div class='controls'><textarea id='content'  class='input-large' rows='2' name='content'></textarea></div>\n
 					</div>\n
 					<div class='controls controls-row'>\n
+					<input type='hidden' name='path' value='".CurrentUser::$path."'/>
 					<input class='btn btn-primary' type='submit'  value='".Settings::_("settings","submit")."' />\n
 					</div>\n";
 				echo "</fieldset>\n";	

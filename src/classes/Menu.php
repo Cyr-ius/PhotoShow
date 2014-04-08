@@ -85,7 +85,7 @@ class Menu implements HTMLObject
 		//~ print_r($a);
 		echo self::ListFolder('',0,$a);	
 	}
-	
+
 	public function CsMenu($dir=null,$level=0,$item_prec=null){	
 		/// Init Menu 
 		if($dir == null)
@@ -117,7 +117,7 @@ class Menu implements HTMLObject
 			$selected 			="";
 			$actived 			="";
 		}
-	
+
 		$this->categories[$level][] = array('title'=>$title,'categorie_id'=>$title,'parent_id'=>$item_prec,'path' => $apath ,'selected' => $selected,'active'=>$actived);
 		$item_prec = $title;
 		$subdirs = $this->list_dirs($dir);

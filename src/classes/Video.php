@@ -98,9 +98,10 @@ class Video implements HTMLObject
 		   $out = explode('=',$output[5]);
 		   $pid = intval($out[1]);
 		} else {
-		   exec($cmd . " > /dev/null 2>&1 & echo $!", $output);   
+		   exec($cmd . " > /dev/null 2>&1 & echo $!", $output);
 		   $pid = intval($output[0]);
 		}
+	error_log($output);		
         return $pid;
 	} 
 
@@ -313,10 +314,10 @@ class Video implements HTMLObject
 	//~ self::FastEncodeVideo($this->file);
 	$wh = ' height="'.$height.'" width="'.$width.'"';
         if ($control) {
-            $c = ' controls="controls"';
+            $c = ' controls="controls" autobuffer="autobuffer" poster="?t=Thb&f='.$this->fileweb.'"';
         }
 	//~ echo '<div class="videoUiWrapper">';
-        echo '<video height="100%"'.$c.'><source src="?t=Vid&f='.$this->fileweb.'" type="video/'.Settings::$encode_type.'" />';
+        echo '<video height="100%" width="98%"'.$c.'><source src="?t=Vid&f='.$this->fileweb.'" type="video/'.Settings::$encode_type.'" />';
         echo 'Your browser does not support the video tag.<br />';
         echo 'Please upgrade your brower or Download the codec <a href="http://tools.google.com/dlpage/webmmf">Download</a>';
         echo '</video>';

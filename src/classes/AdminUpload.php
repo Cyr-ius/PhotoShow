@@ -67,47 +67,13 @@
  	 */
  	public function upload(){
  		
-		//$allowedExtensions = array("tiff","jpg","jpeg","gif","png","flv","mov","mpg","mp4","ogv","mts","3gp","webm","avi","wmv","mpeg");
-
-		$already_set_rights = false;
  		/// Just to be really sure... 
  		if( !(CurrentUser::$admin || CurrentUser::$uploader) ){
-			Json::$json = array("action"=>"AdminUpload",
-							"result"=>1,
-							"desc"=>"Error : No Rights");		
- 			return;
+			throw new jsonRPCException('Insufficients rights for Upload');
  		}
-		
+
  		/// Set upload path
  		$path = stripslashes(File::r2a($_POST['path']));
- 		/// Create dir and update upload path if required
- 		if(strlen(stripslashes($_POST['newdir']))>0 && !strpos(stripslashes($_POST['newdir']),'..')){
-
- 			$path = $path."/".stripslashes($_POST['newdir']);
- 			if(!file_exists($path)){
- 				@mkdir($path,0755,true);
- 				@mkdir(File::r2a(File::a2r($path),Settings::$thumbs_dir),0755,true);
- 			}
-
- 			/// Setup rights
- 			if(!isset($_POST['inherit'])){
- 				if(isset($_POST['public'])){
- 					Judge::edit($path);
- 				}else{
- 					Judge::edit($path,$_POST['users'],$_POST['groups']);					
- 				}
- 			}
- 			$already_set_rights = true;
- 		}
-		
-		if(!isset($_FILES["file"])) {	
-			Json::$json = array("action"=>"AdminUpload",
-							"result"=>0,
-							"uri"=>urlencode(File::a2r(CurrentUser::$path)),
-							"desc"=>"Folder Create");							
- 			return;
-		}
-		
 
 		// Check that file is uploaded and Treat uploaded file
 		if ($error == UPLOAD_ERR_OK) {
@@ -120,7 +86,8 @@
 			$base_name =  basename($name,'.'.$info['extension']);
 			// Check filetype
 			if(!in_array(strtolower($info['extension']),Settings::$allowedExtensions)){
-				continue;
+				error_log("ERROR/AdminUpload : Extension $name refused");
+				throw new jsonRPCException('Error : Upload error , extension refused');
 			}
 			
 			// Rename until this name isn't taken
@@ -129,35 +96,27 @@
 				$name=$base_name."-".$i.".".$info['extension'];
 				$i++;
 			}
-
+                        
 			// Save the files
 			if(!move_uploaded_file($tmp_name, "$path/$name")){
-				error_log("ERROR/AdminUpload : save uploaded $name refused");
-				Json::$json = array("action"=>"AdminUpload",
-					"result"=>1,
-					"desc"=>"Error : Upload error");
-				return;
+				error_log("ERROR/AdminUpload : Error to save a $path/$name");
+				throw new jsonRPCException("Error to save a $path/$name");
 			}
+                        $img_path = File::a2r($path.'/'.$name);
 			// Setup rights
-			if(!$already_set_rights && !isset($_POST['inherit'])){
+			if(!isset($_POST['inherit'])){
 				if(isset($_POST['public'])){
 					Judge::edit("$path/$name");
 				}else{
 					Judge::edit("$path/$name",$_POST['users'],$_POST['groups']);					
 				}
 			}
-			
-			Json::$json = array("action"=>"AdminUpload",
-				"result"=>0,
-				"uri"=>urlencode(File::a2r("$path/$name")),
-				"desc"=>"File save :".$name);
-				return;
+                        //~ error_log("SUCCES/AdminUpload : $path/$name");
+                        //~ die('{"jsonrpc" : "2.0", "result" : [{"path":"'.urlencode($img_path).'"}], "id" : "id"}');
+                        die(json_encode(array('jsonrpc'=>'2.0','result'=>array("path"=>urlencode($img_path),"type"=>File::Type($img_path)),'id'=>0)));
 			
 		} else { 
-				Json::$json = array("action"=>"AdminUpload",
-					"result"=>1,
-					"desc"=>"Error : Upload error");
-				return;
+			throw new jsonRPCException("Failed to move uploaded file");
 		}
 	}
 

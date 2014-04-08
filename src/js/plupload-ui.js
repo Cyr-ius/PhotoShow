@@ -2,7 +2,7 @@ function init_plupload() {
 
 	var uploader = new plupload.Uploader({
 	        runtimes : 'html5,html4,flash,silverlight',
-	        url : '?t=Adm&a=Upl&j=JSon',
+	        url : '?t=Adm&a=Upl',
 		container : 'uploader',
 		browse_button : 'dropzone',
 		drop_element : 'dropzone',
@@ -17,15 +17,10 @@ function init_plupload() {
 	 
 	        // Specify what files to browse for
 		filters : [
-			{title : "Image files", extensions : "jpg,gif,png,jpeg,tiff"},
-			{title : "Zip files", extensions : "zip"},
-			{title : "Video files", extensions : "flv,mov,mpg,mpeg,mp4,ogv,mts,3gp,webm,avi,wmv"}
+			{title : "image", extensions : "jpg,gif,png,jpeg,tiff"},
+			{title : "file", extensions : "zip"},
+			{title : "video", extensions : "flv,mov,mpg,mpeg,mp4,ogv,mts,3gp,webm,avi,wmv"}
 		]
-	});
-	
-	uploader.destroy();
-	uploader.bind('Init', function(up, params) {
-		//~ $('#filelist').html("<div class='info'>Current runtime: " + params.runtime + "</div>");
 	});
 
 	$('#button_upload').unbind();
@@ -36,6 +31,8 @@ function init_plupload() {
 		uploader.start();
 		e.preventDefault();
 	});
+	
+	uploader.unbindAll();
 
 	uploader.init();
 
@@ -59,7 +56,6 @@ function init_plupload() {
 	});
 
 	uploader.bind('Error', function(up, err) {
-		//~ $('#filelist').append("<div>Error: " + err.code +", Message: " + err.message +(err.file ? ", File: " + err.file.name : "")+"</div>");
 		get_message(1,err.code+'-'+err.message+(err.file ? "-" + err.file.name : ""));	
 		up.refresh(); // Reposition Flash/Silverlight
 	});
@@ -68,19 +64,23 @@ function init_plupload() {
 		$('#' + file.id + " .action").html("<i class='icon-ok-sign'></i>");
 		$('#' + file.id).delay(20).fadeOut(20);
 		var obj = JSON.parse(info.response);
-		$.get('?j=Item&f='+obj['uri'],$(this).serialize(),function(data){
-			$('.images .thumbnails').append(data);
-			init();
-		});
-		get_message(obj['result'],obj['desc']);		
+		if (obj.result){
+			if (obj.result.type=='Image') { var type='.images'};
+			if (obj.result.type=='Video') { var type='.videos'};
+			if (obj.result.type=='File') { var type='.albums'};
+			$.get('?j=Item&f='+obj.result.path,function(data){
+				var $boxes = $(data);
+				$(type+' .thumbs').append($boxes).masonry( 'appended', $boxes ).parent().show();
+				init();
+			});
+			
+		}	
 	});
 	
 	uploader.bind('UploadComplete',function(up,file){
 		$('.uploadbtn').hide();
-		get_message(0,'Upload Completed');	
+		get_message(0,'Upload Completed');
 	});
-	
-	
 	
 	$('#dropzone').droppable({hoverClass: "hovered"});
 }

@@ -122,20 +122,14 @@ class Exif implements HTMLObject
 	 */
 	public function toHTML(){
 		if($this->exif){	
-				echo "<div class='row-fluid'>";	
-				echo "<span class='span6' style='min-height:0px;'>Name : ".$this->exif['Name']."</span>";
-				echo "<span class='span6'  style='min-height:0px;'>Make : ".$this->exif['Make']."</span>";				
-				echo "</div>\n";
-				echo "<div class='row-fluid'>";	
-				echo "<span class='span6'  style='min-height:0px;'>Model : ".$this->exif['Model']."</span>";
-				echo "<span class='span6'  style='min-height:0px;'>Original Date : ".$this->exif['Original Date']."</span>";					
-				echo "</div>\n";				
-				echo "<div class='row-fluid'>";		
-				echo "<span class='span2'>Expo : ".$this->exif['Expo']."</span>";				
-				echo "<span class='span4'>Focal Length : ".$this->exif['Focal Length']."</span>";				
-				echo "<span class='span4'>ApertureValue : ".$this->exif['Aperture']."</span>";				
-				echo "<span class='span2'>ISO : ".$this->exif['ISO']."</span>";				
-				echo "</div>\n";					
+				echo "<div style='width:50%;float:left;'>Name : ".$this->exif['Name']."</div>";
+				echo "<div style='width:50%;float:left;'>Make : ".$this->exif['Make']."</div>";				
+				echo "<div style='width:50%;float:left;'>Model : ".$this->exif['Model']."</div>";
+				echo "<div style='width:50%;float:left;'>Original Date : ".$this->exif['Original Date']."</div>";					
+				echo "<div style='width:50%;float:left;'>Expo : ".$this->exif['Expo']."</div>";				
+				echo "<div style='width:50%;float:left;'>Focal Length : ".$this->exif['Focal Length']."</div>";				
+				echo "<div style='width:50%;float:left;'>ApertureValue : ".$this->exif['Aperture']."</div>";				
+				echo "<div style='width:50%;float:left;'>ISO : ".$this->exif['ISO']."</div>";								
 		}
 	}
 	

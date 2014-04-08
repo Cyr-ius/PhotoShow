@@ -154,42 +154,46 @@ class Board implements HTMLObject
 
 		//Display album
 		$this->foldergrid();
-		if(sizeof($this->boardfolders)>0){
-			echo "<div class='well albums'>\n";
+		 if(sizeof($this->boardfolders)==0){ $hide_a='hide';}
+			echo "<div class='well albums ".$hide_a."'>\n";
 			echo "<legend><h4>".Settings::_("board","albums")."</h4></legend>\n";
-			echo "<ul class='thumbnails'>\n";
+			echo "<ul class='thumbs'>\n";
 			foreach($this->boardfolders as $boardfolder){
 				$boardfolder->toHTML();
 			}
 			echo "</ul>\n";
 			echo "</div>\n";
-		}
+		//~ }
 		
 		///Display BoardLine (content images + videos)
 		$rslt_grid = $this->grid($this->files);
 		echo "<div class='boardlines'>\n";
-			if(count($rslt_grid) >0){
-				echo "<div class='well images'>\n";
+			//~ if(count($rslt_grid['Images']) >0){
+		 if(count($rslt_grid['Images'])==0){ $hide_i='hide';}
+			
+				echo "<div class='well images ".$hide_i."'>\n";
 				echo "<legend><h4>".Settings::_("board","images")."</h4></legend>\n";
-				echo "<ul class='thumbnails'>\n";				
+				echo "<ul class='thumbs'>\n";				
 				// Output grid
-				foreach($rslt_grid  as $boarditem){
+				foreach($rslt_grid['Images']  as $boarditem){
 					if ($boarditem->type == 'Image')
 					$boarditem->toHTML();
 				}
 				echo "</ul>\n";
 				echo "</div>\n";
-				echo "<div class='well videos'>\n";
+			//~ }
+			if(count($rslt_grid['Videos'])==0){ $hide_v='hide';}
+				echo "<div class='well videos ".$hide_v."'>\n";
 				echo "<legend><h4>".Settings::_("board","videos")."</h4></legend>";
-				echo "<ul class='thumbnails'>\n";
+				echo "<ul class='thumbs'>\n";
 				// Output grid
-				foreach($rslt_grid  as $boarditem){
+				foreach($rslt_grid['Videos']  as $boarditem){
 					if ($boarditem->type == 'Video')
 					$boarditem->toHTML();
 				}
 				echo "</ul>\n";			
 				echo "</div>\n";
-			}
+			//~ }
 		echo "</div>\n";
 	}
 	
@@ -202,7 +206,8 @@ class Board implements HTMLObject
 	public function grid($files){
 
 		$notempty = false;
-		$items = array();
+		$itemsImage = array();
+		$itemsVideo = array();
 		
 		foreach($files as $file){
 
@@ -216,12 +221,19 @@ class Board implements HTMLObject
 			}
 		
 			// Add item to the line
-			$items[] =  new BoardItem($file);
-			$notempty = true;
+			$bi = new BoardItem($file);
+			if ($bi->type=='Image') {
+				$itemsImage[] =  $bi;
+				$notempty = true;
+			}
+			if ($bi->type=='Video') {
+				$itemsVideo[] =  $bi;
+				$notempty = true;
+			}			
 		}
 
 		if($notempty){
-			return $items;
+			return array('Images'=>$itemsImage,'Videos'=>$itemsVideo);
 		}
 	}
 	

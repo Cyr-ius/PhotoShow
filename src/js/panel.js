@@ -32,7 +32,6 @@
 	$('#button_exif').hide();
 	if (viewlist==1){init_list();}
  	currentpath = $('span.currentpath').text();	 
-	//~ $('img.lazy').lazyload().unbind();
 	
 	$(".panel .item a").unbind();
 	$(".panel .item a").click(function(){
@@ -46,19 +45,20 @@
 				$('.exif').load(url+"&t=Exif",function() {
 					$('.exif').show();
 				});
-			}
-	
-			$('img.lazy').lazyload().unbind();			
+			}	
 			$(".panel").hide();
+			$(".item").clone().appendTo(".linear_panel .thumbnails").removeAttr('style');
 			$(".image_bar #linear").hide();
 			$(".bigpanel").show("slide",{direction:"up"},600,init);
 		});		
 		return false;
 	});
 
-	if ($('.plupload').length ==0) {init_plupload();}
+	$('.images .thumbs').masonry({columnWidth:10,gutter:10, itemSelector: '.item'});
+	$('.videos .thumbs').masonry({columnWidth:10,gutter:10, itemSelector: '.item'});
+	$('.albums .thumbs').masonry({columnWidth:10,gutter:10, itemSelector: '.directory'});
+	if ($('.moxie-shim-html5').length==0) {init_plupload();}
 	$(".linear_panel .thumbnails").children().remove();
-	$(".item").clone().appendTo(".linear_panel .thumbnails");		
 	$('img.lazy').lazyload({effect : "fadeIn",container:$(".panel"),threshold : 200});
 }
 
@@ -74,18 +74,9 @@ function init_hiders(){
 		$(target+"Label").text(title);
 		$(target+' .modal-body').load(url,init_actions);
 	 });
-	 
-	//~ $("a[data-type=account],a[data-type=register],a[data-type=login],a[data-type=comments]").unbind();
-	//~ $("a[data-type=account],a[data-type=register],a[data-type=login],a[data-type=comments]").click(function() {
-		//~ target = $(this).attr('data-target');
-		//~ title = $(this).attr('data-title');
-		//~ url = $(this).attr('data-href');		 
-		//~ $(target+"Label").text(title);
-		//~ $(target+' .modal-body').load(url,init_actions);
-	 //~ });	
 	
-	$(".dir_img").unbind();
-	$(".dir_img").mouseover(function(e){
+	$(".directory").unbind();
+	$(".directory").mouseover(function(e){
 		var i = $(this).children(".alt_dir_img");
 		var x = Math.floor(i.length * (e.pageX - $(this).offset().left) / $(this).width());
 		var img = $(i[x]).text();
@@ -149,49 +140,66 @@ function init_hiders(){
 	$("#menu_hide").click(function(){
 		if ($('.menu').is(':visible')){
 			$('.menu').hide("slide",{direction:"left"},600,function() {
-				$('.panel,.bigpanel').removeClass('span10').addClass('span12');
-				$('.panel,.bigpanel').css('padding-left','20px');
+				$('.panel,.bigpanel').css('width','');
+				$('.panel,.bigpanel').css('left','20px');
 				$('#menu_hide i').removeClass('icon-backward').addClass('icon-forward');
+				$('.thumbs').masonry({"columnWidth": 10,"gutter":10,"itemSelector": ".item"})
 			});
 		} else {
-			$('.panel,.bigpanel').removeClass('span12').addClass('span10');
-			$('.panel,.bigpanel').css('padding-left','');
+			$('.panel,.bigpanel').width('81%');
+			$('.panel,.bigpanel').css('left','');
+			$('.panel,.bigpanel').css('right','0');
 			$('.menu').show("slide",{direction:"left"},600);
 			$('#menu_hide i').removeClass('icon-forward').addClass('icon-backward');
+			$('.thumbs').masonry({"columnWidth": 10,"gutter":10,"itemSelector": ".item"})
 		}
 	return false;	
 	});
 		
 	$('#logout').unbind();
 	$('#logout').click(function(){
-		$.get($(location).attr('pathname')+'?t=Log&j=JS',function(){
-		window.location.replace('/');	
-		});
+		var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_Account.logout","params":[],"id":"1"});
+		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		.done(function(data){
+			if (!data.error) {
+				window.location.replace('/');
+			} else {
+				get_message(1,data.error.data.fullMessage);
+			}
+		});		
 	return false;	
 	});
 
 }
 function init_actions() {
-	$('#logins-form').unbind();
-	$('#logins-form').submit(function(){
-		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data){
-			get_message(data.result,data.desc);
-			if (data.result ==0) {
+	
+	$('#logins-form,#register-form').unbind();
+	$('#logins-form,#register-form').submit(function(){
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		.done(function(data){
+			if (!data.error) {
 				window.location.replace($(location).attr('search'));
+			} else {
+				get_message(1,data.error.data.fullMessage);
 			}
-			
+		});
+	return false;
+	}); 
+	
+	$('#account-form,#comments-form').unbind();
+	$('#account-form,#comments-form').submit(function(){
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		.done(function(data){
+			if (!data.error) {
+				$(target).modal('hide',get_message(0,"Action sucessfully"));
+			} else {
+				get_message(1,data.error.data.fullMessage);
+			}
 		});
 	return false;	
 	});
-
- 	$('#account-form,#comments-form').unbind();
-	$('#account-form,#comments-form').submit(function(){
-		$.post($(this).attr('action')+'&j=JSon',$(this).serialize(),function(data,info){
-			$('#myModal .modal-body').load(data.uri);
-			get_message(data.result,data.desc);
-		});
-	return false;	
-	});	
 	
 	init_admin();
 }
@@ -244,5 +252,47 @@ $("document").ready(function(){
 	exifvisible = 0;
 	viewlist = 0;
 	init();
-	$(".menu").scrollTo($(".menu .selected:last"));
+	if ($(".menu .selected:last").length > 0) $(".menu").scrollTo($(".menu .selected:last"));
 });
+
+/****************** Function JsonRpc ***************/
+
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+
+$.fn.heightauto = function () {
+   this.css("height", ($(window).height()-140-50-72)  + "px");
+   return this;
+}
+
+function populateForm(frm, data) {   
+    $.each(data, function(key, value){  
+    var $ctrl = $('[name='+key+']', frm);  
+    switch($ctrl.attr("type"))  
+    {  
+        case "text" : case "hidden":  
+        $ctrl.val(value);   
+        break;   
+        case "radio" : case "checkbox":   
+        $ctrl.each(function(){
+           if($(this).attr('value') == value) {  $(this).attr("checked",value); } });   
+        break;  
+        default:
+        $ctrl.val(value); 
+    }  
+    });  
+} 

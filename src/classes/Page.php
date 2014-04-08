@@ -69,6 +69,7 @@ abstract class Page implements HTMLObject
 		echo "<link rel='stylesheet' href='inc/mCustomScrollbar/jquery.mCustomScrollbar.css'>";	
 		echo "<link rel='stylesheet' href='inc/colorpicker/css/colorpicker.css'>";	
 		echo "<link rel='stylesheet' href='inc/assets/css/video-default.css'>";	
+		echo "<link rel='stylesheet' href='inc/mediaelement/mediaelementplayer.css'>";	
 		echo "<link rel='stylesheet' href='inc/messenger/css/messenger.css'>";	
 		echo "<link rel='stylesheet' href='inc/messenger/css/messenger-theme-future.css'>";	
 		echo "<link rel='stylesheet' href='src/stylesheets/jquery.plupload.queue.css'>";

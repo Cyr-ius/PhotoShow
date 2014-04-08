@@ -135,6 +135,10 @@ li.plupload_droptext {
 	position : static !important;	
 }
 
+div[id*='html5_'] {
+	display:none;
+}
+
 /* dropZone */
 #dropzone {
 	position : static !important;	

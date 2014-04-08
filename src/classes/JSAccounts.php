@@ -66,7 +66,7 @@ class JSAccounts
 		
 		foreach($this->accounts as $acc){
 			echo "<div class='accountitem alert alert-info'>
-					<form class='removeacc form-inline' action='?t=Adm&a=ADe' method='post'>
+					<form id='delacc-form' class='removeacc form-inline' action='WS_Account.delete' method='post'>
 					<fieldset>
 						<input type='hidden' name='name' value='".htmlentities($acc['login'], ENT_QUOTES ,'UTF-8')."'>
 						<input class='btn btn-danger btn-mini' type='submit' value='x'>		
@@ -76,7 +76,7 @@ class JSAccounts
 			echo "<div class='name hide'>".$acc['login']."</div>";					
 			foreach($acc['groups'] as $g){
 				$groupaccounts["$g"][] = $acc['login'];
-				echo "<form id='rmgroup-form' style='display:inline;' method='post' action='?t=Adm&a=AGR'>
+				echo "<form id='rmgroup-form' style='display:inline;' method='post' action='WS_Account.remove_group'>
 					<button type='submit' class='btn btn-mini'>
 					<i class=' icon-trash'></i> <span class='groupname'>".htmlentities($g, ENT_QUOTES ,'UTF-8')."</span>
 					</button>
@@ -87,24 +87,21 @@ class JSAccounts
 			echo "</div>";
 		}
 		echo "</div>";
-
+		// Colonne droit - Gestion des groupes
 		echo "<div class='span6'>";
 		echo "<h3>".Settings::_("jsaccounts","groups")."</h3>";
 		echo "<div class='newgroup well'>";
 		echo "
-		<form class='addgroup form-inline' method='post' action='?t=Adm&a=GC'>";
+		<form id='creategroup-form' class='addgroup form-inline' method='post' action='WS_Group.create'>";
 		echo "<legend>".Settings::_("jsaccounts","addgroup")."</legend>\n";
-		//~ echo "<fieldset>\n";				
-		//~ echo "<label for='groupname' class='control-label'>".Settings::_("jsaccounts","groupname")."</label>";
 		echo "<input id='groupname' class='input-medium' type='text' name='group' placeholder='".Settings::_("jsaccounts","groupname")."'>\n";
-		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("jsaccounts","addgroup")."'>\n";
-		//~ echo "</fieldset>\n";		
+		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("jsaccounts","addgroup")."'>\n";	
 		echo "</form>\n";
 		echo "</div>";
 		foreach($this->groups as $g){
 			$gn = $g['name'];
 			echo "<div class='groupitem alert alert-success'>
-					<form class='removegroup' action='?t=Adm&a=GDe' method='post'>
+					<form id='delgroup-form' class='removegroup' action='WS_Group.delete' method='post'>
 						<input type='hidden' name='name' value='$gn'>
 						<input class='btn btn-danger btn-mini' type='submit' value='x'>
 						<span class='groupname'>".$gn."</span>
@@ -112,7 +109,7 @@ class JSAccounts
 			echo "<div class='name hide'>".$gn."</div>";					
 			if(isset($groupaccounts["$gn"])){
 				foreach($groupaccounts["$gn"] as $g){
-					echo "<form id='rmacc-form' style='display:inline;' method='post' action='?t=Adm&a=AGR'>
+					echo "<form id='rmacc-form' style='display:inline;' method='post' action='WS_Account.remove_group'>
 						<button type='submit' class='btn btn-mini'>
 						<i class=' icon-trash'></i> <span class='accname'>".htmlentities($g, ENT_QUOTES ,'UTF-8')."</span>
 						</button>
