@@ -264,9 +264,25 @@ function init_admin(){
 	return false;	
 	});	
 	
+	
 	//Json with ModalAdmin page
-	$('#adminrights-form,#setting-form').unbind();
-	$('#adminrights-form,#setting-form').change(function(){
+	$('#adminrights-form').unbind();
+	$('#adminrights-form').change(function(){
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params": $(this).serializeObject(),"id":"1"});
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		.done(function(data){
+			if (!data.error) {
+				get_message(0,"Save successful");
+			} else {
+				get_message(1,data.error.data.fullMessage);
+			}
+		});
+	return false;	
+	});	
+	
+	//Json with ModalAdmin page
+	$('#setting-form').unbind();
+	$('#setting-form').change(function(){
 		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params": $(this).serializeArray(),"id":"1"});
 		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){

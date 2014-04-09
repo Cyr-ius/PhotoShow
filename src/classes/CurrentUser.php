@@ -225,7 +225,7 @@ class CurrentUser
 		if(Account::password($password) == $acc->password){
 			$_SESSION['login']		=	$login;
 			CurrentUser::$account	=	$acc;
-			$_SESSION['token']      =   NULL;
+			$_SESSION['token']     	 =   NULL;
 		}else{
 			// Wrong password						
 			return false;

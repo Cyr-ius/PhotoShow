@@ -369,6 +369,8 @@ class Judge
 			echo "</div>";		
 			echo "</fieldset>\n";
 			echo "<input type='hidden' name='type' value='Pri'></input>";
+			echo "<input type='hidden' name='users' value='default'></input>";	
+			echo "<input type='hidden' name='groups' value='default'></input>";				
 			echo "<input type='hidden' name='path' value='".CurrentUser::$path."'/>";
 			echo "</form>";
 			return;
@@ -378,6 +380,8 @@ class Judge
 			echo "<button type='button' class='btn btn-primary '>".Settings::_("judge","gopub")."</button>";	
 			echo "</div>";			
 			echo "<input type='hidden' name='type' value='Pub'></input>";
+			echo "<input type='hidden' name='users' value='default'></input>";	
+			echo "<input type='hidden' name='groups' value='default'></input>";	
 			echo "<input type='hidden' name='path' value='".CurrentUser::$path."'/>";			
 		}
 		
@@ -386,9 +390,9 @@ class Judge
 		echo "<form id='adminrights-form' class='form-horizontal' action='WS_Judge.rights' method='post'>\n";
 		echo "<fieldset>\n";
 		echo "<input type='hidden' name='type' value='Pri'></input>";	
+		echo "<input type='hidden' name='users' value='default'></input>";	
+		echo "<input type='hidden' name='groups' value='default'></input>";	
 		echo "<input type='hidden' name='path' value='".CurrentUser::$path."'/>";			
-		echo "<input type='hidden' name='users' value=''/>";			
-		echo "<input type='hidden' name='groups' value=''/>";			
 		echo "<legend>".Settings::_("judge","accounts")."</legend>\n";
 
 		foreach(Account::findAll() as $account){
