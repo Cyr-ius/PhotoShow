@@ -48,17 +48,18 @@ function init_image_panel(){
 		$('#linear_panel a[href$="' + url + '"]').parent().addClass("active selected");
 	}
 	
-	init_image_bar();
-	scrollbar('.linear_panel',true);
+
+	$('.linear_panel').mCustomScrollbar("scrollTo",".thumbnails li.selected");
 	$('img.lazy').lazyload({effect : "fadeIn",container:$(".linear_panel"),threshold : 200});
+		init_image_bar();
 	
 	// On mousewheelling
-	$(".linear_panel").mousewheel(function(event,delta){
-		if($(".linear_panel").is(":visible")){
-			this.scrollLeft -= delta * 30;
-			event.preventDefault();
-		}
-	});
+	//~ $(".linear_panel").mousewheel(function(event,delta){
+		//~ if($(".linear_panel").is(":visible")){
+			//~ this.scrollLeft -= delta * 30;
+			//~ event.preventDefault();
+		//~ }
+	//~ });
 	
  }	
  
@@ -66,6 +67,7 @@ function init_image_panel(){
  * Initialise the image bar
  */
 function init_image_bar(){
+
 
 	$('#spacer').heightauto();
 

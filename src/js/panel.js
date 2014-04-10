@@ -46,9 +46,9 @@
 					$('.exif').show();
 				});
 			}	
-			$(".panel").hide();
 			$(".item").clone().appendTo(".linear_panel .thumbnails").removeAttr('style');
-			$(".image_bar #linear").hide();
+			$(".panel").hide();
+			$(".image_bar #linear").hide
 			$(".bigpanel").show("slide",{direction:"up"},600,init);
 		});		
 		return false;
@@ -58,8 +58,9 @@
 	$('.videos .thumbs').masonry({columnWidth:10,gutter:10, itemSelector: '.item'});
 	$('.albums .thumbs').masonry({columnWidth:10,gutter:10, itemSelector: '.directory'});
 	if ($('.moxie-shim-html5').length==0) {init_plupload();}
-	$(".linear_panel .thumbnails").children().remove();
 	$('img.lazy').lazyload({effect : "fadeIn",container:$(".panel"),threshold : 200});
+	$(".linear_panel .thumbnails").children().remove();	
+	//~ $('.linear_panel').mCustomScrollbar("destroy");
 }
 
 function init_hiders(){
@@ -252,6 +253,7 @@ function init() {
 $("document").ready(function(){
 	exifvisible = 0;
 	viewlist = 0;
+	scrollbar('.linear_panel',true);
 	init();
 	if ($(".menu .selected:last").length > 0) $(".menu").scrollTo($(".menu .selected:last"));
 });

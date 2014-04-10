@@ -51,7 +51,7 @@ function init_textinfo(){
 
 function init_menu(){
 	
-if ($('.mCSB_container').length==0){
+if ($('.menu .mCSB_container').length==0){
 	$('.menu').removeClass('mCustomScrollbar');
 	$('.menu').removeClass('_mCS_1');
 	scrollbar(".menu",false);

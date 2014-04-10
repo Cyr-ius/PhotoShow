@@ -116,6 +116,11 @@ width:130px;
 display:inline-block;
 }
 
+#spacer {
+	height:100%;
+	width:100%;
+}
+
 /* Scrollbar */
 #VerticalScrollBar, #HorizontalScrollBar {
 	display:none;
