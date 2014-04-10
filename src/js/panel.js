@@ -207,9 +207,10 @@ function init_actions() {
 function scrollbar(class_pane,h_bool){
 	var e_pane = class_pane;
 	$(class_pane).mCustomScrollbar({
-	horizontalScroll:h_bool,autoHideScrollbar:false,scrollInertia:0,autoDraggerLength:true,
+	horizontalScroll:h_bool,autoHideScrollbar:false,scrollInertia:0,autoDraggerLength:true,mouseWheel:true,mouseWheelPixels:"auto",
 	scrollButtons:{enable: true, scrollSpeed: "auto"},
 	advanced:{autoExpandHorizontalScroll:h_bool,updateOnBrowserResize: true,updateOnContentResize:true,autoScrollOnFocus:true},
+	contentTouchScroll:true,
 	callbacks:{onScroll:function(){$(e_pane).trigger("scroll")}},
 	theme:"dark-thin"
 	});	

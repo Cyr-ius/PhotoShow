@@ -49,6 +49,7 @@ function init_image_panel(){
 	}
 	
 	init_image_bar();
+	scrollbar('.linear_panel',true);
 	$('img.lazy').lazyload({effect : "fadeIn",container:$(".linear_panel"),threshold : 200});
 	
 	// On mousewheelling

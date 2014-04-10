@@ -196,7 +196,8 @@ li.selected > a.thumbnail {
 }
 
 .linear_panel {
-	overflow: hidden;
+	overflow-x:auto;
+	overflow-y:hidden;
 	white-space: nowrap;
 	bottom:0px;
 	position:absolute;
@@ -384,8 +385,6 @@ li.submenu.selected > ul  {
 
   #menu, .image_panel, .image_bar, .panel, .bigimage, .bigpanel, .linear_panel {
 	position:static;
-	overflow-y:auto;
-	overflow-x : hidden;
 	margin:0 !important;
 	width:100% !important;
     }

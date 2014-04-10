@@ -50,8 +50,7 @@ function init_textinfo(){
 }
 
 function init_menu(){
-
-//if (!$('.menu').hasClass('mCustomScrollbar')){scrollbar(".menu",false);}	
+	
 if ($('.mCSB_container').length==0){
 	$('.menu').removeClass('mCustomScrollbar');
 	$('.menu').removeClass('_mCS_1');
