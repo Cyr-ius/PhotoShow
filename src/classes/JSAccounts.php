@@ -61,8 +61,8 @@ class JSAccounts
 	public function toHTML(){
 		$groupaccounts = array();
 		echo "<div class='row-fluid'>";
-		echo "<div class='span6'>";
-		echo "<h3>".Settings::_("jsaccounts","accounts")."</h3>";
+		echo "<div class='span6 well'>";
+		echo "<legend>".Settings::_("jsaccounts","accounts")."</legend>";
 		
 		foreach($this->accounts as $acc){
 			echo "<div class='accountitem alert alert-info'>
@@ -80,21 +80,20 @@ class JSAccounts
 					<button type='submit' class='btn btn-mini'>
 					<i class=' icon-trash'></i> <span class='groupname'>".htmlentities($g, ENT_QUOTES ,'UTF-8')."</span>
 					</button>
-					<input type='hidden' name='acc' value='".$acc['login']."'/>
-					<input type='hidden' name='group' value='$g'/>
+					<input type='hidden' name='name' value='".$acc['login']."'/>
+					<input type='hidden' name='groupname' value='$g'/>
 					</form>&nbsp;";				
 			}
 			echo "</div>";
 		}
 		echo "</div>";
 		// Colonne droit - Gestion des groupes
-		echo "<div class='span6'>";
-		echo "<h3>".Settings::_("jsaccounts","groups")."</h3>";
-		echo "<div class='newgroup well'>";
+		echo "<div class='span6 well'>";
+		echo "<legend>".Settings::_("jsaccounts","addgroup")."</legend>";
+		echo "<div class='newgroup'>";
 		echo "
 		<form id='creategroup-form' class='addgroup form-inline' method='post' action='WS_Group.create'>";
-		echo "<legend>".Settings::_("jsaccounts","addgroup")."</legend>\n";
-		echo "<input id='groupname' class='input-medium' type='text' name='group' placeholder='".Settings::_("jsaccounts","groupname")."'>\n";
+		echo "<input id='groupname' class='input-medium' type='text' name='groupname' placeholder='".Settings::_("jsaccounts","groupname")."'>\n";
 		echo "<input class='btn btn-primary' type='submit' value='".Settings::_("jsaccounts","addgroup")."'>\n";	
 		echo "</form>\n";
 		echo "</div>";
@@ -113,8 +112,8 @@ class JSAccounts
 						<button type='submit' class='btn btn-mini'>
 						<i class=' icon-trash'></i> <span class='accname'>".htmlentities($g, ENT_QUOTES ,'UTF-8')."</span>
 						</button>
-						<input type='hidden' name='acc' value='$g'/>
-						<input type='hidden' name='group' value='$gn'/>
+						<input type='hidden' name='name' value='$g'/>
+						<input type='hidden' name='groupname' value='$gn'/>
 						</form>&nbsp;";
 				}
 			}

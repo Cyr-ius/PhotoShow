@@ -1,20 +1,16 @@
 <?
 class WS_Judge
 {
+
 	function __construct(){
 	}
 		
-	public function rights($type,$users=null,$groups=null,$path){
-	
-		if ($type=='Pri'){
-
-			if (!is_array($users)) {$users=array($users);}
-			if (!is_array($groups)) {$groups=array($groups);}
-		
-			return Judge::edit($path,$users,$groups,true);
+	public function rights($variables){
+		if ($variables['type']=='Pri'){
+			return Judge::edit($variables['path'],$variables['users'],$variables['groups'],true);
 		}
-		if ($type=='Pub'){
-			return Judge::edit($path,null,null,false);
+		if ($variables['type']=='Pub'){
+			return Judge::edit($variables['path'],null,null,false);
 		}
 	} 
 }

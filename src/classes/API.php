@@ -44,7 +44,6 @@
 class API
 {
 	function __construct(){
-		//~ require_once dirname(__FILE__).'/../json-rpc/jsonRPC2Server.php';	
 		$jsonRpc = new jsonRPCServer();
 		$jsonCls[]= new WS_Account();
 		$jsonCls[]= new WS_Group();
@@ -53,7 +52,6 @@ class API
 		$jsonCls[]= new WS_Textinfo();
 		$jsonCls[]= new WS_MgmtFF();
 		$jsonCls[]= new WS_Judge();
-		$jsonCls[]= new WS_Script();
 		$jsonRpc->registerClass($jsonCls);             
 		$jsonRlt = $jsonRpc->handle() or die('no request');
 	}

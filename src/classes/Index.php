@@ -124,11 +124,8 @@ class Index
 								
 			case "MvD":		$page= new AdminRename(CurrentUser::$path);
 							$page->toHTML();
-							break;
+							break;						
 
-			//~ case "JSon"	:	$page = new Json();
-							//~ $page->toHTML();
-							//~ return;
 		}
 	}
 }

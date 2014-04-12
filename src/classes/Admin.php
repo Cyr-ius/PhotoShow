@@ -50,7 +50,7 @@
  	public $menu;
 
  	/// Admin action
- 	static public $action = "stats";
+ 	static public $action = "Sta";
 
  	/**
  	 * Create admin page
@@ -58,6 +58,19 @@
  	 * @author Thibaud Rohmer
  	 */
  	public function __construct(){
+	
+	
+	
+		//Section  pour tout le monde
+ 		if(isset($_GET['a'])){
+	 		switch($_GET['a']){
+				case "Abo" 	: 	//Display Page About
+								$this->page = new AdminAbout();
+								break;
+	 		}
+	 	}
+	
+	
  		/// Check that current user is an admin or an uploader
 	 	if( !(CurrentUser::$admin || CurrentUser::$uploader) ){
 	 		return;
@@ -69,17 +82,17 @@
 		//Section  pour les administrateurs et uploders
  		if(isset($_GET['a'])){
 	 		switch($_GET['a']){
-	 			case "Abo" 		: 	//Display Page About
-									$this->page = new AdminAbout();
-	 								break;
-	 								
-		 		case "Upl"			:	// POST Upload File
-									if(isset($_POST['path'])){
-		 								AdminUpload::upload();
-		 								CurrentUser::$path = File::r2a(stripslashes($_POST['path']));
-		 							}
-									$this->page = "Page";
-		 							break;
+				case "Abo" 	: 	//Display Page About
+								$this->page = new AdminAbout();
+								break;
+								
+				case "Upl"	:	// POST Upload File
+								if(isset($_POST['path'])){
+									AdminUpload::upload();
+									CurrentUser::$path = File::r2a(stripslashes($_POST['path']));
+								}
+								$this->page = "Page";
+								break;
 	 		}
 	 	}
 
@@ -95,41 +108,26 @@
 		//Section uniquement pour les administrateurs
  		if(isset($_GET['a'])){
 	 		switch($_GET['a']){
-		 		case "Sta"		:	$this->page = new AdminStats();
-		 							break;
+		 		case "Sta"	:	$this->page = new AdminStats();
+		 						break;
 
-		 		case "VTk"		:	$this->page = new AdminToken();
-		 							break;
+		 		case "VTk"	:	$this->page = new AdminToken();
+		 						break;
 									
 				case "JS"		:	$this->page = new JS();
-									break;
+								break;
 
-				case "EdA"		:	$this->page = new JSAccounts();
-									break;	
+				case "EdA"	:	$this->page = new JSAccounts();
+								break;	
 
-		 		case "Acc"		:	$this->page= new AdminAccount();
-									break;
-				
-				case "GTh"		:	// Generate or Clean Thumbnails
-									if(isset($_POST['path']) && isset($_POST['DAl']) ){
-										Settings::cleanthumbs(File::r2a(stripslashes($_POST['cleanpath'])));
-									}				
-									if(isset($_POST['path']) && isset($_POST['GAl'])){
-										Settings::gener_all(File::r2a(stripslashes($_POST['path'])));
-									}
-									$this->page = new Settings();
-									break;
+		 		case "Acc"	:	$this->page= new AdminAccount();
+								break;
 									
-				case "Set" 		:	//Save Preferences settings
-									if(isset($_POST['name'])){
-										Settings::set();
-									}
-									$this->page = new Settings();
-									break;
-				
-				case "UpM"			:	//Manage Upload
-									$this->page = new Board("Gallery/Flore");
-									break;
+				case	"ATh"	:	$this->page = new AdminThumbs();
+								break;
+									
+				case "Set"	:	$this->page = new Settings();
+								break;									
 		 		}				
 		}
 	}

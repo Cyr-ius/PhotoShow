@@ -27,7 +27,6 @@
  * @license	  http://www.gnu.org/licenses/
  * @link	  http://github.com/thibaud-rohmer/PhotoShow
  */
-
 function init_admin(){
 	
 	$(".menu_title").draggable({
@@ -88,7 +87,7 @@ function init_admin(){
 								$(".panel .item.selected").each(function(){
 									from = $(this).children(".path").text();
 									var obj = $(this);
-									var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[from,to],"id":"1"});
+									var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[{"from":from,"to":to}],"id":"1"});
 									$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 									.done(function(data){
 										if (!data.error) {
@@ -99,7 +98,7 @@ function init_admin(){
 									});										
 								});
 							} else {
-								var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[from,to],"id":"1"});
+								var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[{"from":from,"to":to}],"id":"1"});
 								$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 								.done(function(data){
 									if (!data.error) {
@@ -110,14 +109,17 @@ function init_admin(){
 								});
 							}
 						} else {
-							var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[from,to],"id":"1"});
+							var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[{"from":from,"to":to}],"id":"1"});
 							$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 							.done(function(data){
 								if (!data.error) {
-									$('.menu span:contains('+from+')').parent().remove();
-									$('.albums span:contains('+from+')').parent().remove();
-									$('.thumbs').masonry('layout');
-									$(".menu").load(".?j=Men&f="+encodeURI(currentpath),init_menu);
+									$(".menu").load(".?j=Men&f="+encodeURI(currentpath),function(){
+										init_menu();
+										$('.albums span:contains('+from+')').parent().remove();
+										$('.thumbs').masonry('layout');
+										init_admin();
+									});
+									return false;
 								} else {
 									get_message(1,data.error.data.fullMessage);
 								}
@@ -134,7 +136,7 @@ function init_admin(){
 						dragg.draggable('option','revert',false);
 						acc = dragg.children(".name").text();
 						group = $(this).children(".name").text();
-						var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_Account.add_group","params":[acc,group],"id":"1"});
+						var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_Account.add_group","params":[{"login":acc,"group":group}],"id":"1"});
 						$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 						.done(function(data){
 							if (!data.error) {
@@ -145,7 +147,7 @@ function init_admin(){
 						});						
 					}
 				}
-	})
+	})	
 	
 	$("a[data-toggle=modaladmin]").unbind();
 	$("a[data-toggle=modaladmin]").click(function() {
@@ -157,11 +159,11 @@ function init_admin(){
 	$("#adminchoiceaccount-form").unbind();
 	$("#adminchoiceaccount-form").change(function(){
 		$form = $(this);
-		var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_Account.get","params":$form.serializeObject(),"id":"1"});
+		var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_Account.get","params":[$form.toObject()],"id":"1"});
 		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
-				populateForm("#adminaccount-form", JSON.parse(JSON.stringify(data.result)));
+				js2form($('#adminaccount-form')[0],data.result)
 			} else {
 				get_message(1,data.error.data.fullMessage);
 			}
@@ -175,7 +177,7 @@ function init_admin(){
 		$(".panel .item.selected").each(function(){
 			file = $(this).children(".path").text();
 			var obj = $(this);
-			var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_MgmtFF.delete","params":[file],"id":"1"});
+			var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_MgmtFF.delete","params":[{"from":file}],"id":"1"});
 			$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 			.done(function(data){
 				if (!data.error) {
@@ -199,7 +201,7 @@ function init_admin(){
 	//Reload Modal-body
  	$('#gthumb-form,#delcomment-form,#createtoken-form,#deltoken-form,#delacc-form,#rmgroup-form,#rmacc-form,#creategroup-form,#delgroup-form,#adminregister-form,#adminaccount-form').unbind();
 	$('#gthumb-form,#delcomment-form,#createtoken-form,#deltoken-form,#delacc-form,#rmgroup-form,#rmacc-form,#creategroup-form,#delgroup-form,#adminregister-form,#adminaccount-form').submit(function(){
-		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
 		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
@@ -215,7 +217,7 @@ function init_admin(){
 	//Reload Modal-body (not Submit button)
 	$('#admintype-form').unbind();
 	$('#admintype-form').click(function(){
-		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
 		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
@@ -230,7 +232,7 @@ function init_admin(){
 	//Reload and Close Modal
  	$('#createfolder-form').unbind();
 	$('#createfolder-form').submit(function(){
-		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
 		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
@@ -249,7 +251,7 @@ function init_admin(){
 	
  	$('#renamefolder-form').unbind();
 	$('#renamefolder-form').submit(function(){
-		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
 		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
@@ -264,11 +266,10 @@ function init_admin(){
 	return false;	
 	});	
 	
-	
 	//Json with ModalAdmin page
 	$('#adminrights-form').unbind();
 	$('#adminrights-form').change(function(){
-		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params": $(this).serializeObject(),"id":"1"});
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params": [$(this).toObject({skipEmpty:false})],"id":"1"});
 		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
@@ -283,7 +284,7 @@ function init_admin(){
 	//Json with ModalAdmin page
 	$('#setting-form').unbind();
 	$('#setting-form').change(function(){
-		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params": $(this).serializeArray(),"id":"1"});
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params": [$(this).toObject()],"id":"1"});
 		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
@@ -294,11 +295,7 @@ function init_admin(){
 		});
 	return false;	
 	});
-
-
 }
-
-
 
 function init_infos(){
 	$('#button_createdir').attr('data-href',$(location).attr('search')+"&t=MkD");
@@ -323,7 +320,7 @@ function init_textinfo(){
 	});
 	
 	$("#editti-form,#delti-form").submit(function(){
-		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
 		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {

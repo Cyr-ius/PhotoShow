@@ -6,43 +6,44 @@ class WS_Account
 		CurrentUser::init();
 	}
 		
-	public function create($login, $password, $verif, $groups=array(),$name='',$email=''){
-		return Account::create($login, $password, $verif, $groups,$name,$email);
+	public function create($variables){
+		return Account::create($variables['login'], $variables['password'], $variables['verif'], $variables['groups'],$variables['name'],$variables['email']);
 	} 
 
-	public function register($login, $password, $verif, $groups=array(),$name='',$email=''){
-		if (Account::create($login, $password, $verif, $groups,$name,$email)) {
-			return self::login($login,$password);
+	public function register($variables){
+		if (Account::create($variables['login'], $variables['password'], $variables['verif'], $variables['groups'],$variables['name'],$variables['email'])) {
+			return self::login($variables);
 		}
 	} 
 
-	public function edit($login=NULL,$name=NULL, $email=NULL, $language=NULL, $key=null,$password=NULL,$old_password=NULL,$groups=array()){
-		return Account::edit($login, $old_password, $password, $name, $email, $groups, $language);
+	public function edit($variables){
+		return Account::edit($variables['login'], $variables['old_password'], $variables['password'], $variables['name'],$variables['email'],$variables['groups'],$variables['language']);
 	}
 
-	public function delete($login){
-		return Account::delete($login);		
+	public function delete($variables){
+		return Account::delete($variables['name']);		
 	} 
 	
-	public function get($login=null,$key=null){
-		return Account::get_acc($login);
+	public function get($variables){
+		return Account::get_acc($variables['login']);
 	}
 
-	public function add_group($login,$group){
-		return Account::add_group($login,$group);
+	public function add_group($variables){
+		return Account::add_group($variables['login'],$variables['group']);
 	} 
 	
-	public function remove_group($login,$group){
-		return Account::remove_group($login,$group);
+	public function remove_group($variables){
+		return Account::remove_group($variables['name'],$variables['groupname']);
 	} 	
 
 	public function exists($login){
 		return Account::exists($login);		
 	} 
 
-	public function login($login,$password){
-		if(CurrentUser::login($login,$password)){
-			return CurrentUser::$account->get_key();
+	public function login($variables){
+		if(CurrentUser::login($variables['login'], $variables['password'])){
+			//~ return CurrentUser::$account->get_key();
+			return;
 		}else{
 			throw new jsonRPCException('User or password incorrect.');
 		}
@@ -51,8 +52,8 @@ class WS_Account
 		return CurrentUser::logout();
 	}
 
-	public function change_password($login,$old_password,$password){
-		$rslt = Account::change_password($login,$old_password,$password);
+	public function change_password($variables){
+		$rslt = Account::change_password($variables['login'], $variables['old_password'], $variables['password']);
 		if ($rslt){
 			return true;
 		} else {

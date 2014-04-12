@@ -487,7 +487,7 @@ class Account extends Page
 		}else{
 			echo "<form id='account-form' class='form-horizontal' method='post' action='WS_Account.edit'>\n";
 		}	 
-		echo "<legend>".Settings::_("account","account")."</legend>\n";		
+		echo "<legend>".Settings::_("account","detailaccount")."</legend>\n";		
 		echo "<fieldset>\n";			
 		/// Login
 		echo "<div class='control-group'>\n";

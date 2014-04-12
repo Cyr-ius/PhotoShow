@@ -435,7 +435,6 @@ class Settings extends Page
 	public function toHTML(){
 
 	echo "<div class='row-fluid'>\n";
-		echo "<h3>".Settings::_("settings","settings")."</h3>\n";
 		echo "<div class='well'>\n";
 		echo "<form id='setting-form' class='form-horizontal' action='WS_MgmtFF.saveset' method='post'>\n";
 		echo "<legend>Global</legend>\n";

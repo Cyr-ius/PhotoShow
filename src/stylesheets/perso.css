@@ -372,6 +372,13 @@ li.submenu.selected > ul  {
 	cursor:  move;
 }
 
+/* Viewlist */
+
+.view_list th , .view_list td {
+	vertical-align:middle;
+	text-align:center;
+}
+
 /*Plupload*/
 .plupload.html5 {
 	width:0 !important;

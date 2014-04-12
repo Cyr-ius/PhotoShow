@@ -64,8 +64,8 @@
 		}
 		
 		echo "<div class='row-fluid'>";
-		echo "<div class='span12'>";
-		echo "<h3>".Settings::_("token","tokens")."</h3>\n";
+		echo "<div class='span12 well'>";
+		echo "<legend>".Settings::_("token","tokens")."</legend>\n";
 		
 		// We still want to display the title so the page is not empty
 		if ( !file_exists(CurrentUser::$tokens_file)){
@@ -75,10 +75,10 @@
 		    echo "<tbody>";
 			foreach(GuestToken::findAll() as $t){
 			    echo "<tr>";
-			    echo "<td>".$t['key']."<br/>".$t['path']."<br/><a href='".GuestToken::get_url($t['key'])."' >".GuestToken::get_url($t['key'])."</a></td>";
-			    echo "<td>";
-			    echo "<form id='deltoken-form' class='form-horizontal'  action='WS_Token.delete' method='post'>\n";
-			    echo "<input type='hidden' name='tokenkey' value='".$t['key']."' />";
+			    echo "<td>".$t['path']."<br/><a href='".GuestToken::get_url($t['key'])."' >".$t['key']."</a></td>";
+			    echo "<td style='vertical-align:middle;text-align:center;'>";
+			    echo "<form id='deltoken-form' class='form-horizontal'  action='WS_Token.delete' method='post' style='margin:0;'>\n";
+			    echo "<input type='hidden' name='key' value='".$t['key']."' />";
 			    echo "<input type='submit' class='btn btn-primary' value='".Settings::_("token","deletetoken")."' />";
 			    echo "</form>";
 			    echo "</td>";

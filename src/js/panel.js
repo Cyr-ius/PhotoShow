@@ -176,7 +176,7 @@ function init_actions() {
 	
 	$('#logins-form,#register-form').unbind();
 	$('#logins-form,#register-form').submit(function(){
-		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
 		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
@@ -190,7 +190,7 @@ function init_actions() {
 	
 	$('#account-form,#comments-form').unbind();
 	$('#account-form,#comments-form').submit(function(){
-		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":$(this).serializeObject(),"id":"1"});
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
 		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
@@ -258,44 +258,46 @@ $("document").ready(function(){
 	if ($(".menu .selected:last").length > 0) $(".menu").scrollTo($(".menu .selected:last"));
 });
 
-/****************** Function JsonRpc ***************/
+/****************** Function Jquery ***************/
 
-$.fn.serializeObject = function()
-{
-    var o = {};
-    var a = this.serializeArray();
-    $.each(a, function() {
-        if (o[this.name] !== undefined) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    });
-    return o;
-};
+//~ $.fn.serializeObject = function()
+//~ {
+    //~ var o = {};
+    //~ var a = this.serializeArray();
+    //~ $.each(a, function() {
+        //~ if (o[this.name] !== undefined) {
+            //~ if (!o[this.name].push) {
+                //~ o[this.name] = [o[this.name]];
+            //~ }
+            //~ o[this.name].push(this.value || '');
+        //~ } else {
+            //~ o[this.name] = this.value || '';
+        //~ }
+    //~ });
+    //~ return o;
+//~ };
 
 $.fn.heightauto = function () {
    this.css("height", ($(window).height()-140-50-72)  + "px");
    return this;
 }
 
-function populateForm(frm, data) {   
-    $.each(data, function(key, value){  
-    var $ctrl = $('[name='+key+']', frm);  
-    switch($ctrl.attr("type"))  
-    {  
-        case "text" : case "hidden":  
-        $ctrl.val(value);   
-        break;   
-        case "radio" : case "checkbox":   
-        $ctrl.each(function(){
-           if($(this).attr('value') == value) {  $(this).attr("checked",value); } });   
-        break;  
-        default:
-        $ctrl.val(value); 
-    }  
-    });  
-} 
+$.fn.fillForm = function (data) {
+	var frm = this;
+	$.each(data, function(key, value){  
+		var $ctrl = $('[name='+key+']', frm);  
+		switch($ctrl.attr("type"))  {  
+			case "text" : case "hidden":  
+				$ctrl.val(value);   
+				break;   
+			case "radio" : case "checkbox":   
+				$ctrl.each(function(){
+					if($(this).attr('value') == value) {  $(this).attr("checked",value); } 
+				});   
+				break;  
+			default:
+				$ctrl.val(value); 
+		}  
+	});  
+	return true;
+}

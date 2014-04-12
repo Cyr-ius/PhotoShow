@@ -3,20 +3,18 @@ class ModalAdmin
 {
 
 	public function __construct() {
- 		$this->options['Abo']	= Settings::_("adminmenu","about");
- 		$this->options['Sta']	= Settings::_("adminmenu","stats");
- 		$this->options['VTk']	= Settings::_("adminmenu","tokens");
- 	 	$this->options['Set']	= Settings::_("adminmenu","settings");
- 	 	$this->options['Acc']	= Settings::_("adminmenu","account");
- 	 	$this->options['EdA']	= Settings::_("adminmenu","groups");
- 	 	$this->options['UpM']	= Settings::_("adminmenu","uploadmgmt");	
-
+ 		$this->options['Abo'] = Settings::_("adminmenu","about");
+		if (CurrentUser::$admin) {
+			$this->options['Sta']= Settings::_("adminmenu","stats");
+			$this->options['VTk']= Settings::_("adminmenu","tokens");
+			$this->options['Set']= Settings::_("adminmenu","settings");
+			$this->options['Acc']= Settings::_("adminmenu","account");
+			$this->options['EdA']= Settings::_("adminmenu","groups");
+			$this->options['ATh']= Settings::_("adminmenu","thumbs");	
+		}
 	}
 	
 	public function toHTML(){
-		if(!CurrentUser::$admin) {
-			return;
-		}
 		echo "
 		<!-- Modal Template
 		================================================== -->

@@ -14,6 +14,9 @@ class Scripts
 		<!-- Framwork JQUERY 1.10 -->
 		<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js'></script>
 		<script src='inc/jquery-ui.min.js'></script>
+		
+		<!-- Touch-Punch -->
+		<script src='inc/jquery.ui.touch-punch.min.js'></script>		
 				
 		<!-- Framework BootStrap 2.3.2 -->
 		<script src='inc/bootstrap/js/bootstrap.min.js'></script>
@@ -24,15 +27,16 @@ class Scripts
 		<script src='inc/plupload/js/plupload.full.min.js'></script>
 		<script src='inc/plupload/js/jquery.plupload.queue/jquery.plupload.queue.min.js'></script>
 		
-		<!-- Touch-Punch -->
-		<script src='inc/jquery.ui.touch-punch.min.js'></script>
-		
 		<!-- MouseWhell -->
 		<script src='inc/jquery.mousewheel.js'></script>
 		
 		<!-- Mansory  -->
 		<script src='inc/jquery.masonry.pkgd.min.js'></script>
 
+		<!-- Form2js  -->
+		<script src='inc/form2js/form2js.js'></script>
+		<script src='inc/form2js/js2form.js'></script>
+		<script src='inc/form2js/jquery.toObject.js'></script>
 		
 		<!-- JQuery plugin : MediaElement  
 		<script src='inc/mediaelement/mediaelement-and-player.min.js'></script>-->

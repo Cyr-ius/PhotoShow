@@ -4,16 +4,16 @@ class WS_Textinfo
 	function __construct(){
 	}
 	
-	public function create($title=null,$author=null,$contain=null,$path){
-		return TextInfo::create($path ,$title,$author,$contain);
+	public function create($variables){
+		return TextInfo::create($variables['path'] ,$variables['title'],$variables['author'],$variables['contain']);
 	} 
 
-	public function delete($path){
-		return TextInfo::delete($path);	
+	public function delete($variables){
+		return TextInfo::delete($variables['path']);	
 	} 
 
-	public function get($path){
-		return TextInfo::get($path);	
+	public function get($variables){
+		return TextInfo::get($variables['path']);	
 	} 
 }
 ?>

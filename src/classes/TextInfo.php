@@ -163,11 +163,11 @@ class TextInfo
 			<div class='controls controls-row'>\n
 			<input id='button_submit' type='submit' class='btn btn-primary' data-loading-text='Posting...' value='".Settings::_("settings","submit")."' />\n
 			</div>\n
-			<input id='f' type='hidden' name='f' value='$f' />\n";
+			<input id='f' type='hidden' name='path' value='$f' />\n";
 		echo "</fieldset>\n";
 		echo "</form>\n";
 		echo "<form id='delti-form' class='form-horizontal' action='WS_Textinfo.delete' method='post'>\n
-			<input id='f' type='hidden' name='f' value='$f' />\n
+			<input id='f' type='hidden' name='path' value='$f' />\n
 			<input id='button_clean'  type='submit'  class='btn btn-warning' value='".Settings::_("textinfo","delete")."' data-loading-text='Deleting...'/>
 			</form>\n";
 	}

@@ -81,15 +81,15 @@ class AdminFiles
  		if( !(CurrentUser::$admin || CurrentUser::$uploader) ){
 			throw new jsonRPCException('Insufficient rights');
  		}
-		$delpath = File::r2a($delpath);
-		if (!$delpath) {
-			$delpath 	=	File::r2a(stripslashes($_POST['del']));
-		}
-		
+		//~ $delpath = File::r2a($delpath);
+
+		//~ if (!$delpath) {
+			//~ $delpath 	=	File::r2a(stripslashes($_POST['del']));
+		//~ }
 		if($delpath == Settings::$photos_dir || empty($delpath)){
 			throw new jsonRPCException(Settings::$photos_dir." refuse deleted");	
  		}
-
+		$delpath = File::r2a($delpath);
 		$file_file	       = new File($delpath);
 		$thumb_path_no_ext = File::r2a(Settings::$thumbs_dir.dirname(File::a2r($delpath))."/".$file_file->name,File::Root());
 

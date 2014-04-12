@@ -369,8 +369,6 @@ class Judge
 			echo "</div>";		
 			echo "</fieldset>\n";
 			echo "<input type='hidden' name='type' value='Pri'></input>";
-			echo "<input type='hidden' name='users' value='default'></input>";	
-			echo "<input type='hidden' name='groups' value='default'></input>";				
 			echo "<input type='hidden' name='path' value='".CurrentUser::$path."'/>";
 			echo "</form>";
 			return;
@@ -380,8 +378,6 @@ class Judge
 			echo "<button type='button' class='btn btn-primary '>".Settings::_("judge","gopub")."</button>";	
 			echo "</div>";			
 			echo "<input type='hidden' name='type' value='Pub'></input>";
-			echo "<input type='hidden' name='users' value='default'></input>";	
-			echo "<input type='hidden' name='groups' value='default'></input>";	
 			echo "<input type='hidden' name='path' value='".CurrentUser::$path."'/>";			
 		}
 		
@@ -390,8 +386,6 @@ class Judge
 		echo "<form id='adminrights-form' class='form-horizontal' action='WS_Judge.rights' method='post'>\n";
 		echo "<fieldset>\n";
 		echo "<input type='hidden' name='type' value='Pri'></input>";	
-		echo "<input type='hidden' name='users' value='default'></input>";	
-		echo "<input type='hidden' name='groups' value='default'></input>";	
 		echo "<input type='hidden' name='path' value='".CurrentUser::$path."'/>";			
 		echo "<legend>".Settings::_("judge","accounts")."</legend>\n";
 
@@ -403,7 +397,7 @@ class Judge
 				$checked = "";
 			}
 
-			echo "<div><label><input type='checkbox' value='".$account['login']."' name='users' $checked >".htmlentities($account['login'], ENT_QUOTES ,'UTF-8')."</label></div>";
+			echo "<div><label><input type='checkbox' value='".$account['login']."' name='users[]' $checked >".htmlentities($account['login'], ENT_QUOTES ,'UTF-8')."</label></div>";
 		}
 		
 		echo "<legend>".Settings::_("judge","groups")."</legend>\n";		
@@ -418,7 +412,7 @@ class Judge
 				$checked = "";
 			}
 
-			echo "<div><label><input type='checkbox' value='".$group['name']."' name='groups' $checked > ".htmlentities($group['name'], ENT_QUOTES ,'UTF-8')." </label></div>";
+			echo "<div><label><input type='checkbox' value='".$group['name']."' name='groups[]' $checked > ".htmlentities($group['name'], ENT_QUOTES ,'UTF-8')." </label></div>";
 		}
 		echo "<fieldset>\n
 			</form>\n

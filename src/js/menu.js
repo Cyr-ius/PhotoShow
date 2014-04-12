@@ -51,11 +51,9 @@ function init_textinfo(){
 
 function init_menu(){
 	
-if ($('.menu .mCSB_container').length==0){
-	$('.menu').removeClass('mCustomScrollbar');
-	$('.menu').removeClass('_mCS_1');
+	$('.menu').mCustomScrollbar('destroy');
 	scrollbar(".menu",false);
-}	
+
 	/**
 	* Clicking on an item in the menu
 	*/	
@@ -67,7 +65,6 @@ if ($('.menu .mCSB_container').length==0){
 		}
 		$(this).parent().parent('ul').find('li').removeClass("active selected");
 		$(this).parent().addClass("active selected");	
-		//~ $(this).parent().draggable('disable');
 		url = $(this).attr("href");
 		update_url(url);
 		$('.bigpanel,.panel').hide();

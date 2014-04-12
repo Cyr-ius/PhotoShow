@@ -62,22 +62,29 @@
 		echo "<div class='row-fluid'>";
  		echo "<h3>PhotoShow</h3>";
  		echo "<ul class='breadcrumb'>";
- 		echo "<li><a href='http://www.photoshow-gallery.com'>PhotoShow-Gallery.com</a></li>\n";
- 		echo "<li><a href='https://github.com/thibaud-rohmer/PhotoShow'>PhotoShow on GitHub</a></li>\n";
- 		echo "<li><a href='https://github.com/thibaud-rohmer/PhotoShow/wiki/Tips'>Tips !</a></li>\n";
+ 		echo "<li><a href='https://github.com/cyr-ius/PhotoShow'>PhotoShow on GitHub</a></li>\n";
+ 		echo "<li><a href='https://github.com/cyr-ius/PhotoShow/wiki/Tips'>Tips !</a></li>\n";
  		echo "</ul>\n";
 
  		echo "<h3>Me</h3>";
  		echo "<div style='text-align:center;'>";
-		echo "<p><img src='inc/me.jpg' width='150px' align='center' style='border-radius:5px; -moz-border-radius:5px;'></p>";
+		echo "<p><img src='inc/me.png' align='center' style='border-radius: 5px; background-color: white; height: 120px; width: auto;border-radius:5px; -moz-border-radius:5px;'></p>";
  		echo "<ul class='breadcrumb'>";
  		echo "<li><a href='mailto:cedric.levasseur@ipocus.net'>Email</a></li>\n";
- 		echo "<li><a href='http://twitter.com/#osi_iien'>Twitter</a></li>\n";
  		echo "<li><a href='https://github.com/Cyr-ius/PhotoShow'>GitHub</a></li>\n";
  		//~ echo "<li><a href='https://plus.google.com/114933352963292387937/about'>Google Profile</a></li>\n";
+                
+               echo " <div id='fb-root'></div>
+                <script>(function(d, s, id) {
+                  var js, fjs = d.getElementsByTagName(s)[0];
+                  if (d.getElementById(id)) return;
+                  js = d.createElement(s); js.id = id;
+                  js.src = '//connect.facebook.net/fr_FR/all.js#xfbml=1';
+                  fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));</script>";
+                echo "<li><div class='fb-like' data-href='https://www.facebook.com/pages/Photoshow-Evolution' data-layout='standard' data-action='like' data-show-faces='true' data-share='true'></div></li>";
  		echo "</ul>\n";
 		echo "</div>\n";		
-
  		echo "<h3>If you like PhotoShow ... </h3>";
  		echo "<ul class='breadcrumb'>";
  		echo "<li>Spread the word ! Tell it to your friends :)</li>\n";

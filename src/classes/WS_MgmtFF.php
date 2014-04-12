@@ -4,12 +4,12 @@ class WS_MgmtFF
 	function __construct(){
 	}
 
-	public function create($newfolder,$path,$inherit=null,$public=null,$users=array(),$groups=array()){
-		return AdminFiles::create($path,$newfolder,$inherit,$public,$users,$groups);
+	public function create($variables){
+		return AdminFiles::create($variables['path'],$variables['newfolder'],$variables['inherit']);
 	} 
 
-	public function delete($path){
-		return AdminFiles::delete($path);
+	public function delete($variables){
+		return AdminFiles::delete($variables['from']);
 	} 
 	
 	public function list_dirs($dir,$rec=false, $hidden=false) {
@@ -40,22 +40,21 @@ class WS_MgmtFF
 		return $res;
 	}
 
-	public function move($sourcepath,$targetpath){
-		return AdminFiles::move($sourcepath,$targetpath,"move");
+	public function move($variables){
+		return AdminFiles::move($variables['from'],$variables['to'],"move");
 	} 
 	
-	public function rename($sourcepath,$targetpath){
-		return AdminFiles::move($sourcepath,$targetpath,"rename");
+	public function rename($variables){
+		return AdminFiles::move($variables['pathFrom'],$variables['pathTo'],"rename");
 	} 	
 
-	public function mgmt_thumbs($path,$type){
-	
-		if ($type) {
-			if (in_array('clean',$type) || $type=='clean') {
-				Settings::cleanthumbs(File::r2a($path));
+	public function mgmt_thumbs($variables){
+		if ($variables['type']) {
+			if (in_array('clean',$variables['type']) || $variables['type']=='clean') {
+				AdminThumbs::cleanthumbs(File::r2a($variables['path']));
 			}
-			if (in_array('create',$type)|| $type=='create') {
-				Settings::gener_all(File::r2a($path));
+			if (in_array('create',$variables['type'])|| $variables['type']=='create') {
+				AdminThumbs::gener_all(File::r2a($variables['path']));
 			}
 			return true; 
 		} else {
@@ -67,13 +66,11 @@ class WS_MgmtFF
 
 	} 		
 	
-	public function saveset(){
-		$numargs = func_num_args();
-		$args = func_get_args();
+	public function saveset($variables){
 		$f = fopen(Settings::$admin_settings_file,"w");
-		foreach($args as $arg){
-			fwrite($f,$arg['name']." = \"".$arg["value"]."\"\n");
-		}
+		foreach(array_keys($variables) as $value){
+			 fwrite($f,$value." = \"".$variables[$value]."\"\n");
+		}		
 		fclose($f);
 		Settings::init(true);	
 	return true;

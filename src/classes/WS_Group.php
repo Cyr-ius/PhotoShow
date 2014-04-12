@@ -4,16 +4,16 @@ class WS_Group
 	function __construct(){
 	}
 		
-	public function create($name,$rights=array()){
-		return Group::create($name,$rights);
+	public function create($variables){
+		return Group::create($variables['groupname'],$variables['rights']);
 	} 
 
-	public function delete($name){
-		return Group::delete($name);	
+	public function delete($variables){
+		return Group::delete($variables['name']);	
 	} 
 
-	public function exists($name){
-		return Group::exists($name);		
+	public function exists($variables){
+		return Group::exists($variables['groupname']);		
 	} 
 }
 ?>

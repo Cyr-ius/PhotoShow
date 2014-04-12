@@ -83,8 +83,8 @@ class MenuBar implements HTMLObject{
 						if(isset(CurrentUser::$account)){
 							echo "<li><a href='#' data-href='?t=MyA' data-toggle='modal' data-target='#myModal' data-title='".CurrentUser::$account->login."' data-type='account'><i class='icon-user'></i> ".CurrentUser::$account->login."</a></li>";
 							echo "<li><a href='#' id='logout'><i class='icon-off'></i> ".Settings::_("menubar","logout")."</a></li>";
+							
 							if(CurrentUser::$admin){
-							echo "<li><a  href='#' data-href='?t=Adm&a=Set' data-toggle='modal' data-target='#ModalAdmin' ><i class='icon-wrench'></i> ".Settings::_("menubar","admin")."</a></li>";
 							}
 						} else {
 							echo "<li><a href='#' data-href='?t=Log' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","login")."' data-type='login'><i class='icon-globe'></i> ".Settings::_("menubar","login")."</a></li>";
@@ -92,6 +92,7 @@ class MenuBar implements HTMLObject{
 							echo "<li><a href='#' data-href='?t=Reg' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","register")."' data-type='register'><i class='icon-pencil'></i> ".Settings::_("menubar","register")."</a></li>";
 							}
 						}
+							echo "<li><a  href='#' data-href='?t=Adm&a=Abo' data-toggle='modal' data-target='#ModalAdmin' ><i class='icon-wrench'></i> ".Settings::_("menubar","admin")."</a></li>";
 							echo "<li><a href='/'><i class='icon-home'></i> ".Settings::_("menubar","home")."</a></li>";
 						echo "</ul>";
 						echo "<ul class='nav pull-right'>";

@@ -266,7 +266,7 @@ class jsonRPCServer {
 				$this->rpcCalls();
 			}
 			
-			$obj = $this->classes[$this->extension];				
+			$obj = $this->classes[$this->extension];		
 			if (($result = call_user_func_array(array($obj,$this->request['method']),$this->request['params'])) !== false) {
 				$this->ok((is_array($result)) ? $result : Array($result));
 			} else {

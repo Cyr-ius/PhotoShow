@@ -50,9 +50,9 @@ class AdminCreate
 		<fieldset>\n
 		<div class='control-group'>\n
 		<label for='foldername' class='control-label'>".Settings::_("adminpanel","name")."</label>\n
-		<div class='controls'><input class='input-large'  id='foldername' name='newdir' type='text' value='".Settings::_("adminpanel","new")."'></div>\n
+		<div class='controls'><input class='input-large'  id='foldername' name='newfolder' type='text' value='".Settings::_("adminpanel","new")."'></div>\n
                 <input type='hidden' name='path' value=\"".htmlentities(File::a2r(CurrentUser::$path), ENT_QUOTES ,'UTF-8')."\">
-		<div class='controls'><label class='checkbox'><input class='input-large'  id='folder_inherit' name='folder_inherit' type='checkbox' value='true' checked=checked />".Settings::_("settings","inherits_folder")."</label></div>\n
+		<div class='controls'><label class='checkbox'><input class='input-large'  id='folder_inherit' name='inherit' type='checkbox' value='true' checked=checked />".Settings::_("settings","inherits_folder")."</label></div>\n
 		</div>\n
 		<div class='controls controls-row'>\n
 		<input class='btn btn-primary' type='submit' value='".Settings::_("adminpanel","create")."'>

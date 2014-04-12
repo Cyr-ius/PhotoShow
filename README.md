@@ -1,4 +1,4 @@
-# PhotoShow Revolution
+# PhotoShow Evolution
 
 This is a Friendly fork of the original as the maintener is currently not active.
 
