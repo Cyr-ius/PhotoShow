@@ -134,7 +134,7 @@
 			</div>
 			<span ><small>".Settings::_("upload","rights_upload")."</small></span>
 		</section>";		
-		echo "<div id='dropzone' class='well'>".Settings::_("upload","dropzone")."</div>";
+		//~ echo "<div id='dropzone' class='well'>".Settings::_("upload","dropzone")."</div>";
 		echo "<div id='uploader'>
 				<div id='filelist'> 
 				<table class='well table table-striped'>

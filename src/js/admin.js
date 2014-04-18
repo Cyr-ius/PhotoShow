@@ -63,6 +63,8 @@ function init_admin(){
 		revert: 		true
 	});
 	
+	//~ $('#additem').draggable('disable');
+	
 	$(".accountitem").draggable({
 		cursor: 		"move",
 		zIndex: 		1050,

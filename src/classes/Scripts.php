@@ -38,6 +38,8 @@ class Scripts
 		<script src='inc/form2js/js2form.js'></script>
 		<script src='inc/form2js/jquery.toObject.js'></script>
 		
+		<script src='inc/jquery.lazyload.min.js'></script>	
+		
 		<!-- JQuery plugin : MediaElement  
 		<script src='inc/mediaelement/mediaelement-and-player.min.js'></script>-->
 
@@ -75,7 +77,7 @@ class Scripts
 		<script src='src/js/image_panel.js'></script>
 		<script src='src/js/slideshow.js'></script>
 		<script src='src/js/keyboard.js'></script>
-		<script src='inc/jquery.lazyload.min.js'></script>			
+		
 	    <script id='js_fix'>
 	      !function ($) {
 		$(function(){

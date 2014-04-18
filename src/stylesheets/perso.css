@@ -110,7 +110,7 @@ a {
   list-style :none outside none;
 }
 
-.thumbs .item , .thumbs .directory {
+.thumbs .item , .thumbs .directory , .thumbs .dropzone {
 margin-bottom: 10px;
 width:130px;
 display:inline-block;
@@ -145,6 +145,12 @@ display:inline-block;
 .thumbnail > img {
 	 height : 120px;
 	 width : 120px;	 
+}
+
+.thumbnail > canvas {
+	 height : 120px;
+	 width : 120px;	
+	margin-bottom:-5px;
 }
 
 li.selected > a.thumbnail {
@@ -218,7 +224,6 @@ li.selected > a.thumbnail {
     display: -moz-inline-stack;
     display: inline-block;
     float: none;
-    margin: 5px;
     vertical-align: top;
 }
 

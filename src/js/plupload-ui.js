@@ -4,9 +4,10 @@ function init_plupload() {
 	        runtimes : 'html5,html4,flash,silverlight',
 	        url : '?t=Adm&a=Upl',
 		container : 'uploader',
-		browse_button : 'dropzone',
-		drop_element : 'dropzone',
+		browse_button : 'additem',
+		drop_element : 'additem',
 		multiple_queues : true,
+		rename:true,
 		multipart_params : {path: $('span.currentpath').text()},
 	        max_file_size : '200mb',
 		unique_names : true,		
@@ -14,7 +15,6 @@ function init_plupload() {
 		silverlight_xap_url : '/plupload/js/plupload.silverlight.xap',
 	        // Resize images on clientside if we can
 	        resize : {width : 1920, height : 1200, quality : 90},
-	 
 	        // Specify what files to browse for
 		filters : [
 			{title : "image", extensions : "jpg,gif,png,jpeg,tiff"},
@@ -37,16 +37,50 @@ function init_plupload() {
 	uploader.init();
 
 	uploader.bind('FilesAdded', function(up, files) {
+		
 		if ($('.uploadbtn').is(':hidden')) {
 			$('.uploadbtn').show();
 		}
 		
-		$.each(files, function(i, file) {
-			$('#files').append('<tr  id="' + file.id + '"><td  class="name">' + file.name + '</td><td class="span6"><div class="progress progress-success progress-striped active" aria-valuenow="0" aria-valuemax="100" aria-valuemin="0" role="progressbar"><div class="bar" style="width:0%;"></div></div></td><td class="size">' + plupload.formatSize(file.size) +'<td><td><a class="action" href="#"><i class="icon-remove-sign"></i></a></td></tr>');			
-			$('#' + file.id + " .action").bind('click',function(){
-				uploader.removeFile(file);
-				$('#' + file.id).fadeOut(1000);
-			})
+		$.each(files, function(i, file) {	
+
+			var additem = $('#additem').clone().attr("id",file.id);
+			$(additem).children('.thumbnail').children('img').attr('src','../inc/loading_img.gif');
+			var $boxes = $(additem);
+			$('.images .thumbs').append($boxes).masonry( 'appended', $boxes ).parent().show();
+			$('.images .thumbs').masonry('layout');
+			$('.images .thumbs').masonry( 'on', 'layoutComplete', function(){
+				
+				
+				
+				
+							var previewimg = new o.Image();
+			previewimg.oid = file.id;
+
+			previewimg.onload = function() {
+				previewimg.downsize(120,120,true);
+				var src_img=previewimg.getAsDataURL();
+				$('#'+this.oid+' img').attr('src',src_img);
+				$('#'+this.oid+' .progress').show();
+				
+				$('#' +this.oid + " a").bind('click',function(){
+					uploader.removeFile(file);
+					$('#' + this.oid).fadeOut(1000,function(){
+						$('.images .thumbs').masonry('layout');	
+					});
+				})
+				previewimg.destroy();
+			};			
+			 previewimg.load(file.getSource());	
+				
+				
+				
+				
+				
+				
+				});
+			
+
 		});
 		up.refresh(); // Reposition Flash/Silverlight
 	});
@@ -54,15 +88,14 @@ function init_plupload() {
 	uploader.bind('UploadProgress', function(up, file) {
 		$('#' + file.id + " .bar").css('width',file.percent + "%");
 	});
-
+	
 	uploader.bind('Error', function(up, err) {
 		get_message(1,err.code+'-'+err.message+(err.file ? "-" + err.file.name : ""));	
 		up.refresh(); // Reposition Flash/Silverlight
 	});
 
 	uploader.bind('FileUploaded', function(up, file,info) {
-		$('#' + file.id + " .action").html("<i class='icon-ok-sign'></i>");
-		$('#' + file.id).delay(20).fadeOut(20);
+		//~ $('#' + file.id + " .action").html("<i class='icon-ok-sign'></i>");
 		var obj = JSON.parse(info.response);
 		if (obj.result){
 			if (obj.result.type=='Image') { var type='.images'};
@@ -70,8 +103,12 @@ function init_plupload() {
 			if (obj.result.type=='File') { var type='.albums'};
 			$.get('?j=Item&f='+obj.result.path,function(data){
 				var $boxes = $(data);
-				$(type+' .thumbs').append($boxes).masonry( 'appended', $boxes ).parent().show();
-				init();
+				$('#'+file.id).replaceWith($boxes);
+				$('#' + file.id).fadeOut(100, function(){
+						$(type+' .thumbs').append($boxes).masonry( 'appended', $boxes ).parent().fadeIn(100);
+						init();
+					});
+				$('#' + file.id).remove();
 			});
 			
 		}	
@@ -81,6 +118,12 @@ function init_plupload() {
 		$('.uploadbtn').hide();
 		get_message(0,'Upload Completed');
 	});
-	
-	$('#dropzone').droppable({hoverClass: "hovered"});
+	$('#additem').bind('dragover',function(){
+		$('#additem').addClass('hovered');
+	});
+	$('#additem').bind('dragleave',function(){
+		$('#additem').removeClass('hovered');
+	});
+	$('#additem').droppable({hoverClass: "hovered"});
+
 }

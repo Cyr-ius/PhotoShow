@@ -140,20 +140,27 @@ div[id*='html5_'] {
 }
 
 /* dropZone */
-#dropzone {
-	position : static !important;	
-	border-radius: 2px 2px 2px 2px;
-    box-shadow: 0 2px 2px black;	
-    line-height: 50px;
-    text-align: center;
-    font-weight: bold;
-	z-index: auto !important;
-	background: white;	
-	opacity:0.85;
+#additem a.thumbnail:hover,#additem a.thumbnail:focus,#additem a.thumbnail:active {
+	color : none;
+	text-decoration:none;
+	border: 1px dashed grey;
+	box-shadow:none;
 }
 
-#dropzone.hovered{
+#additem.hovered{
 	border: 1px dashed grey;
+	background-color : red;
+	color : none;
+}
+
+/* Progress bar */
+.progress {
+   margin-bottom: 10px;
+    margin-top: -15px;
+    margin-left: 5px;
+    margin-right: 5px;
+    height:5px;
+   position:relative;
 }
 
 

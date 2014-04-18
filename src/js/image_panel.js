@@ -50,7 +50,7 @@ function init_image_panel(){
 	
 
 	$('.linear_panel').mCustomScrollbar("scrollTo",".thumbnails li.selected");
-	$('img.lazy').lazyload({effect : "fadeIn",container:$(".linear_panel"),threshold : 200});
+	$('img.lazy').lazyload('update');
 		init_image_bar();
 	
 	// On mousewheelling

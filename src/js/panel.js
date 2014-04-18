@@ -47,18 +47,26 @@
 				});
 			}	
 			$(".item").clone().appendTo(".linear_panel .thumbnails").removeAttr('style');
+			$("#additem").hide();
 			$(".panel").hide();
 			$(".image_bar #linear").hide
 			$(".bigpanel").show("slide",{direction:"up"},600,init);
 		});		
 		return false;
 	});
+	//Remove Click item on additem
+	$('#additem a').unbind();
 
 	$('.images .thumbs').masonry({columnWidth:10,gutter:10, itemSelector: '.item'});
 	$('.videos .thumbs').masonry({columnWidth:10,gutter:10, itemSelector: '.item'});
 	$('.albums .thumbs').masonry({columnWidth:10,gutter:10, itemSelector: '.directory'});
 	if ($('.moxie-shim-html5').length==0) {init_plupload();}
-	$('img.lazy').lazyload({effect : "fadeIn",container:$(".panel"),threshold : 200});
+	if (lazyload==0) {
+		$('img.lazy').lazyload({effect : "fadeIn",container:$(".panel"),threshold : 200}); 
+		lazyload=1;
+	} else {
+		$('img.lazy').lazyload('update');
+	}
 	$(".linear_panel .thumbnails").children().remove();	
 	//~ $('.linear_panel').mCustomScrollbar("destroy");
 }
@@ -253,12 +261,27 @@ function init() {
 $("document").ready(function(){
 	exifvisible = 0;
 	viewlist = 0;
+	lazyload = 0;
 	scrollbar('.linear_panel',true);
 	init();
 	if ($(".menu .selected:last").length > 0) $(".menu").scrollTo($(".menu .selected:last"));
 });
 
 /****************** Function Jquery ***************/
+function preloadThumb(file) {
+	var toto = new o.Image();
+
+	toto.onload = function() {
+		var thumb = $('.album-title').html('');
+		this.embed(thumb[0], { 
+			width: 100, 
+			height: 60, 
+			crop: true,
+		});
+	};
+
+	toto.load(file.getSource());
+}
 
 //~ $.fn.serializeObject = function()
 //~ {
