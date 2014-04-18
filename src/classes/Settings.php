@@ -288,6 +288,8 @@ class Settings extends Page
 				Settings::$ffmpeg_option	=	$admin_settings['ffmpeg_option'];
 			}
 		}
+		// Create Array Extensions
+		Settings::$allowedExtensions = array_merge(Settings::$allowedExtImages,Settings::$allowedExtVideos,Settings::$allowedExtFiles);			
 
 		// Localization files path
 		Settings::$locpath = dirname(dirname(dirname(__FILE__)))."/inc/loc/";
