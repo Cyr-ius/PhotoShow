@@ -1,5 +1,5 @@
 <?php 
-class Scripts
+class Scripts implements HTMLObject
 {
 
 	public function __construct() {

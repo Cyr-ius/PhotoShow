@@ -154,7 +154,6 @@ class Provider
 	 * @author Thibaud Rohmer
 	 */
 	public static function thumb($file){
-		require_once dirname(__FILE__).'/../phpthumb/ThumbLib.inc.php';
 		
 		$basefile		= 	new File($file);
 		$basepath	=	File::a2r($file);
@@ -194,7 +193,6 @@ class Provider
 	 * @author Thibaud Rohmer
 	 */
 	public static function small($file){
-		require_once dirname(__FILE__).'/../phpthumb/ThumbLib.inc.php';
 
 		$basefile	= 	new File($file);
 		$basepath	=	File::a2r($file);

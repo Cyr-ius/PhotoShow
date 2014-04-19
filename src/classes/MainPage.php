@@ -83,18 +83,18 @@ class MainPage extends Page
 		/// Check how to display current file
 		if(is_file(CurrentUser::$path)){
 			$this->bigpanel_visible			=	"";			
-			$this->image_panel			=	new ImagePanel(CurrentUser::$path);
+			$this->image_panel				=	new ImagePanel(CurrentUser::$path);
 			$this->panel					=	new Board(dirname(CurrentUser::$path));
 			$this->linear_panel				=	new Linear_panel(CurrentUser::$path);
 			$this->imagebar				=	new ImageBar(CurrentUser::$path);
-			$this->panel_visible			=	"hide";
+			$this->panel_visible				=	"hide";
 		}else{
 			$this->bigpanel_visible			=	"hide";						
-			$this->image_panel			=	new ImagePanel();		
+			$this->image_panel				=	new ImagePanel();		
 			$this->panel					=	new Board(CurrentUser::$path);
 			$this->linear_panel				=	new Linear_panel(CurrentUser::$path);	
 			$this->imagebar				=	new ImageBar(CurrentUser::$path);			
-			$this->panel_visible			=	"";			
+			$this->panel_visible				=	"";			
 		}
 
 		/// Create MenuBar

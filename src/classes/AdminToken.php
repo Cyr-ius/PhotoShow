@@ -41,7 +41,7 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
- class AdminToken
+ class AdminToken  implements HTMLObject
  {
 
  	/**

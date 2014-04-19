@@ -41,16 +41,17 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-class BoardHeader{
+class BoardHeader  implements HTMLObject
+{
 
 	/// Name of the directory listed in parent Board
-	public $title;
+	private $title;
 	
 	/// Path of the directory listed in parent Board
-	public $path;
+	private $path;
 	
 	/// TestInfo , containing the title and explain
-	public $textinfo;	
+	private $textinfo;	
 
 	/**
 	 * Create BoardHeader
@@ -59,9 +60,9 @@ class BoardHeader{
 	 * @author Thibaud Rohmer
 	 */
 	public function __construct($title,$path){
-		$this->path 	=	urlencode(File::a2r($path));
 		$this->title 	=	$title;
-		$this->textinfo 	=	new TextInfo($path);
+		$this->path 	=	urlencode(File::a2r($path));
+		$this->textinfo =	new TextInfo($path);
 		$this->upload	=	new AdminUpload();
 	}
 	

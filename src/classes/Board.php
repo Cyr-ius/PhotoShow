@@ -98,7 +98,6 @@ class Board implements HTMLObject
 		$this->files	=	Menu::list_files($this->path);
 		$this->dirs	=	Menu::list_dirs($this->path);
 		$pageURL 	=	Settings::$site_address."/?f=".urlencode(File::a2r($this->path));
-		//~ $this->comm	=	new Comments($this->path);
 
         // generate the header - opengraph metatags for facebook
         $this->page_header = "<meta property=\"og:url\" content=\"".$pageURL."\"/>\n"

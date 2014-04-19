@@ -28,7 +28,8 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow-v2
  */
-
+ini_set('display_errors', 'On');
+ error_reporting(E_ALL);
 ini_set('max_execution_time', 60);
 
 /// Start session
@@ -65,7 +66,8 @@ function my_autoload($class){
 	}else{
 		return FALSE;
 	}
-        require_once dirname(__FILE__).'/src/json-rpc/jsonRPC2Server.php';	
+        require_once dirname(__FILE__).'/inc/json-rpc/jsonRPC2Server.php';	
+        require_once dirname(__FILE__).'/inc/phpthumb/ThumbLib.inc.php';
 }
 
 spl_autoload_register("my_autoload");
@@ -98,7 +100,6 @@ if (!get_magic_quotes_gpc()){
 }
 
 if (!isset($_SESSION['login'])) {session_unset();}
-
 if(preg_match("/application\/json/",$_SERVER['CONTENT_TYPE'])){
 	new API();
 }else{

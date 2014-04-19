@@ -60,16 +60,15 @@ abstract class Page implements HTMLObject
 		echo "<meta name='viewport' content='width=device-width, initial-scale=1.0'>\n";
 		echo "<title>".Settings::$name."</title>\n";
 		echo "<link rel='icon' type='image/ico' href='".Settings::$icon_path."'>";
-
 		/// CSS
 		echo "<link rel='stylesheet' href='src/stylesheets/normalize.css' type='text/css' media='screen' charset='utf-8'>";
 		echo "<link rel='stylesheet' href='inc/bootstrap/css/bootstrap.min.css'>";
 		echo "<link rel='stylesheet' href='inc/bootstrap/css/bootstrap-modal.css'>";			
 		echo "<link rel='stylesheet' href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'>";		
 		echo "<link rel='stylesheet' href='inc/mCustomScrollbar/jquery.mCustomScrollbar.css'>";	
-		echo "<link rel='stylesheet' href='inc/colorpicker/css/colorpicker.css'>";	
-		echo "<link rel='stylesheet' href='inc/assets/css/video-default.css'>";	
-		echo "<link rel='stylesheet' href='inc/mediaelement/mediaelementplayer.css'>";	
+		//~ echo "<link rel='stylesheet' href='inc/colorpicker/css/colorpicker.css'>";	
+		//~ echo "<link rel='stylesheet' href='inc/assets/css/video-default.css'>";	
+		//~ echo "<link rel='stylesheet' href='inc/mediaelement/mediaelementplayer.css'>";	
 		echo "<link rel='stylesheet' href='inc/messenger/css/messenger.css'>";	
 		echo "<link rel='stylesheet' href='inc/messenger/css/messenger-theme-future.css'>";	
 		echo "<link rel='stylesheet' href='src/stylesheets/jquery.plupload.queue.css'>";

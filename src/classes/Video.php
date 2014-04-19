@@ -101,136 +101,135 @@ class Video implements HTMLObject
 		   exec($cmd . " > /dev/null 2>&1 & echo $!", $output);
 		   $pid = intval($output[0]);
 		}
-	error_log($output);		
         return $pid;
 	} 
 
-    /**
-     * Compute the duration of a video using ffmpeg
-     *
-     * @return the duration in seconds
-     * @author Franck Royer
-     */
-    public function GetDuration($file){
-        if(!File::Type($file) || File::Type($file) != "Video"){
-            return;
-        }
+	/**
+	* Compute the duration of a video using ffmpeg
+	*
+	* @return the duration in seconds
+	* @author Franck Royer
+	*/
+	public function GetDuration($file){
+	if(!File::Type($file) || File::Type($file) != "Video"){
+	    return;
+	}
 
 	if (substr(php_uname(), 0, 7) == "Windows"){
 		exec(Settings::$ffmpeg_path.' -i "'.$file.'" 2>&1|findstr Duration', $output);
 	} else {
-	        exec(Settings::$ffmpeg_path.' -i "'.$file.'" 2>&1|grep Duration', $output);
+		exec(Settings::$ffmpeg_path.' -i "'.$file.'" 2>&1|grep Duration', $output);
 	}
-	
-        $duration = $output[0];
 
-        $duration_array = explode(':', $duration);
-        $duration = intval($duration_array[1]) * 3600 + intval($duration_array[2]) * 60 + intval($duration_array[3]);
+	$duration = $output[0];
 
-        //error_log('DEBUG/Video: duration of '.$file.' is '.$duration.' seconds');
-        return $duration;
-    }
+	$duration_array = explode(':', $duration);
+	$duration = intval($duration_array[1]) * 3600 + intval($duration_array[2]) * 60 + intval($duration_array[3]);
 
-    /**
-     * Compute the dimension of a video using ffmpeg
-     *
-     * @return the dimension in a array of int
-     * @author Franck Royer
-     */
-    public function GetScaledDimension($file, $x = 0, $y = 0){
+	//error_log('DEBUG/Video: duration of '.$file.' is '.$duration.' seconds');
+	return $duration;
+	}
 
-        if(!File::Type($file) || File::Type($file) != "Video"){
-            return;
-        }
+	/**
+	* Compute the dimension of a video using ffmpeg
+	*
+	* @return the dimension in a array of int
+	* @author Franck Royer
+	*/
+	public function GetScaledDimension($file, $x = 0, $y = 0){
+
+	if(!File::Type($file) || File::Type($file) != "Video"){
+	    return;
+	}
 
 	if (substr(php_uname(), 0, 7) == "Windows"){
 		exec(Settings::$ffmpeg_path.' -i "'.$file.'" 2>&1|findstr Video', $output);
 	} else {
 		exec(Settings::$ffmpeg_path.' -i "'.$file.'" 2>&1|grep Video', $output);
 	}
-        $line = $output[0];
-        preg_match('/[0-9]{2,4}x[0-9]{2,4}/', $line, $matches);
-        $match = $matches[0];
+	$line = $output[0];
+	preg_match('/[0-9]{2,4}x[0-9]{2,4}/', $line, $matches);
+	$match = $matches[0];
 
 
-        $dimensions_array = explode('x', $match);
-        $orig_x = intval($dimensions_array[0]);
-        $orig_y = intval($dimensions_array[1]);
-        //error_log('DEBUG/Video: dimension of '.$file.' is '.$orig_x.'x'.$orig_y);
+	$dimensions_array = explode('x', $match);
+	$orig_x = intval($dimensions_array[0]);
+	$orig_y = intval($dimensions_array[1]);
+	//error_log('DEBUG/Video: dimension of '.$file.' is '.$orig_x.'x'.$orig_y);
 
-        //If for some reason ffmpeg cannot get the dimension
-        if ($orig_x == 0 || $orig_y == 0){
-            error_log('ERROR/Video: dimension of '.$file.' is '.$orig_x.'x'.$orig_y);
-            $orig_x = 320;
-            $orig_y = 240;
-        }
+	//If for some reason ffmpeg cannot get the dimension
+	if ($orig_x == 0 || $orig_y == 0){
+	    error_log('ERROR/Video: dimension of '.$file.' is '.$orig_x.'x'.$orig_y);
+	    $orig_x = 320;
+	    $orig_y = 240;
+	}
 
 
-        $dimensions = array( 'x' => $orig_x, 'y' => $orig_y );
+	$dimensions = array( 'x' => $orig_x, 'y' => $orig_y );
 
-        if ($x != 0){// wants to know y for the given x
-            $y = ($x*$orig_y) / $orig_x;
-            $dimensions['x'] = $x;
-            $dimensions['y'] = intval($y);
-        }
-        elseif ($x != 0){// wants to know x for the given y
-            $x = ($y*$orig_x) / $orig_y;
-            $dimensions['x'] = intval($x);
-            $dimensions['y'] = $y;
-        }// if both 0 we return original dimensions
+	if ($x != 0){// wants to know y for the given x
+	    $y = ($x*$orig_y) / $orig_x;
+	    $dimensions['x'] = $x;
+	    $dimensions['y'] = intval($y);
+	}
+	elseif ($x != 0){// wants to know x for the given y
+	    $x = ($y*$orig_x) / $orig_y;
+	    $dimensions['x'] = intval($x);
+	    $dimensions['y'] = $y;
+	}// if both 0 we return original dimensions
 
-        //error_log('DEBUG/Video: *scaled* dimension of '.$file.' is '.$dimensions['x'].'x'.$dimensions['y']);
-        return $dimensions;
-    }
+	//error_log('DEBUG/Video: *scaled* dimension of '.$file.' is '.$dimensions['x'].'x'.$dimensions['y']);
+	return $dimensions;
+	}
 	/**
 	* Envoce video
 	*
 	* @param string $file 
 	* @author Cédric Levasseur
 	*/
-    public static function Encode($file) {
+	public function Encode($file) {
 	// We check that first to allow the clean of old job files
 	if (self::NoJob($file)) {
 		$video = new Video($file);
-	        // Check if thumb folder exist
+		// Check if thumb folder exist
 		if(!file_exists($video->targetpath)){
 			@mkdir($video->targetpath,0755,true);
 		}
 	     $target = $video->targetpath."/".$video->filename.'.'.Settings::$encode_type;
-            if (!file_exists($target) || filectime($file) > filectime($target)){
-                if ($video->extension !=Settings::$encode_type) {
-                    ///Convert video to Thumbs folder
-                    //TODO: Max job limit
-                    $u = Settings::$ffmpeg_path.' -i "'.$file.'" '.Settings::$ffmpeg_option.' -y "'.$target.'"';		
-                    $pid = self::ExecInBackground($u);
-                    self::CreateJob($file, $pid);
-                }
-                else {
-                    ///Copy original video to Thumbs folder
-                    copy($file,$target);
-                }
-            }
-        }
-    }
+	    if (!file_exists($target) || filectime($file) > filectime($target)){
+		if ($video->extension !=Settings::$encode_type) {
+		    ///Convert video to Thumbs folder
+		    //TODO: Max job limit
+		    $u = Settings::$ffmpeg_path.' -i "'.$file.'" '.Settings::$ffmpeg_option.' -y "'.$target.'"';		
+		    $pid = self::ExecInBackground($u);
+		    self::CreateJob($file, $pid);
+		}
+		else {
+		    ///Copy original video to Thumbs folder
+		    copy($file,$target);
+		}
+	    }
+	}
+	}
 	/**
 	* Create Thumbnail  for a video file
 	*
 	* @param string $file 
 	* @author Cédric Levasseur
 	*/    
-    public static function Thumb($file) {
-	$video = new Video($file);
-	// Check if thumb folder exist
-	if(!file_exists($video->targetpath)){
-		@mkdir($video->targetpath,0755,true);
+	public static function Thumb($file) {
+		$video = new Video($file);
+		// Check if thumb folder exist
+		if(!file_exists($video->targetpath)){
+			@mkdir($video->targetpath,0755,true);
+		}
+		$target = $video->targetpath."/".$video->filename.'_thumb.jpg';
+		$offset = Video::GetDuration($file)/2;
+		$dimensions = Video::GetScaledDimension($file, 320);
+		$u=Settings::$ffmpeg_path.' -itsoffset -'.$offset.'  -i "'.$file.'" -vcodec mjpeg -vframes 1 -an -f rawvideo -s '.$dimensions['x'].'x'.$dimensions['y'].' -y "'.$target.'"';
+		exec($u);
+		self::Encode($file);
 	}
-	$target = $video->targetpath."/".$video->filename.'_thumb.jpg';
-	$offset = Video::GetDuration($file)/2;
-	$dimensions = Video::GetScaledDimension($file, 320);
-	$u=Settings::$ffmpeg_path.' -itsoffset -'.$offset.'  -i "'.$file.'" -vcodec mjpeg -vframes 1 -an -f rawvideo -s '.$dimensions['x'].'x'.$dimensions['y'].' -y "'.$target.'"';
-	exec($u);
-	self::Encode($file);
-    }
 
 	/**
 	 * Check if a job is running for the conversion
@@ -332,7 +331,7 @@ class Video implements HTMLObject
 	 * @author Cédric Levasseur
 	 */
 	public function toHTML(){	
-        self::VideoDiv('100%','100%',true);
+		self::VideoDiv('100%','100%',true);
 	}
 
 }

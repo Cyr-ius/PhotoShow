@@ -599,34 +599,6 @@ class Settings extends Page
 		echo "</fieldset>\n";		
 		echo "</form>\n";			
 		echo "</div>\n";
-
-		echo "<h3>".Settings::_("settings","admthumbs")."</h3>\n";
-		echo "<div class='well'>\n";
-		echo "<form id='gthumb-form' class='form-horizontal' action='WS_MgmtFF.mgmt_thumbs' method='post'>\n";
-			echo "<fieldset>\n";
-				echo "<div class='control-group'>\n";		
-					echo "<label for='ffmpeg_path' class='control-label'>".Settings::_("settings","folder")."</label>";
-					echo "<div class='controls'>";
-						echo "<select name='path' class='input-xxlarge'>";
-						echo "<option value='.'>".Settings::_("settings","all")."</option>";
-							foreach(Menu::list_dirs(Settings::$photos_dir,true) as $f){
-								$p = htmlentities(File::a2r($f), ENT_QUOTES ,'UTF-8');
-								echo "<option value=\"".addslashes($p)."\">".basename($p)."</option>";
-							}
-						echo "</select>";		
-					echo "</div>\n";
-				echo "</div>\n";
-				echo "<div class='control-group'>\n";
-					echo "<label class='checkbox'><input type='checkbox' name='type[]' value='clean'>".Settings::_("settings","delthumb")."</label>\n";
-					echo "<label class='checkbox'><input type='checkbox' name='type[]' value='create'>".Settings::_("settings","genthumb")."</label>\n";
-
-				echo "</div>\n";
-				echo "<div class='controls controls-row'>\n";
-					echo "<input class='btn btn-primary' type='submit' value='".Settings::_("settings","submit")."' data-loading-text='Generating...'>\n";
-				echo "</div>\n";		
-			echo "</fieldset>\n";
-		echo "</form>";		
-		echo "</div>";
 	echo "</div>\n";
 		
 	}

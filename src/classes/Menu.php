@@ -56,41 +56,27 @@ class Menu implements HTMLObject
 	/// Array of Menu instances, one per directory inside $dir
 	private $items=array();
 	private $categories=array();
-
+	private $menu=array();
+	
 	/// Relative path to file
 	private $path = "";
 	
+	
+	
 	private $html;
 	
-	/**
-	 * Create Menu
-	 *
-	 * @param string $dir 
-	 * @param int $level
-	 * @author Thibaud Rohmer
-	 */
 	public function __construct($dir=null,$level=0){
-		
+		$this->menu = $this->CsMenu();
 	}
 	
-
-	/**
-	 * Display Menu in website
-	 *
-	 * @return void
-	 * @author Thibaud Rohmer
-	 */
 	public function toHTML(){
-		$a = self::CsMenu();
-		//~ print_r($a);
-		echo self::ListFolder('',0,$a);	
+		echo $this->ListFolder('',0,$this->menu);	
 	}
 
 	public function CsMenu($dir=null,$level=0,$item_prec=null){	
 		/// Init Menu 
 		if($dir == null)
 			$dir = Settings::$photos_dir;
-		
 		
 		/// Check rights
 		if(!(Judge::view($dir) || Judge::searchDir($dir))){
@@ -131,7 +117,7 @@ class Menu implements HTMLObject
 		return $this->categories;
 	}	
 	
-	public function ListFolder($parent, $niveau, $array) {
+	private function ListFolder($parent, $niveau, $array) {
 			
 			$niveau_precedent = 0;
 			if (!$niveau && !$niveau_precedent) {
@@ -176,10 +162,10 @@ class Menu implements HTMLObject
 		/// Directory content
 		$dir_content = scandir($dir);
 
-        if (empty($dir_content)){
-            // Directory is empty or no right to read
-            return $list;
-        }
+		if (empty($dir_content)){
+		    // Directory is empty or no right to read
+		    return $list;
+		}
 		
 		/// Check each content
 		foreach ($dir_content as $content){

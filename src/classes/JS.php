@@ -43,11 +43,6 @@
  */
 class JS 
 {
-	
-	private $toPrint;
-
-	private $j;
-
 	public function __construct(){
 
 		if(isset($_GET['j'])){

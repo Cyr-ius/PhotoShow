@@ -122,7 +122,6 @@ class MainBody extends Page
 	public function toHTML(){
 		$this->header($this->header_content);
 		echo "<body>";
-		//~ echo "<span id='key'>".CurrentUser::$account->key."</span>";
 		echo "<div id='mainpage'>";
 		$this->mainpage->toHTML();
 		echo "</div>";

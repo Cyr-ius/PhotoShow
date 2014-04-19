@@ -42,14 +42,8 @@
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
 
-class LoginPage extends Page
+class LoginPage implements HTMLObject
 {
-	
-	/**
-	 * Create Login Page
-	 *
-	 * @author Thibaud Rohmer
-	 */
 	public function __construct(){
 			
 	}

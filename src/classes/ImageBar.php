@@ -43,7 +43,7 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-class ImageBar
+class ImageBar implements HTMLObject
 {
 
 	/// Buttons to display

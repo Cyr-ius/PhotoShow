@@ -41,7 +41,7 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
- class AdminUpload
+ class AdminUpload  implements HTMLObject
  {
  	/// Directories where we can upload
  	public $dirs = array();

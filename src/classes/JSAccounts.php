@@ -41,7 +41,7 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-class JSAccounts
+class JSAccounts implements HTMLObject
 {
 
 	/// The accounts
@@ -50,11 +50,8 @@ class JSAccounts
 	/// The groups
 	private $groups;
 
-
-
 	public function __construct(){
 		$this->accounts = Account::findAll();
-
 		$this->groups = Group::findAll();
 	}
 

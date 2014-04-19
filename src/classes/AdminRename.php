@@ -39,7 +39,7 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-class AdminRename
+class AdminRename  implements HTMLObject
 {
 	public function __construct(){
 	}

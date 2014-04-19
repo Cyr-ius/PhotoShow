@@ -37,20 +37,14 @@
 
  */
 
-class TextInfo
+class TextInfo extends Page
 {
 	
 	public $title=null;
 	public $author=null;
 	public $contain=null;
 
-	/**
-	 * Create a Judge for a specific file.
-	 *
-	 * @param string $f 
-	 * @param string $read_rights 
-	 * @author Thibaud Rohmer
-	 */
+
 	public function __construct($f){
 		
 		if(!file_exists($f)){

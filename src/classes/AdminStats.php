@@ -42,7 +42,7 @@
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
 
- class AdminStats
+ class AdminStats  implements HTMLObject
  {
 
  	// Stats
@@ -88,7 +88,7 @@
 	}
 
  	public function toHTML(){
-		self::Calculate() ;
+		$this->Calculate() ;
 		echo "<div class='row-fluid'>";
 			echo "<div class='span6'>";
 			echo "<h3>Stats</h3>";

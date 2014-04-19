@@ -41,7 +41,7 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
- class AdminAccount
+ class AdminAccount  implements HTMLObject
  {
 
  	public function __construct(){

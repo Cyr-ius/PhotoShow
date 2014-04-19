@@ -59,8 +59,6 @@
  	 */
  	public function __construct(){
 	
-	
-	
 		//Section  pour tout le monde
  		if(isset($_GET['a'])){
 	 		switch($_GET['a']){
@@ -69,7 +67,6 @@
 								break;
 	 		}
 	 	}
-	
 	
  		/// Check that current user is an admin or an uploader
 	 	if( !(CurrentUser::$admin || CurrentUser::$uploader) ){
@@ -140,6 +137,7 @@
 	public function toHTML(){
 		// Create menu
 	 	$this->menu = new ModalAdmin();
+		//Create content
 		$this->page->toHTML();
 	}
 

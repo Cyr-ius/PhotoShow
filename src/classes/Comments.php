@@ -50,7 +50,7 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-class Comments
+class Comments  implements HTMLObject
 {
 	/// Array of the comments
 	private $comments=array();

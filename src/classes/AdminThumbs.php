@@ -42,7 +42,7 @@
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
 
-class AdminThumbs
+class AdminThumbs  implements HTMLObject
 {
 
 	public function __construct(){
@@ -56,29 +56,23 @@ class AdminThumbs
 	 */
 	public static function gener_all($folder){
 		$files = Menu::list_files($folder,true);
-
 		if( !ini_get('safe_mode') ){ 
 			set_time_limit(1200); 
 		}
-
 		foreach($files as $file){
 			/// Generate thumb
 			Provider::image($file,true,false,false);
-
 			/// Generate webimg
 			Provider::image($file,false,false,false);
 		}
 		return;
 	}
 	
-	
 	public static function cleanthumbs($folder){
 		$files = Menu::list_files(Settings::$thumbs_dir.File::a2r($folder),true);
-
 		if( !ini_get('safe_mode') ){ 
 			set_time_limit(1200); 
 		}
-
 		foreach($files as $file){
 			@unlink($file);
 		}	

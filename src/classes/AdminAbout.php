@@ -41,23 +41,12 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
- class AdminAbout
+ class AdminAbout  implements HTMLObject
  {
-
- 	/**
- 	 * Create about page
- 	 * 
- 	 * @author Thibaud Rohmer
- 	 */
  	public function __construct(){
 
  	}
-
- 	/**
- 	 * Display upload page on website
- 	 * 
- 	 * @author Thibaud Rohmer
- 	 */
+        
  	public function toHTML(){
 		echo "<div class='row-fluid'>";
  		echo "<h3>PhotoShow</h3>";

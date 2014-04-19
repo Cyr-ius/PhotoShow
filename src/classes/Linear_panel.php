@@ -55,6 +55,9 @@ class Linear_panel implements HTMLObject
 	/// Paths to the files in the directory
 	private $files;
 	
+	/// Array board item
+	private $grid;
+	
 
 	/**
 	 * Board constructor
@@ -74,6 +77,7 @@ class Linear_panel implements HTMLObject
 			$this->path		=	dirname($path);
 		}
 		$this->files	=	Menu::list_files($this->path);
+		$this->grid	=	Board::grid($this->files);
 	}
 	
 	/**
@@ -83,13 +87,12 @@ class Linear_panel implements HTMLObject
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){		
-	    $rslt_grid = Board::grid($this->files);
 	    echo "<div id='linear_panel' class='linear_panel'>\n
 		<ul class='thumbnails'>\n";
-		foreach($rslt_grid['Images'] as $boardline){
+		foreach($this->grid['Images'] as $boardline){
 			$boardline->toHTML();
 		}
-		foreach($rslt_grid['Videos'] as $boardline){
+		foreach($this->grid['Videos'] as $boardline){
 			$boardline->toHTML();
 		}		
 		echo "</ul>\n";	

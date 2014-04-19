@@ -1,5 +1,5 @@
 <?php 
-class ModalTemplate
+class ModalTemplate implements HTMLObject
 {
 
 	public function __construct() {

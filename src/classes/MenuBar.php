@@ -42,7 +42,8 @@
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
 
-class MenuBar implements HTMLObject{
+class MenuBar implements HTMLObject
+{
 	
 	/// True if user is logged in
 	private $logged_in	= false;

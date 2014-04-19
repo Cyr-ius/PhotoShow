@@ -1,5 +1,5 @@
 <?php 
-class ModalAdmin
+class ModalAdmin implements HTMLObject
 {
 
 	public function __construct() {

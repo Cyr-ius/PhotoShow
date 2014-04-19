@@ -39,7 +39,7 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
-class AdminCreate
+class AdminCreate  implements HTMLObject
 {
 	public function __construct(){
 	}

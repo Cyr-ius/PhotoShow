@@ -44,7 +44,7 @@
  * @link      http://github.com/thibaud-rohmer/PhotoShow
  */
 
-class Judge
+class Judge implements HTMLObject
 {
 	/// Absolute path to rights file for requested file
 	public $path;
