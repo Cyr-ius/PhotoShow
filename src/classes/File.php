@@ -66,7 +66,7 @@ class File
 		
 		/// Check that file exists
 		if(!file_exists($path))
-			throw new Exception("The file doesn't exist !");
+			throw new jsonRPCException("The file doesn't exist !");
 		
 		/// Set variables
 		$this->path			=	$path;
@@ -142,7 +142,7 @@ class File
 		}
 
 		$ext	=	self::Extension($file);
-		if(!isset($ext)){
+		if(!isset($ext) || empty($ext)){
 			return "Folder";
 		}
 		if (in_array($ext,Settings::$allowedExtImages)) 
@@ -153,6 +153,20 @@ class File
 			return "File";
 		return 0;
 
+	}
+	
+	public static function path2Thumb($file,$type='thumb') {
+		$file = stripslashes(str_replace(Settings::$photos_dir,Settings::$thumbs_dir,$file));
+		switch(self::Type($file)){
+			case "Image":
+				if (strtolower($type) =="thumb") { $type="_thumb.jpg"; } else {$type="_small.jpg";}
+				return dirname($file).'/'.(self::Name($file).$type);
+			case "Video":
+				if (strtolower($type) =="thumb") { $type="_thumb.jpg"; } else {$type=".".Settings::$encode_type;}
+				return dirname($file).'/'.(self::Name($file).$type);
+			case "Folder":
+				return $file;
+		}	
 	}
 	
 	/**

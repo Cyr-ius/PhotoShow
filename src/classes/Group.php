@@ -243,7 +243,7 @@ class Group
 				return $rights;
 			}
 		}
-		throw new Exception("$name not found");
+		throw new jsonRPCException("$name not found");
 	}
 	
 	public static function findAll(){

@@ -126,13 +126,10 @@ class Provider
 		    error_log('ERROR/Provider::Video - path:'.$path.' does not exist, using '.$file);
 		    return;
 		}
-		error_log($path);
-		error_log(File::Type($path));
 		/// Check file type
 		if(!isset($path) || !File::Type($path) || File::Type($path) != "Video") {
 			return;
 		}		
-		error_log('la');
 		$expires = 60*60*24*14;
 		$last_modified_time = filemtime($path); 
 		$etag = md5_file($file); 
@@ -196,7 +193,7 @@ class Provider
 
 		$basefile	= 	new File($file);
 		$basepath	=	File::a2r($file);
-		$webimg	=	dirname($basepath)."/".$basefile->name."_small.".$basefile->extension;
+		$webimg	=	dirname($basepath)."/".$basefile->name."_small.jpg";
 		
 		list($x,$y) = getimagesize($file);
 		if($x <= 800 && $y <= 600){	
@@ -242,9 +239,10 @@ class Provider
 
 		if(!$large){
 			if ($thumb){
-			    $path = Provider::thumb($file);
+				$path = Provider::small($file);
+				$path = Provider::thumb($file);
 			}else{
-			    $path = Provider::small($file);
+				$path = Provider::small($file);
 			}
 		}
 

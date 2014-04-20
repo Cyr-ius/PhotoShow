@@ -157,7 +157,7 @@ class Menu implements HTMLObject
 
 		/// Check that $dir is a directory, or throw exception
 		if(!is_dir($dir)) 
-			throw new Exception("'".$dir."' is not a directory");
+			throw new jsonRPCException("'".$dir."' is not exist");
 			
 		/// Directory content
 		$dir_content = scandir($dir);
@@ -201,7 +201,7 @@ class Menu implements HTMLObject
 		
 		/// Check that $dir is a directory, or throw exception
 		if(!is_dir($dir)) 
-			throw new Exception("'".$dir."' is not a directory");
+			throw new jsonRPCException("'".$dir."' is not exist");
 			
 		/// Directory content
 		$dir_content = scandir($dir);

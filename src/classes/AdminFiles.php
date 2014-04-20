@@ -81,34 +81,17 @@ class AdminFiles
  		if( !(CurrentUser::$admin || CurrentUser::$uploader) ){
 			throw new jsonRPCException('Insufficient rights');
  		}
-		//~ $delpath = File::r2a($delpath);
 
-		//~ if (!$delpath) {
-			//~ $delpath 	=	File::r2a(stripslashes($_POST['del']));
-		//~ }
 		if($delpath == Settings::$photos_dir || empty($delpath)){
 			throw new jsonRPCException(Settings::$photos_dir." refuse deleted");	
  		}
-		$delpath = File::r2a($delpath);
-		$file_file	       = new File($delpath);
-		$thumb_path_no_ext = File::r2a(Settings::$thumbs_dir.dirname(File::a2r($delpath))."/".$file_file->name,File::Root());
-
-		switch($file_file->type){
-			case "Image":
-				$del_thumb_small   = $thumb_path_no_ext.'_small.'.$file_file->extension;	
-				$del_thumb    = $thumb_path_no_ext.'.'.$file_file->extension;
-			case "Video":
-				$del_thumb_small   = $thumb_path_no_ext.'.mp4';	
-				$del_thumb    = $thumb_path_no_ext.'.jpg';
-		}			
 		
-		
-		if(is_file($del_thumb)){
-		self::rec_del($del_thumb);
-		}
-		if(is_file($del_thumb_small)){
-		self::rec_del($del_thumb_small);
-		}
+		$delpath = File::r2a($delpath);	
+	
+		if (is_file(File::path2Thumb($delpath))) 
+			self::rec_del(File::path2Thumb($delpath));
+		if (is_file(File::path2Thumb($delpath,'small'))) 
+			self::rec_del(File::path2Thumb($delpath,'small'));
 		self::rec_del($delpath);
 		return array("path"=>urlencode(File::a2r(CurrentUser::$path)));		
 	}
@@ -129,11 +112,17 @@ class AdminFiles
 			$targetpath  	= stripslashes($_POST['pathTo']);
 		if (!$type)
 			$type	=	$_POST['move'];
+			
 		
 		$from 	= File::r2a($sourcepath);	
-		$to  	= File::r2a($targetpath);		
-		$from_thumb = File::r2a(stripslashes(Settings::$thumbs_dir.$sourcepath),File::Root());
-		$to_thumb = File::r2a(stripslashes(Settings::$thumbs_dir.$targetpath),File::Root());
+		$to  	= File::r2a($targetpath)."/".basename($from);	
+		$from_thumb = File::path2Thumb($from);
+		$to_thumb = File::path2Thumb($to);
+		
+		if (is_file($from)){
+			$from_small = File::path2Thumb($from,'small');
+			$to_small = File::path2Thumb($to,'small');
+		}
 
  		if($from == $to){	
 			throw new jsonRPCException('Source and Target are identically');
@@ -141,14 +130,15 @@ class AdminFiles
 
  		if($type == "rename"){
  			rename($from,dirname($from)."/".$targetpath);
- 			rename($from_thumb,dirname($from_thumb)."/".$targetpath);
+			rename($from_thumb,dirname($from_thumb)."/".$targetpath);
+			rename($from_small,dirname($from_small)."/".$targetpath);
 			return array("path"=>urlencode(File::a2r(dirname($from)."/".$targetpath)));
  		}
-				
 		/// Move File
-		rename($from,$to."/".basename($from));
-		rename($from_thumb,$to_thumb."/".basename($from_thumb));					
-		return array("path"=>urlencode(File::a2r($to."/".basename($from))));
+		rename($from,$to);
+		rename($from_thumb,$to_thumb);
+		rename($from_small,$to_small);
+		return array("path"=>urlencode(File::a2r($to)));
 	}
 
 	/**

@@ -28,8 +28,6 @@
  * @license   http://www.gnu.org/licenses/
  * @link      http://github.com/thibaud-rohmer/PhotoShow-v2
  */
-ini_set('display_errors', 'On');
- error_reporting(E_ALL);
 ini_set('max_execution_time', 60);
 
 /// Start session
