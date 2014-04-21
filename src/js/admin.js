@@ -82,7 +82,7 @@ function init_admin(){
 						from  =  dragg.children('span.path').text();
 						to 	  = $(this).children("span.path").text();
 						if (to=="bin") { var method="WS_MgmtFF.delete";}else{ var method="WS_MgmtFF.move";}
-						if($(dragg).hasClass("item")){
+						if($(dragg).hasClass("item")){ //Item
 							if($(dragg).hasClass("selected")){
 								$(".panel .item.selected").each(function(){
 									from = $(this).children(".path").text();
@@ -108,7 +108,7 @@ function init_admin(){
 									}
 								});
 							}
-						} else {
+						} else { //Directory
 							var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[{"from":from,"to":to}],"id":"1"});
 							$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 							.done(function(data){

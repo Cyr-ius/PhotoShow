@@ -44,16 +44,16 @@
 class Comment implements HTMLObject
 {
 	/// Login of the poster
-	private $login;
+	public $login;
 	
 	/// Date when the comment wat posted
-	private $date;
+	public $date;
 	
 	/// Content of the comment
-	private $content;
+	public $content;
 
 	/// File
-	private $file;
+	public $file;
 
 	/**
 	 * Create comment
@@ -64,8 +64,8 @@ class Comment implements HTMLObject
 	 * @author Thibaud Rohmer
 	 */
 	public function __construct($login,$content,$date,$file=null){
-		$this->login	=	stripslashes(htmlentities($login , ENT_QUOTES ,'UTF-8'));
-		$this->content	=	stripslashes(htmlentities($content , ENT_QUOTES ,'UTF-8'));
+		$this->login	=	$login;
+		$this->content	=	$content;
 		$this->date	=	$date;
 		$this->file 	=	$file;
 	}
@@ -77,17 +77,21 @@ class Comment implements HTMLObject
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){
+		$login		=	stripslashes(htmlentities( $this->login , ENT_QUOTES ,'UTF-8'));
+		$content		=	stripslashes(htmlentities( $this->content , ENT_QUOTES ,'UTF-8'));
+		$date		=	$this->date;
+	
 		echo "<div class='comment alert alert-info'>\n";
 		// Not implemented yet.
-		if(CurrentUser::$admin || $this->login == CurrentUser::$account->login){
+		if(CurrentUser::$admin || $login == CurrentUser::$account->login){
 		echo "<form id='delcomment-form' action='WS_Comment.delete' method='post'>
 			<input type='hidden' id='path' name='path' value='".htmlentities(CurrentUser::$path, ENT_QUOTES ,'UTF-8')."'>
-			<input type='hidden' id='date' name='date' value='$this>date'>
+			<input type='hidden' id='date' name='date' value='$date'>
 			<button type='submit' class='close'>x</button>
 			</form>";
 		}
 		echo "<h5>$this->login : </h5>\n";
-		echo "<div class='content'>$this->content</div>\n";
+		echo "<div class='content'>$content</div>\n";
 		echo "</div>\n";
 	}
 }

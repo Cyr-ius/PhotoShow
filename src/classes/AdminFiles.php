@@ -44,7 +44,8 @@
 class AdminFiles
 {
 
-        public function create($path,$newfolder,$inherit=null,$public=null,$users=array(),$groups=array()){
+        public function create($path,$newfolder,$inherit=false,$public=null,$users=array(),$groups=array()){
+	
  		/// Just to be really sure... 
  		if( !(CurrentUser::$admin || CurrentUser::$uploader) ){		
                         throw new jsonRPCException('Insufficients rights');
@@ -64,8 +65,8 @@ class AdminFiles
 			}
 
  			/// Setup rights
- 			if(!isset($inherit)){
-                          Judge::edit($path);
+ 			if(!$inherit){
+				Judge::edit($path);
  			}
 			return array("path"=>urlencode(File::a2r($path)),"rights"=>true);
  		}
@@ -88,10 +89,9 @@ class AdminFiles
 		
 		$delpath = File::r2a($delpath);	
 	
-		if (is_file(File::path2Thumb($delpath))) 
-			self::rec_del(File::path2Thumb($delpath));
 		if (is_file(File::path2Thumb($delpath,'small'))) 
 			self::rec_del(File::path2Thumb($delpath,'small'));
+		self::rec_del(File::path2Thumb($delpath));
 		self::rec_del($delpath);
 		return array("path"=>urlencode(File::a2r(CurrentUser::$path)));		
 	}

@@ -77,16 +77,15 @@ function init_hiders(){
 	 });
 	
 	$(".directory").unbind();
-	$(".directory").mouseover(function(e){
+	$(".directory").hover(function(e){
 		var i = $(this).children(".alt_dir_img");
-		var x = Math.floor(i.length * (e.pageX - $(this).offset().left) / $(this).width());
+		var x = Math.floor((Math.random()*i.length)+1)-1;
 		var img = $(i[x]).text();
 		e = $(this);
 		if(e.children(".img_bg").text() != img){
 			e.children(".img_bg").text(img);
-			$.get("?t=Thb&f="+img,function(){
-				$(e).css("background-image","url(\"?t=Thb&f="+img+"\")");
-			});
+			$(e).css("background-image","url(\"?t=Thb&f="+img+"\")");
+
 		}
 	return false;
 	});

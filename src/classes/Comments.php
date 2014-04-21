@@ -93,7 +93,7 @@ class Comments  implements HTMLObject
 
 		/// Set absolute path to comments file
 		$this->commentsfile =	File::r2a($comments,Settings::$thumbs_dir);
-		
+				
 		/// Check that comments file exists
 		if(file_exists($this->commentsfile)){
 			$this->parse_comments_file();
@@ -130,7 +130,7 @@ class Comments  implements HTMLObject
 				$login = Settings::_("comments","anonymous");
 			}
 		}
-
+		
 		/// Get existing comments
 		$comments = new Comments($file);
 
@@ -182,7 +182,6 @@ class Comments  implements HTMLObject
 	private function save(){
 		
 		$xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><comments></comments>');
-
 		/// Treat each of the comments
 		foreach ($this->comments as $comment){
 			$c = $xml->addChild("comment");
