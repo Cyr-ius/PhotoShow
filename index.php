@@ -44,7 +44,7 @@ $debug = true;
 if (isset ($_SESSION['last_activity']) && $_SESSION['last_activity'] < $limit) {
   // if too old, clear the session array and redirect
   $_SESSION = array();
- echo "<script>window.location='/';</script>";
+ echo "<script>window.location='';</script>";
  exit;
 } else {
   // otherwise, set the value to the current time

@@ -159,7 +159,7 @@ function init_hiders(){
 	$('#logout').unbind();
 	$('#logout').click(function(){
 		var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_Account.logout","params":[],"id":"1"});
-		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		$.ajax({url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
 				window.location.replace('/');
@@ -176,7 +176,7 @@ function init_actions() {
 	$('#logins-form,#register-form').unbind();
 	$('#logins-form,#register-form').submit(function(){
 		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
-		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		$.ajax({url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
 				window.location.replace($(location).attr('search'));
@@ -190,7 +190,7 @@ function init_actions() {
 	$('#account-form,#comments-form').unbind();
 	$('#account-form,#comments-form').submit(function(){
 		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
-		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		$.ajax({url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
 				$(target).modal('hide',get_message(0,"Action sucessfully"));

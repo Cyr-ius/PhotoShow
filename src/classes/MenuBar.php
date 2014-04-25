@@ -94,7 +94,7 @@ class MenuBar implements HTMLObject
 							}
 						}
 							echo "<li><a  href='#' data-href='?t=Adm&a=Abo' data-toggle='modal' data-target='#ModalAdmin' ><i class='icon-wrench'></i> ".Settings::_("menubar","admin")."</a></li>";
-							echo "<li><a href='/'><i class='icon-home'></i> ".Settings::_("menubar","home")."</a></li>";
+							echo "<li><a href='.'><i class='icon-home'></i> ".Settings::_("menubar","home")."</a></li>";
 						echo "</ul>";
 						echo "<ul class='nav pull-right'>";
 							echo "<li class='drowpdown'>
@@ -130,6 +130,6 @@ class MenuBar implements HTMLObject
 			</div>
 		</div>";
 		}
-		//echo "<a href='?a=rss'>RSS <img src='./inc/rss.png' height='11px'></a>\n";
+		//echo "<a href='?a=rss'>RSS <img src='inc/rss.png' height='11px'></a>\n";
 }
 ?>

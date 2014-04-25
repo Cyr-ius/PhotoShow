@@ -126,7 +126,7 @@ class Image implements HTMLObject
 		background-size: contain;	
 		background-image:url(\"".$this->filepath."\");
 		'>\n";
-		echo "<a href='?f=".$this->dir."'><img id='spacer' style='width:auto;' src='../inc/spacer.gif'></a>\n";
+		echo "<a href='?f=".$this->dir."'><img id='spacer' style='width:auto;' src='inc/spacer.gif'></a>\n";
 		echo "</div>\n";
 
 	}
