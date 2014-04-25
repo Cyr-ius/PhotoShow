@@ -234,7 +234,7 @@ class Settings extends Page
 			}
 
 			// Formatting the address so we can directly append "?t=..." to it without worry
-			if (!preg_match("/ndex.php$/", Settings::$site_address) && !preg_match("/.*\/$/", Settings::$site_address)){
+			if (!preg_match("/index.php$/", Settings::$site_address) && !preg_match("/.*\/$/", Settings::$site_address)){
 				Settings::$site_address	=	Settings::$site_address."/";
 			}
 			
