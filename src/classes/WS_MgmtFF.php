@@ -1,6 +1,7 @@
 <?
 class WS_MgmtFF
 {	
+	
 	function __construct(){
 	}
 
@@ -67,17 +68,22 @@ class WS_MgmtFF
 	} 		
 	
 	public function saveset($variables){
-		$f = fopen(Settings::$admin_settings_file,"w");
+		$set = new XMLMg(Settings::$admin_settings_file);
 		foreach(array_keys($variables) as $value){
-			 fwrite($f,$value." = \"".$variables[$value]."\"\n");
-		}		
-		fclose($f);
+			$set->create($value,$variables[$value]);
+		}
 		Settings::init(true);	
 	return true;
 	} 
-
-
-
+	
+	public function pluploadsets($variables){
+		$images=array('title'=>'images','extensions'=>implode(",",Settings::$allowedExtImages));
+		$videos=array('title'=>'videos','extensions'=>implode(",",Settings::$allowedExtVideos));
+		$files=array('title'=>'files','extensions'=>implode(",",Settings::$allowedExtFiles));
+		$resize = array('width'=>Settings::$upload_width, 'height'=>Settings::$upload_height, 'quality'=>Settings::$upload_quality,'crop'=>Settings::$upload_crop,'enabled'=>Settings::$upload_resize,'preserve_headers'=>Settings::$upload_preserve_headers);
+		$ext = array('filters'=>array('mime_types'=>array($images,$videos,$files),'max_file_size'=>"100mb",'prevent_duplicates'=>false),'resize'=>$resize);
+		return $ext;
+	}
 
 }
 ?>

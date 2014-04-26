@@ -90,6 +90,9 @@
 								}
 								$this->page = "Page";
 								break;
+								//Display Admin Upload managment
+		 		case "Aup"	:	$this->page = new AdminUpload();
+		 						break;								
 	 		}
 	 	}
 

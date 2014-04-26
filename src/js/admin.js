@@ -284,7 +284,7 @@ function init_admin(){
 	//Json with ModalAdmin page
 	$('#setting-form').unbind();
 	$('#setting-form').change(function(){
-		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params": [$(this).toObject()],"id":"1"});
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params": [$(this).toObject({skipEmpty:false})],"id":"1"});
 		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {

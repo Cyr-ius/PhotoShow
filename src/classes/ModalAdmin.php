@@ -8,9 +8,10 @@ class ModalAdmin implements HTMLObject
 			$this->options['Sta']= Settings::_("adminmenu","stats");
 			$this->options['VTk']= Settings::_("adminmenu","tokens");
 			$this->options['Set']= Settings::_("adminmenu","settings");
-			$this->options['Acc']= Settings::_("adminmenu","account");
+			$this->options['Acc']= Settings::_("adminmenu","accounts");
 			$this->options['EdA']= Settings::_("adminmenu","groups");
 			$this->options['ATh']= Settings::_("adminmenu","thumbs");	
+			$this->options['Aup']= Settings::_("adminmenu","uploads");	
 		}
 	}
 	

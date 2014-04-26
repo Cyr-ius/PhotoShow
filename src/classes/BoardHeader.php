@@ -84,7 +84,7 @@ class BoardHeader  implements HTMLObject
 
 		if(CurrentUser::$admin || CurrentUser::$uploader){		
 			echo "<div class='row-fluid'>\n";
-				$this->upload->toHTML();
+				$this->upload->Dropzone();
 			echo "</div>\n";
 		}
 		echo "<div id='textinfo' class='row-fluid'>\n";
