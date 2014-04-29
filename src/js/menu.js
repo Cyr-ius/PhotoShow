@@ -73,6 +73,7 @@ function init_menu(){
 			$('.loading').hide();
 			$('.panel').show('fast',function(){
 				$('.panel').scrollTop(0);
+				lazyload=0;
 				init();
 			});
 		});
@@ -92,6 +93,7 @@ function init_menu(){
 			$('.loading').hide();
 			$('.panel').show('fast',function(){
 				$('.panel').scrollTop(0);
+				lazyload=0;
 				init();}
 			);
 		});	

@@ -88,7 +88,7 @@ function init_admin(){
 									from = $(this).children(".path").text();
 									var obj = $(this);
 									var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[{"from":from,"to":to}],"id":"1"});
-									$.ajax({	url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+									$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 									.done(function(data){
 										if (!data.error) {
 											obj.parent().parent().remove();
@@ -99,7 +99,7 @@ function init_admin(){
 								});
 							} else {
 								var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[{"from":from,"to":to}],"id":"1"});
-								$.ajax({	url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+								$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 								.done(function(data){
 									if (!data.error) {
 										$('.thumbs').masonry('remove',obj).masonry('layout');
@@ -110,7 +110,7 @@ function init_admin(){
 							}
 						} else { //Directory
 							var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[{"from":from,"to":to}],"id":"1"});
-							$.ajax({	url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+							$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 							.done(function(data){
 								if (!data.error) {
 									$(".menu").load(".?j=Men&f="+encodeURI(currentpath),function(){
@@ -137,7 +137,7 @@ function init_admin(){
 						acc = dragg.children(".name").text();
 						group = $(this).children(".name").text();
 						var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_Account.add_group","params":[{"login":acc,"group":group}],"id":"1"});
-						$.ajax({	url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+						$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 						.done(function(data){
 							if (!data.error) {
 								$(target+' .modal-body').load($(window).attr("url"),init_admin);
@@ -160,7 +160,7 @@ function init_admin(){
 	$("#adminchoiceaccount-form").change(function(){
 		$form = $(this);
 		var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_Account.get","params":[$form.toObject()],"id":"1"});
-		$.ajax({	url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
 				js2form($('#adminaccount-form')[0],data.result)
@@ -178,7 +178,7 @@ function init_admin(){
 			file = $(this).children(".path").text();
 			var obj = $(this);
 			var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_MgmtFF.delete","params":[{"from":file}],"id":"1"});
-			$.ajax({	url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+			$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 			.done(function(data){
 				if (!data.error) {
 					obj.parent().parent().remove();
@@ -202,7 +202,7 @@ function init_admin(){
  	$('#gthumb-form,#delcomment-form,#createtoken-form,#deltoken-form,#delacc-form,#rmgroup-form,#rmacc-form,#creategroup-form,#delgroup-form,#adminregister-form,#adminaccount-form').unbind();
 	$('#gthumb-form,#delcomment-form,#createtoken-form,#deltoken-form,#delacc-form,#rmgroup-form,#rmacc-form,#creategroup-form,#delgroup-form,#adminregister-form,#adminaccount-form').submit(function(){
 		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
-		$.ajax({	url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
 				$(target+' .modal-body').load($(window).attr("url"),init_actions);
@@ -218,7 +218,7 @@ function init_admin(){
 	$('#admintype-form').unbind();
 	$('#admintype-form').click(function(){
 		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
-		$.ajax({	url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
 				$(target+' .modal-body').load($(window).attr("url"),init_actions);
@@ -233,7 +233,7 @@ function init_admin(){
  	$('#createfolder-form').unbind();
 	$('#createfolder-form').submit(function(){
 		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
-		$.ajax({	url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
 				$.get('?j=Album&f='+data.result.path,function(data){
@@ -252,7 +252,7 @@ function init_admin(){
  	$('#renamefolder-form').unbind();
 	$('#renamefolder-form').submit(function(){
 		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
-		$.ajax({	url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
 				update_url("?f="+data.result.path,'new_path');
@@ -270,7 +270,7 @@ function init_admin(){
 	$('#adminrights-form').unbind();
 	$('#adminrights-form').change(function(){
 		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params": [$(this).toObject({skipEmpty:false})],"id":"1"});
-		$.ajax({	url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
 				get_message(0,"Save successful");
@@ -284,8 +284,8 @@ function init_admin(){
 	//Json with ModalAdmin page
 	$('#setting-form').unbind();
 	$('#setting-form').change(function(){
-		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params": [$(this).toObject()],"id":"1"});
-		$.ajax({	url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params": [$(this).toObject({skipEmpty:false})],"id":"1"});
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
 				get_message(0,"Save successful");
@@ -321,7 +321,7 @@ function init_textinfo(){
 	
 	$("#editti-form,#delti-form").submit(function(){
 		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
-		$.ajax({url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
 				$('.panel').load($(location).attr('search')+"&j=Pan",init);

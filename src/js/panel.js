@@ -58,7 +58,12 @@
 	$('.videos .thumbs').masonry({columnWidth:10,gutter:10, itemSelector: '.item'});
 	$('.albums .thumbs').masonry({columnWidth:10,gutter:10, itemSelector: '.directory'});
 	if ($('.moxie-shim-html5').length==0) {init_plupload();}
-	$('img.lazy').lazyload({effect : "fadeIn",container:$(".panel"),threshold : 200});
+	if (lazyload==0) {
+		$('img.lazy').lazyload({effect : "fadeIn",container:$(".panel"),threshold : 200}); 
+		lazyload=1;
+	} else {
+		$('img.lazy').lazyload('update');
+	}
 	$(".linear_panel .thumbnails").children().remove();	
 	//~ $('.linear_panel').mCustomScrollbar("destroy");
 }
@@ -252,6 +257,7 @@ function init() {
 $("document").ready(function(){
 	exifvisible = 0;
 	viewlist = 0;
+	lazyload = 0;
 	scrollbar('.linear_panel',true);
 	init();
 	if ($(".menu .selected:last").length > 0) $(".menu").scrollTo($(".menu .selected:last"));

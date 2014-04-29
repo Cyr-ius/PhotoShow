@@ -125,7 +125,86 @@
  	 * 
  	 * @author Thibaud Rohmer
  	 */
- 	public function toHTML(){
+         public function toHTML(){
+         
+         echo "<div class='row-fluid'>\n";
+		echo "<div class='well'>\n";
+		echo "<form id='setting-form' class='form-horizontal' action='WS_MgmtFF.saveset' method='post'>\n";
+		///Extensions
+		echo "<legend>Extensions</legend>\n";
+		echo "<fieldset>\n";
+		echo "<div class='control-group'>\n";
+		echo "<label for='allowedExtImages' class='control-label'>".Settings::_("settings","extImages")."</label>";
+		echo "<div class='controls'><input id='allowedExtImages' class='input-xxlarge' type='text' name='allowedExtImages' value='".htmlentities(implode(',',Settings::$allowedExtImages), ENT_QUOTES ,'UTF-8')."'></div>\n";		
+		echo "<label for='allowedExtVideos' class='control-label'>".Settings::_("settings","extVideos")."</label>";
+		echo "<div class='controls'><input id='allowedExtVideos' class='input-xxlarge' type='text' name='allowedExtVideos' value='".htmlentities(implode(',',Settings::$allowedExtVideos), ENT_QUOTES ,'UTF-8')."'></div>\n";		
+		echo "<label for='allowedExtFiles' class='control-label'>".Settings::_("settings","extFiles")."</label>";
+		echo "<div class='controls'><input id='allowedExtFiles' class='input-xxlarge' type='text' name='allowedExtFiles' value='".htmlentities(implode(',',Settings::$allowedExtFiles), ENT_QUOTES ,'UTF-8')."'></div>\n";		
+		echo "</div>\n";
+		echo "</fieldset>\n";
+		///Upload resizing
+		echo "<legend>Upload resizing</legend>\n";
+		echo "<fieldset>\n";
+		echo "<div class='control-group'>\n";
+		echo "<label class='checkbox'>";
+		if(Settings::$upload_resize){echo "<input type='checkbox' name='upload_resize' checked>";}else{echo "<input type='checkbox' name='upload_resize'>";}		
+		echo Settings::_("settings","upload_resize")."</label>\n";
+		echo "</div>\n";     
+		echo "<div class='control-group offset1'>\n";
+		echo "<label class='checkbox'>";
+		if(Settings::$upload_crop){echo "<input type='checkbox' name='upload_crop' checked>";}else{echo "<input type='checkbox' name='upload_crop'>";}		
+		echo Settings::_("settings","upload_crop")."</label>\n";
+		echo "</div>\n";   
+		echo "<div class='control-group offset1'>\n";
+		echo "<label class='checkbox'>";
+		if(Settings::$upload_preserve_headers){echo "<input type='checkbox' name='upload_preserve_headers' checked>";}else{echo "<input type='checkbox' name='upload_preserve_headers'>";}		
+		echo Settings::_("settings","upload_preserve_headers")."</label>\n";
+		echo "</div>\n";                         
+		echo "<div class='control-group'>\n";
+		echo "<label for='upload_quality' class='control-label'>".Settings::_("settings","upload_quality")."</label>";
+		echo "<div class='controls'><input id='upload_quality' class='input-xxlarge' type='text' name='upload_quality' value='".htmlentities(Settings::$upload_quality, ENT_QUOTES ,'UTF-8')."'></div>\n";		
+		echo "<label for='upload_height' class='control-label'>".Settings::_("settings","upload_height")."</label>";
+		echo "<div class='controls'><input id='upload_height' class='input-xxlarge' type='text' name='upload_height' value='".htmlentities(Settings::$upload_height, ENT_QUOTES ,'UTF-8')."'></div>\n";		
+		echo "<label for='upload_width' class='control-label'>".Settings::_("settings","upload_width")."</label>";
+		echo "<div class='controls'><input id='upload_width' class='input-xxlarge' type='text' name='upload_width' value='".htmlentities(Settings::$upload_width, ENT_QUOTES ,'UTF-8')."'></div>\n";		
+		echo "</div>\n";
+		echo "</fieldset>\n";                
+		/// Encode Video
+		echo "<legend>Video</legend>\n";
+		echo "<fieldset>\n";
+		echo "<div class='control-group'>\n";
+		echo "<label class='checkbox'>";
+		if(Settings::$encode_video){echo "<input type='checkbox' name='encode_video' checked>";}else{echo "<input type='checkbox' name='encode_video'>";}		
+		echo Settings::_("settings","video_comment")."</label>\n";
+		echo "</div>\n";
+                       /// FFmpeg Type
+		echo "<div class='control-group'>\n";		
+		echo "<label for='encode_type' class='control-label'>".Settings::_("settings","encode_type")."</label>";
+		echo "<div class='controls'>";
+			echo "<select id='encode_type' name='encode_type' class='input-xxlarge'>\n";
+				if (Settings::$encode_type=='mp4') {echo "<option value='mp4' selected>mp4</option>\n"; } else {echo "<option value='mp4'>mp4</option>\n";}
+				if (Settings::$encode_type=='ogg') {echo "<option value='ogg' selected>ogg</option>\n"; } else {echo "<option value='ogg'>ogg</option>\n";}
+				if (Settings::$encode_type=='webm') {echo "<option value='webm' selected>webm</option>\n"; } else {echo "<option value='webm'>webm</option>\n";}
+			echo "</select>\n";
+		echo "</div>\n";
+		echo "</div>\n";	
+                       /// FFmpeg Path
+		echo "<div class='control-group'>\n";		
+		echo "<label for='ffmpeg_path' class='control-label'>".Settings::_("settings","ffmpeg_path")."</label>";
+		echo "<div class='controls'><input id='ffmpeg_path' class='input-xxlarge' type='text' name='ffmpeg_path' value='".htmlentities(Settings::$ffmpeg_path, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";	
+                        /// FFmpeg command line
+		echo "<div class='control-group'>\n";		
+		echo "<label for='ffmpeg_option' class='control-label'>".Settings::_("settings","ffmpeg_option")."</label>";
+		echo "<div class='controls'><input id='ffmpeg_option' class='input-xxlarge' type='text' name='ffmpeg_option' value='".htmlentities(Settings::$ffmpeg_option, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";	
+		echo "</fieldset>\n";		
+		echo "</form>\n";			
+		echo "</div>\n";
+	echo "</div>\n";
+         }
+         
+ 	public function DropZone(){
 		echo "
 		<section style='margin-bottom: 5px;'>
 			<div id='rights_upload' class='btn-group' data-toggle='buttons-radio'>
