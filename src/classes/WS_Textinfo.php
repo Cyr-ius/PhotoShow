@@ -1,4 +1,4 @@
-<?
+<?php
 class WS_Textinfo
 {
 	function __construct(){
