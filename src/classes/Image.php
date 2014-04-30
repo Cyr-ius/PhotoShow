@@ -126,14 +126,10 @@ class Image implements HTMLObject
 		background-size: contain;	
 		background-image:url(\"".$this->filepath."\");
 		'>\n";
-<<<<<<< HEAD
 		echo "<span id='prev'></span>";
 		//~ echo "<span style='position:absolute;left:0;width:100%;bottom:120px;top:0;z-index:-100;background-position: center center;background-repeat: no-repeat;background-size: contain;background-image:url(\"".$this->filepath."\");'></span>";
 		echo "<a href='?f=".$this->dir."'><img id='spacer' src='../inc/spacer.gif'></a>\n";
 		echo "<span id='next'></span>";		
-=======
-		echo "<a href='?f=".$this->dir."'><img id='spacer' style='width:auto;' src='inc/spacer.gif'></a>\n";
->>>>>>> 9bc0f4e78311701b4736bd39fe3f3d7fed919729
 		echo "</div>\n";
 
 	}

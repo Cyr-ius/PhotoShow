@@ -93,13 +93,8 @@ class MenuBar implements HTMLObject
 							echo "<li><a href='javascript:void(0);' data-href='?t=Reg' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","register")."' data-type='register'><i class='icon-pencil'></i> ".Settings::_("menubar","register")."</a></li>";
 							}
 						}
-<<<<<<< HEAD
 							echo "<li><a  id='admin' href='javascript:void(0);' data-href='?t=Adm&a=Abo' data-toggle='modal' data-target='#ModalAdmin' ><i class='icon-wrench'></i> ".Settings::_("menubar","admin")."</a></li>";
 							echo "<li><a id='home' href='/'><i class='icon-home'></i> ".Settings::_("menubar","home")."</a></li>";
-=======
-							echo "<li><a  href='#' data-href='?t=Adm&a=Abo' data-toggle='modal' data-target='#ModalAdmin' ><i class='icon-wrench'></i> ".Settings::_("menubar","admin")."</a></li>";
-							echo "<li><a href='.'><i class='icon-home'></i> ".Settings::_("menubar","home")."</a></li>";
->>>>>>> 9bc0f4e78311701b4736bd39fe3f3d7fed919729
 						echo "</ul>";
 						echo "<ul class='nav pull-right'>";
 							echo "<li class='drowpdown'>
