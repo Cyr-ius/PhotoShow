@@ -116,7 +116,7 @@ class Image implements HTMLObject
 	public function toHTML(){
 	
 		echo "<div 
-		class='bigimage'
+		id='current'
 		style='    
 		background-attachment: scroll;
 		background-clip: border-box;
@@ -125,12 +125,14 @@ class Image implements HTMLObject
 		background-repeat: no-repeat;
 		background-size: contain;	
 		background-image:url(\"".$this->filepath."\");
-		'>\n";
-		echo "<span id='prev'></span>";
-		//~ echo "<span style='position:absolute;left:0;width:100%;bottom:120px;top:0;z-index:-100;background-position: center center;background-repeat: no-repeat;background-size: contain;background-image:url(\"".$this->filepath."\");'></span>";
-		echo "<a href='?f=".$this->dir."'><img id='spacer' src='../inc/spacer.gif'></a>\n";
-		echo "<span id='next'></span>";		
-		echo "</div>\n";
+		position:absolute;
+		left:0;right:0;top:0;bottom:0;'
+		>
+		<a href='?f=".$this->dir."'>
+		<img id='spacer' src='../inc/spacer.gif'>
+		</a>
+		</div>";
+
 
 	}
 }

@@ -103,7 +103,7 @@ function init_image_bar(){
 		
 		url = $(this).attr("href");
 		update_url(url,"Image"); 
-		$('.image_panel').load(url + "&j=ImI",function(data){	
+		$('#current').parent().load(url + "&j=ImI",function(data){	
 			if (exifvisible==1) {
 				$('.exif').load(url+"&t=Exif",function() {
 					$('.exif').show();
@@ -133,8 +133,17 @@ function init_image_bar(){
 		new_url = new_select.children("a").attr("href");
 		update_url(new_url,"Image");
 		$.get(new_url+'&j=ImI',function(data){
-			$('.image_panel').append($(data).hide());
+			$w = $('#current').width();
+			$('.bigimage').append($(data).attr('id','next-1').hide());
+			$('#next-1').css({"left":$w+'px',"right":'-'+$w+'px'}).show();
+			$('#next-1').animate({'left':0,'right':0},300,function(){
+				 $('#current').remove();
+				$('#next-1').attr('id','current');
+				init_image_bar();
+			});
+
 		});
+
 		
 		//~ var iw = $('#current').width();
 		//~ $('#myimg').append('<li id="next-1" style="display:inline-block"><img src="'+new_url+'&t=Img"></li>');
@@ -180,17 +189,31 @@ function init_image_bar(){
 		
 		new_url = new_select.children("a").attr("href");
 		update_url(new_url,"Image");
-		$('.image_panel').load(new_url + "&j=ImI",function(data){	
-			if (exifvisible==1) {
-				$('.exif').load(new_url+"&t=Exif",function() {
-					$('.exif').show();
-				});
-			}
-			if(slideshow_status == 1){
-				hide_links();
-			}
-		init_image_bar();
-		});	
+		$.get(new_url+'&j=ImI',function(data){
+			$w = $('#current').width();
+			$('.bigimage').append($(data).attr('id','next-1').hide());
+			$('#next-1').css({"left":'-'+$w+'px',"right":$w+'px'}).show();
+			$('#next-1').animate({'left':0,'right':0},300,function(){
+				 $('#current').remove();
+				$('#next-1').attr('id','current');
+				init_image_bar();
+			});
+
+		});
+		
+		
+		
+		//~ $('.image_panel').load(new_url + "&j=ImI",function(data){	
+			//~ if (exifvisible==1) {
+				//~ $('.exif').load(new_url+"&t=Exif",function() {
+					//~ $('.exif').show();
+				//~ });
+			//~ }
+			//~ if(slideshow_status == 1){
+				//~ hide_links();
+			//~ }
+		//~ init_image_bar();
+		//~ });	
 		
 	return false;
 	});

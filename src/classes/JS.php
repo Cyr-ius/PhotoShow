@@ -47,7 +47,9 @@ class JS
 
 		if(isset($_GET['j'])){
 			switch($_GET['j']){
-                                case "ImI"        :
+                                case "ImI"        :     $im = new Image(CurrentUser::$path);
+								$im->toHTML();
+								break;
 				case "Pan"	:	if(is_file(CurrentUser::$path)){
 									$b = new ImagePanel(CurrentUser::$path);
 									$b->toHTML();
