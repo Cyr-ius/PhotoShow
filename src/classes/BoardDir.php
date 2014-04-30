@@ -88,7 +88,7 @@ class BoardDir implements HTMLObject
 			$getafile =	urlencode(File::a2r($this->images[0]));
 			
 		}else{
-			$getfile = 	"./inc/img.png";
+			$getfile = 	"inc/img.png";
 			$getafile=	"";
 		}	
 
@@ -102,7 +102,7 @@ class BoardDir implements HTMLObject
 				'>\n";
 		if (File::LastModified($this->path,14)) {echo "<i class='icon-star icon-white' style='position:absolute;'></i>";}
 		echo "\t\t<a id='album' class='album' href='?f=".$this->url."'>";
-		echo 	"<img src='./inc/img.png' width='100%' height='100%'>";
+		echo 	"<img src='inc/img.png' width='100%' height='100%'>";
 		echo "</a>\n";	
 		echo	"<div class='dirname'>".substr(htmlentities(basename($this->path), ENT_QUOTES ,'UTF-8'),0,26)."</div>";	
 		echo 	"\t\t<span class='name hide'>".htmlentities(basename($this->path), ENT_QUOTES ,'UTF-8')."</span>\n";

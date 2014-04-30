@@ -1,4 +1,4 @@
-<?
+<?php
 class WS_Comment
 {
 	public function create($variables){

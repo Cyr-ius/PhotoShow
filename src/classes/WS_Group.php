@@ -1,4 +1,4 @@
-<?
+<?php
 class WS_Group
 {
 	function __construct(){

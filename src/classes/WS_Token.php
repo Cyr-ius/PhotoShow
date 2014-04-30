@@ -1,4 +1,4 @@
-<?
+<?php
 class WS_Token
 {
 	function __construct(){
