@@ -79,6 +79,10 @@ a {
     	width: 75% !important;	
 }
 
+#slideshow , #button_downloadorig,#button_vieworig {
+	display:none;
+}
+
 .images , .videos {
 	margin-bottom:15px;
 }
@@ -253,6 +257,39 @@ li.selected > a.thumbnail {
 	padding:0;
 	float:none;
 }
+
+.image_panel #next {
+	display:none;
+	width: 55px;
+	height: 55px;
+	background-image: url("../../inc/a02.png");
+	background-position: -63px -33px;
+	position: absolute;
+	top: 50%; 
+	right: 8px;
+	cursor:pointer;
+}
+
+.image_panel #next:hover {
+	background-position: -183px -33px;
+}
+
+.image_panel #prev {
+	display:none;
+	width: 55px;
+	height: 55px;
+	background-image: url("../../inc/a02.png");
+	background-position: -3px -33px;
+	position: absolute;
+	top: 50%; 
+	left: 8px;
+	cursor:pointer;
+}
+
+.image_panel #prev:hover {
+	background-position: -123px -33px;
+}
+
 
 /* BigImage */
 #image_big {

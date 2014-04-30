@@ -57,15 +57,9 @@ class ImageBar implements HTMLObject
 	 */
 	public function __construct($fs=false){
 		
-		$this->buttons['prev'] = array('icon'=>"icon-step-backward","url"=>"?p=p");
-		$this->buttons['linear'] = array('icon'=>"  icon-camera","url"=> "");
-		$this->buttons['back'] = array('icon'=>" icon-th","url"=>"");
-		if(!Settings::$nodownload){
-			$this->buttons['img'] = array('icon'=>"icon-picture","url"=>"");
-			$this->buttons['get'] = array('icon'=>"icon-download-alt","url"=>"");
-		}
-		$this->buttons['slideshow'] = array('icon'=>" icon-play","url"=> "");
-		$this->buttons['next'] = array('icon'=>"icon-step-forward","url"=>"?p=n");
+		//~ $this->buttons['linear'] = array('icon'=>"  icon-camera","url"=> "");
+		//~ $this->buttons['back'] = array('icon'=>" icon-th","url"=>"");
+		//~ $this->buttons['slideshow'] = array('icon'=>" icon-play","url"=> "");
 		
 	}
 
@@ -77,9 +71,9 @@ class ImageBar implements HTMLObject
 	 public function toHTML(){
 		echo "<div class='image_bar'>\n";
 		echo "<ul>\n";
-	 	foreach($this->buttons as $key=>$value){
-	 		echo "<li id='$key'><a href='".$value['url']."' alt='$key'><i  class='".$value['icon']." icon-white'></i></a></li>";
-	 	}
+	 	//~ foreach($this->buttons as $key=>$value){
+	 		//~ echo "<li id='$key'><a href='".$value['url']."' alt='$key'><i  class='".$value['icon']." icon-white'></i></a></li>";
+	 	//~ }
 		echo "</ul>\n";
 		echo "</div>\n";		
 	 }

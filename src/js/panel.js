@@ -29,7 +29,7 @@
  */
  function init_panel(){
 	$("#button_createdir,#edit_textinfo").show();
-	$('#button_exif').hide();
+	$('#button_exif,#button_downloadorig,#button_vieworig,#slideshow').hide();
 	if (viewlist==1){init_list();}
  	currentpath = $('span.currentpath').text();	 
 	
@@ -123,6 +123,23 @@ function init_hiders(){
 		}		
 	});	
 
+	
+	// On clicking img
+	$("#button_vieworig").unbind();		
+	$("#button_vieworig").click(function(){
+		window.open($(location).attr('search')+"&t=Big");
+	return false;
+	});	
+	
+	// On clicking get
+	$("#button_downloadorig").unbind();		
+	$("#button_downloadorig").click(function(){
+		window.location=$(location).attr('search')+"&t=BDl";
+	return false;
+	});		
+	
+	
+	
 	$("#view-list").unbind();
 	$("#view-list").click(function(){
 		viewlist = 1;
@@ -144,19 +161,20 @@ function init_hiders(){
 	$("#menu_hide").unbind();
 	$("#menu_hide").click(function(){
 		if ($('.menu').is(':visible')){
+			$('.panel,.bigpanel').animate({'left':'20px','right':'0'},600);
+			$('.panel,.bigpanel').css('width','');
 			$('.menu').hide("slide",{direction:"left"},600,function() {
-				$('.panel,.bigpanel').css('width','');
-				$('.panel,.bigpanel').css('left','20px');
 				$('#menu_hide i').removeClass('icon-backward').addClass('icon-forward');
-				$('.thumbs').masonry({"columnWidth": 10,"gutter":10,"itemSelector": ".item"})
+				$('.thumbs').masonry({"columnWidth": 10,"gutter":10,"itemSelector": ".item"});
 			});
 		} else {
-			$('.panel,.bigpanel').width('81%');
+			$('.panel,.bigpanel').animate({'right':'0','width':'81%'},600);
 			$('.panel,.bigpanel').css('left','');
-			$('.panel,.bigpanel').css('right','0');
-			$('.menu').show("slide",{direction:"left"},600);
-			$('#menu_hide i').removeClass('icon-forward').addClass('icon-backward');
-			$('.thumbs').masonry({"columnWidth": 10,"gutter":10,"itemSelector": ".item"})
+			$('.menu').show("slide",{direction:"left"},600,function(){
+				$('#menu_hide i').removeClass('icon-forward').addClass('icon-backward');
+				$('.thumbs').masonry({"columnWidth": 10,"gutter":10,"itemSelector": ".item"});
+			});
+
 		}
 	return false;	
 	});

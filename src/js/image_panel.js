@@ -33,7 +33,8 @@
  */
 function init_image_panel(){
 	//~ $('img.lazy').lazyload().unbind();
-	$('#button_exif').show();
+	$('#button_exif,#button_downloadorig,#button_vieworig').show();
+	$('#slideshow').css( "display", "block");
 	$("#button_createdir,#edit_textinfo").hide();
 	
 	//If we are in a view mode were there is a linear panel and no image selected in that panel
@@ -49,6 +50,7 @@ function init_image_panel(){
 	}
 	
 
+	
 	$('.linear_panel').mCustomScrollbar("scrollTo",".thumbnails li.selected");
 	$('img.lazy').lazyload('update');
 	init_image_bar();
@@ -70,6 +72,12 @@ function init_image_bar(){
 
 
 	$('#spacer').heightauto();
+	
+	$('.bigimage,.bigvideo').hover(function(){
+		$('#next,#prev').show();
+	},function(){
+		$('#next,#prev').hide()
+	});
 
 	// On clicking the bigimage
 	$(".bigimage a, .image_bar #back").unbind();
@@ -106,24 +114,10 @@ function init_image_bar(){
 		
 	return false;
 	});
-	
-	// On clicking img
-	$(".image_bar #img a").unbind();		
-	$(".image_bar #img a").click(function(){
-		window.open($(location).attr('search')+"&t=Big");
-	return false;
-	});	
-	
-	// On clicking get
-	$(".image_bar #get a").unbind();		
-	$(".image_bar #get a").click(function(){
-		window.location=$(location).attr('search')+"&t=BDl";
-	return false;
-	});	
 
 	// On clicking NEXT
-	$(".image_bar #next a").unbind();		
-	$(".image_bar #next a").click(function(){
+	$(".image_panel #next").unbind();		
+	$(".image_panel #next").click(function(){
 		
 		var curr_select = $(".linear_panel .selected");
 		var new_select 	= curr_select.next('.item');
@@ -138,24 +132,40 @@ function init_image_bar(){
 
 		new_url = new_select.children("a").attr("href");
 		update_url(new_url,"Image");
-		$('.image_panel').load(new_url + "&j=ImI",function(data){
-			if (exifvisible==1) {
-				$('.exif').load(new_url+"&t=Exif",function() {
-					$('.exif').show();
-				});
-			}
-			if(slideshow_status == 1){
-				hide_links();
-			}
-			init_image_bar();
-		});	
+		$.get(new_url+'&j=ImI',function(data){
+			$('.image_panel').append($(data).hide());
+		});
+		
+		//~ var iw = $('#current').width();
+		//~ $('#myimg').append('<li id="next-1" style="display:inline-block"><img src="'+new_url+'&t=Img"></li>');
+		//~ $('#myimg').parent().stop(true,false).animate({'left':'-'+(iw)+'px'},function(){
+						
+			//~ $('#current').remove();
+			//~ $('#myimg').parent().css('left','0');
+			//~ $('#next-1').attr('id','current');
+			
+			//~ });
+
+		//~ });
+
+		//~ $('.image_panel').load(new_url + "&j=ImI",function(data){
+			//~ if (exifvisible==1) {
+				//~ $('.exif').load(new_url+"&t=Exif",function() {
+					//~ $('.exif').show();
+				//~ });
+			//~ }
+			//~ if(slideshow_status == 1){
+				//~ hide_links();
+			//~ }
+			//~ init_image_bar();
+		//~ });	
 		
 	return false;
 	});
 
 	// On clicking PREV
-	$(".image_bar #prev a").unbind();		
-	$(".image_bar #prev a").click(function(){
+	$(".image_panel #prev").unbind();		
+	$(".image_panel #prev").click(function(){
 		
 		var curr_select = $(".linear_panel .selected");
 		var new_select 	= curr_select.prev();

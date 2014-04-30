@@ -201,7 +201,7 @@ class Settings extends Page
 
 		// Now, check that this stuff exists.
 		if(!file_exists(Settings::$photos_dir)){
-			if(! @mkdir('./'.Settings::$photos_dir.'/',0755,true)){	
+			if(! @mkdir(Settings::$photos_dir,0755,true)){	
 				throw new Exception("PHOTOS dir '".Settings::$photos_dir."' doesn't exist and couldn't be created !");
 			}
 		}

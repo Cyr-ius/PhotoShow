@@ -11,8 +11,8 @@ class Scripts implements HTMLObject
 		<!-- Le javascript
 		================================================== -->
 		
-		<!-- Framwork JQUERY 1.10 -->
-		<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js'></script>
+		<!-- Framwork JQUERY 1.x -->
+		<script src='inc/jquery-1.11.0.min.js'></script>
 		<script src='inc/jquery-ui.min.js'></script>
 		
 		<!-- Touch-Punch -->
