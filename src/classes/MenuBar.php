@@ -116,14 +116,14 @@ class MenuBar implements HTMLObject
 									}	
 									echo "<li><a id='button_exif' href='javascript:void(0);'><i class='icon-info-sign'></i> Exif</a></li>\n";	
 									if(!Settings::$nodownload){
-									echo "<li><a id='button_downloadorig' href='javascript:void(0);'><i class='icon-download-alt'></i> ".Settings::_("menubar","Download Original")."</a></li>\n";						
-									echo "<li><a id='button_vieworig' href='javascript:void(0);'><i class='icon-picture'></i> ".Settings::_("menubar","View Original")."</a></li>\n";						
+									echo "<li><a id='button_downloadorig' href='javascript:void(0);'><i class='icon-download-alt'></i> ".Settings::_("menubar","downloadorig")."</a></li>\n";						
+									echo "<li><a id='button_vieworig' href='javascript:void(0);'><i class='icon-picture'></i> ".Settings::_("menubar","vieworig")."</a></li>\n";												
 									}
 								echo "</ul>";
 							echo "</li>";
 						echo "</ul>";
 						echo "<ul class='nav pull-right'>";
-							echo "<li><a id='slideshow' href='javascript:void(0);' style='color:gold;'><i class='icon-play'></i> ".Settings::_("menubar","slideshow")."</a></li>";
+							echo "<li><input id='timeshow' class='input-small' type='text' value='3' style=' float: left;margin: 8px auto auto;padding: 0;text-align: center;vertical-align: middle;width: 20px;'><a id='slideshow' href='javascript:void(0);' style='color:gold;float:left;'><i class='icon-play'></i> ".Settings::_("menubar","slideshow")."</a></li>";
 							if(CurrentUser::$admin || CurrentUser::$uploader){
 							echo "<li class='hide uploadbtn'><a id='button_upload' href='javascript:void(0);' style='color:gold;'><i class='icon-upload'></i> ".Settings::_("adminpanel","upload")."</a></li>\n";	
 							echo "<li><a id='bin' class='btn btn-small  bin' style='padding-top:5px;padding-bottom:5px;margin-right:5px;'><span class='path hide'>bin</span><i class=' icon-trash'></i></a></li>\n";							

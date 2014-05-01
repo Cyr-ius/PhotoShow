@@ -116,19 +116,30 @@ class ImagePanel implements HTMLObject
 	public function toHTML(){
 
 		if (!isset($this->image) && !isset($this->video)){
-			echo "<div class='span10 bigpanel hide'><div class='bigimage'><div id='image_panel'></div><span id='prev'></span><span id='prev'></span>\n</div></div>\n";
+			echo "<div class='span10 bigpanel hide'><div class='content_panel'><div id='bigimage'></div><span id='prev'></span><span id='next'></span>\n</div></div>\n";
 			return;
 		}
 		if(isset($this->image)){
-			echo "<div class='bigimage'>";
+			echo "<div class='content_panel'>";
+			echo "<div id='bigimage'>";
 			$this->image->toHTML();
+			echo "<div id='next-1'></div>";
+			echo "</div>";
 			echo "<span id='prev'></span>";
+			echo "<span id='play'></span>";
 			echo "<span id='next'></span>";		
 			echo "</div>\n";
+
 		}	
 		elseif(isset($this->video)){
+			echo "<div class='bigvideo'>";
 			$this->video->toHTML();
-		}		
+			echo "<span id='prev'></span>";
+			echo "<span id='play'></span>";
+			echo "<span id='next'></span>";		
+			echo "</div>\n";			
+		}	
+		
 
 
 	}

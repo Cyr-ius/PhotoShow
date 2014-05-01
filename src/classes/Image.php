@@ -124,14 +124,7 @@ class Image implements HTMLObject
 		background-position: center center;
 		background-repeat: no-repeat;
 		background-size: contain;	
-		background-image:url(\"".$this->filepath."\");
-		position:absolute;
-		left:0;right:0;top:0;bottom:0;'
-		>
-		<a href='?f=".$this->dir."'>
-		<img id='spacer' src='../inc/spacer.gif'>
-		</a>
-		</div>";
+		background-image:url(\"".$this->filepath."\");'><img src='../inc/spacer.gif' width='100%'></div>";
 
 
 	}

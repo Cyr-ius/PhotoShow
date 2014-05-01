@@ -130,7 +130,7 @@ class MainPage extends Page
 					$this->image_panel->toHTML();
 					echo "</div>\n";
 					echo "<div class='well exif '></div>";
-					$this->imagebar->toHTML();
+					//~ $this->imagebar->toHTML();
 					$this->linear_panel->toHTML();
 				echo "</div>\n";
 				
