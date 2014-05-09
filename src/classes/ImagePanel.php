@@ -89,7 +89,7 @@ class ImagePanel implements HTMLObject
 		}		
 		
 		/// Create Image object
-		$this->imagebar	=	new ImageBar($file);
+		//~ $this->imagebar	=	new ImageBar($file);
 
 		$pageURL = Settings::$site_address."/?f=".urlencode(File::a2r($file));
 		
@@ -119,29 +119,20 @@ class ImagePanel implements HTMLObject
 			echo "<div class='span10 bigpanel hide'><div class='content_panel'><div id='bigimage'></div><span id='prev'></span><span id='next'></span>\n</div></div>\n";
 			return;
 		}
+		echo "<div id='bigimage'>";
 		if(isset($this->image)){
-			echo "<div class='content_panel'>";
-			echo "<div id='bigimage'>";
 			$this->image->toHTML();
-			echo "<div id='next-1'></div>";
-			echo "</div>";
-			echo "<span id='prev'></span>";
-			echo "<span id='play'></span>";
-			echo "<span id='next'></span>";		
-			echo "</div>\n";
-
 		}	
 		elseif(isset($this->video)){
-			echo "<div class='bigvideo'>";
-			$this->video->toHTML();
-			echo "<span id='prev'></span>";
-			echo "<span id='play'></span>";
-			echo "<span id='next'></span>";		
-			echo "</div>\n";			
-		}	
-		
-
-
+			$this->video->toHTML();			
+		} else {
+			echo "unknown format";
+		}		
+		echo "</div>";
+		echo "<div class='back'><span id='back'></span></div>";
+		echo "<div class='prev'><span id='prev'></span></div>";
+		echo "<span id='play'></span>";
+		echo "<div class='next'><span id='next'></span></div>";
 	}
 	
 }

@@ -155,11 +155,11 @@ class Video implements HTMLObject
 	$dimensions_array = explode('x', $match);
 	$orig_x = intval($dimensions_array[0]);
 	$orig_y = intval($dimensions_array[1]);
-	//error_log('DEBUG/Video: dimension of '.$file.' is '.$orig_x.'x'.$orig_y);
+	error_log('DEBUG/Video: original dimension of '.$file.' is '.$orig_x.'x'.$orig_y);
 
 	//If for some reason ffmpeg cannot get the dimension
 	if ($orig_x == 0 || $orig_y == 0){
-	    error_log('ERROR/Video: dimension of '.$file.' is '.$orig_x.'x'.$orig_y);
+	    //~ error_log('ERROR/Video: dimension of '.$file.' is '.$orig_x.'x'.$orig_y);
 	    $orig_x = 320;
 	    $orig_y = 240;
 	}
@@ -178,7 +178,7 @@ class Video implements HTMLObject
 	    $dimensions['y'] = $y;
 	}// if both 0 we return original dimensions
 
-	//error_log('DEBUG/Video: *scaled* dimension of '.$file.' is '.$dimensions['x'].'x'.$dimensions['y']);
+	error_log('DEBUG/Video: *scaled* dimension of '.$file.' is '.$dimensions['x'].'x'.$dimensions['y']);
 	return $dimensions;
 	}
 	/**
@@ -313,10 +313,10 @@ class Video implements HTMLObject
 	//~ self::FastEncodeVideo($this->file);
 	$wh = ' height="'.$height.'" width="'.$width.'"';
         if ($control) {
-            $c = ' controls="controls" autobuffer="autobuffer" poster="?t=Thb&f='.$this->fileweb.'"';
+            $c = ' controls="controls" preload="none" autobuffer="autobuffer" poster="?t=Thb&f='.$this->fileweb.'"';
         }
 	//~ echo '<div class="videoUiWrapper">';
-        echo '<video height="100%" width="98%"'.$c.'><source src="?t=Vid&f='.$this->fileweb.'" type="video/'.Settings::$encode_type.'" />';
+        echo '<video id="video"'.$wh.$c.'><source src="?t=Vid&f='.$this->fileweb.'" type="video/'.Settings::$encode_type.'" />';
         echo 'Your browser does not support the video tag.<br />';
         echo 'Please upgrade your brower or Download the codec <a href="http://tools.google.com/dlpage/webmmf">Download</a>';
         echo '</video>';
@@ -331,7 +331,9 @@ class Video implements HTMLObject
 	 * @author Cédric Levasseur
 	 */
 	public function toHTML(){	
-		self::VideoDiv('100%','100%',true);
+		echo "<div id='c_video' class='current'>";
+		self::VideoDiv('','',true);
+		echo "</div>";
 	}
 
 }

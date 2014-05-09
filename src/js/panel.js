@@ -27,6 +27,10 @@
  * @license	  http://www.gnu.org/licenses/
  * @link	  http://github.com/thibaud-rohmer/PhotoShow
  */
+var exifvisible = 0;
+var viewlist = 0;
+var lazyload = 0;
+ 
  function init_panel(){
 	$("#button_createdir,#edit_textinfo").show();
 	$('#button_exif,#button_downloadorig,#button_vieworig,#slideshow,#timeshow').hide();
@@ -35,11 +39,8 @@
 	
 	$(".panel .item a").unbind();
 	$(".panel .item a").click(function(){
-
 		url = $(this).attr("href");
 		update_url(url);
-		
-		// Load image
 		$(".image_panel").load(url+"&j=Pan",function() {
 			if (exifvisible==1) {
 				$('.exif').load(url+"&t=Exif",function() {
@@ -48,7 +49,6 @@
 			}	
 			$(".item").clone().appendTo(".linear_panel .thumbnails").removeAttr('style');
 			$(".panel").hide("slide",{direction:"down"},600);
-			//~ $(".image_bar #linear").hide
 			$(".bigpanel").show("slide",{direction:"up"},600,init);
 		});		
 		return false;
@@ -65,7 +65,6 @@
 		$('img.lazy').lazyload('update');
 	}
 	$(".linear_panel .thumbnails").children().remove();	
-	//~ $('.linear_panel').mCustomScrollbar("destroy");
 }
 
 function init_hiders(){
@@ -143,6 +142,7 @@ function init_hiders(){
 	$("#view-list").unbind();
 	$("#view-list").click(function(){
 		viewlist = 1;
+		//Load init
 		init();
 	return false;	
 	});	
@@ -154,6 +154,7 @@ function init_hiders(){
 		$('#view-thumb').addClass('active');
 		$('#view-list').removeClass('active');
 		$('.boardlines').html(view_grid);
+		//Load init
 		init();
 	return false;	
 	});		
@@ -161,15 +162,15 @@ function init_hiders(){
 	$("#menu_hide").unbind();
 	$("#menu_hide").click(function(){
 		if ($('.menu').is(':visible')){
-			$('.panel,.bigpanel').animate({'left':'20px','right':'0'},600);
-			$('.panel,.bigpanel').css('width','');
+			$('.panel,.bigpanel').animate({'width':'100%'},600);
 			$('.menu').hide("slide",{direction:"left"},600,function() {
 				$('#menu_hide i').removeClass('icon-backward').addClass('icon-forward');
 				$('.thumbs').masonry({"columnWidth": 10,"gutter":10,"itemSelector": ".item"});
 			});
 		} else {
-			$('.panel,.bigpanel').animate({'right':'0','width':'81%'},600);
-			$('.panel,.bigpanel').css('left','');
+			$('.panel,.bigpanel').animate({'width':'84%'},600,function(){
+				$('.panel,.bigpanel').css('width','');
+			});
 			$('.menu').show("slide",{direction:"left"},600,function(){
 				$('#menu_hide i').removeClass('icon-forward').addClass('icon-backward');
 				$('.thumbs').masonry({"columnWidth": 10,"gutter":10,"itemSelector": ".item"});
@@ -223,7 +224,7 @@ function init_actions() {
 		});
 	return false;	
 	});
-	
+	//Load admin
 	init_admin();
 }
 
@@ -268,17 +269,19 @@ function init() {
 		init_menu();
 		init_admin();
 	}
-
-
 }
 
 $("document").ready(function(){
-	exifvisible = 0;
-	viewlist = 0;
-	lazyload = 0;
 	scrollbar('.linear_panel',true);
+	//Load init
 	init();
 	if ($(".menu .selected:last").length > 0) $(".menu").scrollTo($(".menu .selected:last"));
+	
+	//~ $(window).resize(function() {
+		//~ $('#video').css('max-width',$('#c_video').width());
+	//~ });
+	
+	
 });
 
 /****************** Function Jquery ***************/

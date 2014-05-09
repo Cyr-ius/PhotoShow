@@ -86,14 +86,12 @@ class MainPage extends Page
 			$this->image_panel				=	new ImagePanel(CurrentUser::$path);
 			$this->panel					=	new Board(dirname(CurrentUser::$path));
 			$this->linear_panel				=	new Linear_panel(CurrentUser::$path);
-			$this->imagebar				=	new ImageBar(CurrentUser::$path);
 			$this->panel_visible				=	"hide";
 		}else{
 			$this->bigpanel_visible			=	"hide";						
 			$this->image_panel				=	new ImagePanel();		
 			$this->panel					=	new Board(CurrentUser::$path);
 			$this->linear_panel				=	new Linear_panel(CurrentUser::$path);	
-			$this->imagebar				=	new ImageBar(CurrentUser::$path);			
 			$this->panel_visible				=	"";			
 		}
 
@@ -116,37 +114,36 @@ class MainPage extends Page
 		echo "<div id='menubar'>\n";
 			if ($menu){ $this->menubar->toHTML();}
 		echo "</div>\n";
-
-		echo "<div id='content' class=''>\n";
-			echo "<div class=''>\n";
+		echo "<div id='content'>\n";
 				/// Start menu
 				echo "<div id='menu' class='well menu'>\n";
 				$this->menu->toHTML();
 				echo "</div>\n";
 				/// Stop menu		
-				echo "<div class='loading hide' style='width:81%;'></div>";
-				echo "<div class='bigpanel $this->bigpanel_visible' style='width:81%;'>\n";
-					echo "<div class='image_panel'>\n";
-					$this->image_panel->toHTML();
+				echo "<div class='loading hide'></div>";
+				echo "<div class='bigpanel $this->bigpanel_visible'>\n";
+					echo "<div class='content_panel'>";
+						echo "<div class='image_panel'>\n";
+						$this->image_panel->toHTML();
+						echo "</div>\n";
+						echo "<div class='well exif '></div>";
+						$this->linear_panel->toHTML();
 					echo "</div>\n";
-					echo "<div class='well exif '></div>";
-					//~ $this->imagebar->toHTML();
-					$this->linear_panel->toHTML();
 				echo "</div>\n";
 				
 				///Panel (include boardheader(title+button) , album , images , videos , comments)
-				echo "<div class='panel $this->panel_visible' style='width:81%;'>\n";
-					if (Index::$welcome) {
-						echo "<h2>Welcome to Photoshow </h2>\n";
-						echo "<div id='welcome' class='well'>\n";
-						echo " Please, clic on the link below <br/><br/><a href='#' data-href='?t=Reg' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","register")."' data-type='register'><i class='icon-pencil'></i> ".Settings::_("menubar","register")." the first account Administrator</a>\n";
-						echo "</div>\n";		
-					} else {
-						$this->panel->toHTML();
-					}
+				echo "<div class='panel $this->panel_visible'>\n";
+					echo "<div class='content_panel'>";
+						if (Index::$welcome) {
+							echo "<h2>Welcome to Photoshow </h2>\n";
+							echo "<div id='welcome' class='well'>\n";
+							echo " Please, clic on the link below <br/><br/><a href='#' data-href='?t=Reg' data-toggle='modal' data-target='#myModal' data-title='".Settings::_("menubar","register")."' data-type='register'><i class='icon-pencil'></i> ".Settings::_("menubar","register")." the first account Administrator</a>\n";
+							echo "</div>\n";		
+						} else {
+							$this->panel->toHTML();
+						}
+					echo "</div>\n";	
 				echo "</div>\n";	
-				
-			echo "</div>\n";					
 		echo "</div>\n";
 	}
 }

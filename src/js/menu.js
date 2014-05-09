@@ -36,9 +36,10 @@ function init_plupload(){
 }
 
 function init_infos(){
-// Dummy function
-$('#button_download').attr('href',$(location).attr('search')+"&t=Zip");
-$('#button_comm').attr('data-href',$(location).attr('search')+"&t=Com");
+var f=$(location).attr('search');
+if (f=="") { f ='?f=';}
+$('#button_download').attr('href',f+"&t=Zip");
+$('#button_comm').attr('data-href',f+"&t=Com");
 }
 
 function init_list(){
@@ -69,7 +70,7 @@ function init_menu(){
 		update_url(url);
 		$('.bigpanel,.panel').hide();
 		$('.loading').show();
-		$('.panel').load(url+"&j=Pan",function(){
+		$('.panel .content_panel').load(url+"&j=Pan",function(){
 			$('.loading').hide();
 			$('.panel').show('fast',function(){
 				$('.panel').scrollTop(0);
@@ -89,7 +90,7 @@ function init_menu(){
 		$('.bigpanel,.panel').hide();
 		$('.loading').show();
 		$('.menu').load(url+"&j=Men",init_menu);
-		$('.panel').load(url+"&j=Pan",function(){
+		$('.panel .content_panel').load(url+"&j=Pan",function(){
 			$('.loading').hide();
 			$('.panel').show('fast',function(){
 				$('.panel').scrollTop(0);

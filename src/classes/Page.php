@@ -57,7 +57,7 @@ abstract class Page implements HTMLObject
 		echo "<html lang='fr'>";
 		echo "<head>\n";
 		echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>\n";
-		echo "<meta name='viewport' content='width=device-width, initial-scale=1.0'>\n";
+                echo "<meta name='viewport' content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;'/>";
 		echo "<title>".Settings::$name."</title>\n";
 		echo "<link rel='icon' type='image/ico' href='".Settings::$icon_path."'>";
 		/// CSS
@@ -66,9 +66,6 @@ abstract class Page implements HTMLObject
 		echo "<link rel='stylesheet' href='inc/bootstrap/css/bootstrap-modal.css'>";			
 		echo "<link rel='stylesheet' href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'>";		
 		echo "<link rel='stylesheet' href='inc/mCustomScrollbar/jquery.mCustomScrollbar.css'>";	
-		//~ echo "<link rel='stylesheet' href='inc/colorpicker/css/colorpicker.css'>";	
-		//~ echo "<link rel='stylesheet' href='inc/assets/css/video-default.css'>";	
-		//~ echo "<link rel='stylesheet' href='inc/mediaelement/mediaelementplayer.css'>";	
 		echo "<link rel='stylesheet' href='inc/messenger/css/messenger.css'>";	
 		echo "<link rel='stylesheet' href='inc/messenger/css/messenger-theme-future.css'>";	
 		echo "<link rel='stylesheet' href='src/stylesheets/jquery.plupload.queue.css'>";

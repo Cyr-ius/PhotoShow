@@ -15,6 +15,9 @@ class Scripts implements HTMLObject
 		<script src='inc/jquery-1.11.0.min.js'></script>
 		<script src='inc/jquery-ui.min.js'></script>
 		
+		<!-- JQUERY Mobile (option Touch) -->
+		<script src='inc/jquery.mobile.custom.min.js'></script>				
+		
 		<!-- Touch-Punch -->
 		<script src='inc/jquery.ui.touch-punch.min.js'></script>		
 				
@@ -58,12 +61,6 @@ class Scripts implements HTMLObject
 		
 		<!-- JQuery plugin : mCustomScrollbar  -->
 		<script src='inc/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js'></script>		
-
-		<!-- JQuery plugin : ColorPicker  
-		<script src='inc/colorpicker/js/bootstrap-colorpicker.js'></script>-->
-		
-		<!-- JQuery plugin : Assets Video Player 
-		<script src='inc/assets/js/jquery.video-ui.js'></script>-->
 		
 		<!-- JQuery plugin : Messenger  -->
 		<script src='inc/messenger/js/messenger.min.js'></script>		
@@ -76,19 +73,19 @@ class Scripts implements HTMLObject
 		<script src='src/js/slideshow.js'></script>
 		<script src='src/js/keyboard.js'></script>
 		<script src='inc/jquery.lazyload.min.js'></script>			
-	    <script id='js_fix'>
-	      !function ($) {
-		$(function(){
-		  // Fix for dropdowns on mobile devices
-		  $('body').on('touchstart.dropdown', function (e) { 
-		      e.stopPropagation(); 
-		  });
-		  $(document).on('click','.dropdown-menu a',function(){
-		      document.location = $(this).attr('href');
-		  });
-		})
-	      }(window.jQuery)
-	    </script>";	
+		<script id='js_fix'>
+			!function ($) {
+				$(function(){
+				  // Fix for dropdowns on mobile devices
+				  $('body').on('touchstart.dropdown', function (e) { 
+				      e.stopPropagation(); 
+				  });
+				  $(document).on('click','.dropdown-menu a',function(){
+				      document.location = $(this).attr('href');
+				  });
+				})
+			}(window.jQuery)
+		    </script>";	
 		if(CurrentUser::$admin || CurrentUser::$uploader){
 		echo "
 		<script src='src/js/admin.js'></script>

@@ -38,11 +38,11 @@ function init_image_panel(){
 	
 	//If we are in a view mode were there is a linear panel and no image selected in that panel
 	if ($('#linear_panel').length == 1 && $('#linear_panel .selected').length == 0 && $("#linear_panel").is(":visible")){
-		if ($('#bigimage #current').size()!=0) {
-			url = $('#bigimage #current').css('background-image').replace(/^url|[\(\)\"]/g, ''); 
+		if ($('#c_image').size()!=0) {
+			url = $('#c_image').css('background-image').replace(/^url|[\(\)\"]/g, ''); 
 		}
-		if ($('.bigvideo').size()!=0) {
-			url = $('#bigvideo').find('source').attr('src'); 
+		if ($('#c_video').size()!=0) {
+			url = $('#c_video').find('source').attr('src'); 
 		}
 		url = url.slice(url.indexOf('f='));
 		$('#linear_panel a[href$="' + url + '"]').parent().addClass("active selected");
@@ -57,27 +57,52 @@ function init_image_panel(){
  */
 function init_image_bar(){
 	
-	$('.content_panel').hover(function(){
-		$('#next,#prev').show();
+	$('.prev,.next,.back').hover(function(){
+		$('#next,#prev,#back').show();
 	},function(){
-		$('#next,#prev').hide()
+		$('#next,#prev,#back').hide()
 	});
-
-	// On clicking the bigimage
-	$(".content_panel #bigimage").unbind();
-	$(".content_panel #bigimage").click(function(){
-		if(slideshow_status == 1){
-			stop_slideshow();
-		} 
-		// Edit layout
-		$('img.lazy').lazyload().unbind();
-		$(".bigpanel").hide("slide",{direction:"up"},600);
-		$(".panel").show("slide",{direction:"down"},600,function(){	
-			update_url($(".menu .selected:last a").attr("href"),$(".menu .selected:last a").text());
-			init();
-		});
-		
-	return false;
+	
+	//Compatibility : Touch Device 
+	$("#bigimage").swipe({
+		//Go back panel
+		swipeUp:function(event, direction, distance, duration) {
+			if(slideshow_status == 1){
+				stop_slideshow();
+			} 
+			$('img.lazy').lazyload().unbind();
+			$(".bigpanel").hide("slide",{direction:"up"},600);
+			$(".panel").show("slide",{direction:"down"},600,function(){	
+				update_url($(".menu .selected:last a").attr("href"),$(".menu .selected:last a").text());
+				init();
+			});
+		},
+		//Download bigimage
+		swipeDown:function(event, direction, distance, duration) {
+			$("#button_downloadorig").trigger('click');
+		},
+		//Next image
+		swipeLeft:function(event, direction, distance, duration) {
+			$(".content_panel #next").trigger('click');
+		},
+		//Previous image
+		swipeRight:function(event, direction, distance, duration) {
+			$(".content_panel #prev").trigger('click');
+		},
+		//Go back panel (idem swipeup)
+		//~ click:function(event, target) { 
+			//~ if(slideshow_status == 1){
+				//~ stop_slideshow();
+			//~ } 
+			//~ $('img.lazy').lazyload().unbind();
+			//~ $(".bigpanel").hide("slide",{direction:"up"},600);
+			//~ $(".panel").show("slide",{direction:"down"},600,function(){	
+				//~ update_url($(".menu .selected:last a").attr("href"),$(".menu .selected:last a").text());
+				//~ init();
+			//~ });
+		//~ },
+		threshold:100,
+		allowPageScroll:"vertical"
 	});
 
 	// On clicking an item
@@ -85,12 +110,30 @@ function init_image_bar(){
 	$(".linear_panel .item a").click(function(){
 		url = $(this).attr("href");
 		update_url(url,"Image"); 
-		$('#current').css('background-image','url("'+url+'&t=Img")');
+		$('#bigimage').load(url+'&j=ImI',function(){
 			if (exifvisible==1) {
 				$('.exif').load(url+"&t=Exif",function() {
 					$('.exif').show();
 				});
 			}
+			init_image_bar();
+		});
+
+	return false;
+	});
+	
+	//On clicking BACK
+	$(".content_panel #back").unbind();		
+	$(".content_panel #back").click(function(){
+		if(slideshow_status == 1){
+			stop_slideshow();
+		} 
+		$('img.lazy').lazyload().unbind();
+		$(".bigpanel").hide("slide",{direction:"up"},600);
+		$(".panel").show("slide",{direction:"down"},600,function(){	
+			update_url($(".menu .selected:last a").attr("href"),$(".menu .selected:last a").text());
+			init();
+		});
 	return false;
 	});
 
@@ -110,25 +153,38 @@ function init_image_bar(){
 
 		new_url = new_select.children("a").attr("href");
 		update_url(new_url,"Image");
-		 $('<img />').attr('src',new_url+'&t=Img').appendTo('body').css('display','none').load(function(){
-				$(this).remove();
-			if (exifvisible==1) {
-				$('.exif').load(new_url+"&t=Exif",function() {
-					$('.exif').show();
+		$w = $('.current').width();
+		$.get(new_url+'&j=ImI',function(data){
+			ctx = $(data);
+			id = ctx.attr('id');
+			current= $($('#bigimage').children());
+			if (id=='c_image') {
+				$('<img />').attr('src',new_url+'&t=Img').appendTo('body').css('display','none').load(function(){
+					$(this).remove();				
+					ctx.css({"left":$w+'px',"right":'-'+$w+'px'}).appendTo('#bigimage');
+					current.stop().animate({left:'-'+$w+'px',right:$w+'px'},{ duration: 300, queue: false});
+					ctx.stop().animate({'left':0,'right':0},{ duration: 300, queue: false,complete: function(){
+							current.remove();
+							if (exifvisible==1) {
+								$('.exif').load(new_url+"&t=Exif",function() {
+									$('.exif').show();
+								});
+							}
+							$('.linear_panel').mCustomScrollbar("scrollTo",".thumbnails li.selected");}
+					});
 				});
 			}
-			$('.linear_panel').mCustomScrollbar("scrollTo",".thumbnails li.selected");
-			$w = $('#current').width();
-			$('#next-1').css({"left":$w+'px',"right":'-'+$w+'px','background-image':'url("'+new_url+'&t=Img")'});
-			$('#current').hide("slide",{direction:"left"},300);
-			$('#next-1').stop().animate({'left':0,'right':0},300,function(){
-				 $('#current').remove();
-				$('#next-1').attr('id','current');
-				$('#bigimage').append('<div id="next-1"></div>');
-			});
+			if (id=='c_video') {
+					ctx.css({"left":$w+'px',"right":'-'+$w+'px'}).appendTo('#bigimage');
+					current.stop().animate({left:'-'+$w+'px',right:$w+'px'},{ duration: 300, queue: false });
+					ctx.stop().animate({'left':0,'right':0},{ duration: 300, queue: false,complete: function(){
+						if (exifvisible==1) { $('.exif').hide(); }
+						current.remove();
+						$('.linear_panel').mCustomScrollbar("scrollTo",".thumbnails li.selected");}
+					});
+			}			
 		});
 
-	
 	return false;
 	});
 
@@ -148,27 +204,38 @@ function init_image_bar(){
 		
 		new_url = new_select.children("a").attr("href");
 		update_url(new_url,"Image");
-
-		 $('<img />').attr('src',new_url+'&t=Img').appendTo('body').css('display','none').load(function(){
-			$(this).remove();
-			if (exifvisible==1) {
-				$('.exif').load(new_url+"&t=Exif",function() {
-					$('.exif').show();
+		$.get(new_url+'&j=ImI',function(data){
+			ctx = $(data);
+			id = ctx.attr('id');
+			current= $($('#bigimage').children());
+			if (id=='c_image') {
+				$('<img />').attr('src',new_url+'&t=Img').appendTo('body').css('display','none').load(function(){
+					$(this).remove();				
+					ctx.css({"left":'-'+$w+'px',"right":$w+'px'}).appendTo('#bigimage');
+					current.stop().animate({left:$w+'px',right:'-'+$w+'px'},{ duration: 300, queue: false });
+					ctx.stop().animate({'left':0,'right':0},{ duration: 300, queue: false,complete: function(){
+						current.remove();
+						if (exifvisible==1) {
+							$('.exif').load(new_url+"&t=Exif",function() {
+								$('.exif').show();
+							});
+						}
+						$('.linear_panel').mCustomScrollbar("scrollTo",".thumbnails li.selected");}
+					});
 				});
 			}
-			$('.linear_panel').mCustomScrollbar("scrollTo",".thumbnails li.selected");
-			$w = $('#current').width();
-			$('#next-1').css({"left":'-'+$w+'px',"right":$w+'px','background-image':'url("'+new_url+'&t=Img")'});
-			$('#current').hide("slide",{direction:"right"},300);
-			$('#next-1').stop().animate({'left':0,'right':0},300,function(){
-				 $('#current').remove();
-				$('#next-1').attr('id','current');
-				$('#bigimage').append('<div id="next-1"></div>');
-			});
+			if (id=='c_video') {
+					ctx.css({"left":'-'+$w+'px',"right":$w+'px'}).appendTo('#bigimage');
+					current.stop().animate({left:$w+'px',right:'-'+$w+'px'},{ duration: 300, queue: false });
+					ctx.stop().animate({'left':0,'right':0},{ duration: 300, queue: false,complete: function(){
+						if (exifvisible==1) { $('.exif').hide(); }
+						current.remove();
+						$('.linear_panel').mCustomScrollbar("scrollTo",".thumbnails li.selected");}
+					});
+			}		
 		});
-
-
 	return false;
 	});
+	
 	init_slideshow_panel();	
 }

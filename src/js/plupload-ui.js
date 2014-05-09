@@ -8,19 +8,10 @@ function init_plupload() {
 		drop_element : 'dropzone',
 		multiple_queues : true,
 		multipart_params : {path: $('span.currentpath').text()},
-	        //~ max_file_size : '200mb',
+	        max_file_size : '200mb',
 		unique_names : true,		
 		flash_swf_url : '/plupload/js/plupload.flash.swf',
 		silverlight_xap_url : '/plupload/js/plupload.silverlight.xap',
-	        // Resize images on clientside if we can
-	        //~ resize : {width : 1920, height : 1200, quality : 90}
-	 
-	        // Specify what files to browse for
-		//~ filters : [
-			//~ {title : "image", extensions : "jpg,gif,png,jpeg,tiff"},
-			//~ {title : "file", extensions : "zip"},
-			//~ {title : "video", extensions : "flv,mov,mpg,mpeg,mp4,ogv,mts,3gp,webm,avi,wmv"}
-		//~ ]
 	});
 
 	$('#button_upload').unbind();
@@ -37,7 +28,6 @@ function init_plupload() {
 	uploader.init();
 	
 	uploader.bind('Init',function(){
-		
 		var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_MgmtFF.pluploadsets","params":[],"id":"1"});
 		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 			.done(function(data){
@@ -45,7 +35,6 @@ function init_plupload() {
 				uploader.setOption('resize',data.result.resize);
 			});
 	});
-
 
 	uploader.bind('FilesAdded', function(up, files) {
 		if ($('.uploadbtn').is(':hidden')) {

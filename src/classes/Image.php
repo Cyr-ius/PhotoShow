@@ -114,19 +114,7 @@ class Image implements HTMLObject
 	 * @author Thibaud Rohmer
 	 */
 	public function toHTML(){
-	
-		echo "<div 
-		id='current'
-		style='    
-		background-attachment: scroll;
-		background-clip: border-box;
-		background-origin: padding-box;
-		background-position: center center;
-		background-repeat: no-repeat;
-		background-size: contain;	
-		background-image:url(\"".$this->filepath."\");'><img src='../inc/spacer.gif' width='100%'></div>";
-
-
+		echo "<div id='c_image' class='current' style='background-image:url(\"".$this->filepath."\");'><img src='../inc/spacer.gif' width='100%'></div>";
 	}
 }
 

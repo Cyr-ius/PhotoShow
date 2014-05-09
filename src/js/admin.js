@@ -151,6 +151,8 @@ function init_admin(){
 	
 	$("a[data-toggle=modaladmin]").unbind();
 	$("a[data-toggle=modaladmin]").click(function() {
+		$("a[data-toggle=modaladmin]").parent().removeClass("active");
+		$(this).parent().addClass("active");
 		target = $(this).attr('data-target');
 		url = $(this).attr('data-href');		 
 		$(target+' .modal-body').load(url,init_admin);
@@ -298,13 +300,15 @@ function init_admin(){
 }
 
 function init_infos(){
-	$('#button_createdir').attr('data-href',$(location).attr('search')+"&t=MkD");
-	$('#button_renamedir').attr('data-href',$(location).attr('search')+"&t=MvD");
-	$('#button_token').attr('data-href',$(location).attr('search')+"&t=Token");		
-	$('#button_rights').attr('data-href',$(location).attr('search')+"&t=Rights");
-	$('#button_download').attr('href',$(location).attr('search')+"&t=Zip");
-	$('#button_comm').attr('data-href',$(location).attr('search')+"&t=Com");
-}
+	var f=$(location).attr('search');
+	if (f=="") { f ='?f=';}
+	$('#button_createdir').attr('data-href',f+"&t=MkD");
+	$('#button_renamedir').attr('data-href',f+"&t=MvD");
+	$('#button_token').attr('data-href',f+"&t=Token");
+	$('#button_rights').attr('data-href',f+"&t=Rights");
+	$('#button_download').attr('href',f+"&t=Zip");
+	$('#button_comm').attr('data-href',f+"&t=Com");
+} 
 
 function init_textinfo(){
 	
@@ -317,8 +321,10 @@ function init_textinfo(){
 			$('.textinfo').hide("slide",{direction:"down"},600);			
 			$('.textinfoadmin').show("slide",{direction:"up"},600);
 		}
+		return false;	
 	});
 	
+	$("#editti-form,#delti-form").unbind();	
 	$("#editti-form,#delti-form").submit(function(){
 		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
 		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
