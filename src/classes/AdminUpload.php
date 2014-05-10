@@ -102,6 +102,12 @@
 				error_log("ERROR/AdminUpload : Error to save a $path/$name");
 				throw new jsonRPCException("Error to save a $path/$name");
 			}
+			
+			if (strtolower($info['extension'])=='zip') {
+				$rslt = Provider::unzip("$path/$name");
+				die(json_encode(array('jsonrpc'=>'2.0','result'=>array("path"=>$rslt,"type"=>"zip"),'id'=>0)));
+			}
+			
                         $img_path = File::a2r($path.'/'.$name);
 			// Setup rights
 			if(!isset($_POST['inherit'])){
@@ -112,7 +118,6 @@
 				}
 			}
                         //~ error_log("SUCCES/AdminUpload : $path/$name");
-                        //~ die('{"jsonrpc" : "2.0", "result" : [{"path":"'.urlencode($img_path).'"}], "id" : "id"}');
                         die(json_encode(array('jsonrpc'=>'2.0','result'=>array("path"=>urlencode($img_path),"type"=>File::Type($img_path)),'id'=>0)));
 			
 		} else { 

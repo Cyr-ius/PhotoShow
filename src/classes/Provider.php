@@ -319,6 +319,46 @@ class Provider
 		readfile($tmpfile);
 		unlink($tmpfile);
 	}
+	
+	/**
+	* Extract Zip fle
+	*
+	* @param string $file
+	* @return array $rlt  - list files
+	* @author Cédric Levasseur
+	*/
+	
+	public static function unzip($file) {
+	
+		$path = dirname($file);
+		$folder=   sys_get_temp_dir().'/'.time();
+		
+		//Extract
+		$zip = new ZipArchive;
+		if ($zip->open(File::Root().'/'.$file)) {
+			$zip->extractTo($folder);
+			$zip->close();
+		}
+		
+		$rlt = Menu::list_files($folder);
+		foreach ($rlt as $item) {
+		
+			$info = pathinfo($item);
+			$base_name =  basename($item,'.'.$info['extension']);
+			$name =  basename($item);
+			
+			// Rename until this name isn't taken
+			$i=1;
+			while(file_exists("$path/$name")){
+				$name=$base_name."-".$i.".".$info['extension'];
+				$i++;
+			}
+			@rename($item,"$path/$name");
+			@unlink($item);
+		}
+		@rmdir($folder);
+		return $rlt;
+	}
 
 }
 

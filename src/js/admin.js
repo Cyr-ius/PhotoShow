@@ -88,7 +88,7 @@ function init_admin(){
 									from = $(this).children(".path").text();
 									var obj = $(this);
 									var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[{"from":from,"to":to}],"id":"1"});
-									$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+									$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 									.done(function(data){
 										if (!data.error) {
 											obj.parent().parent().remove();
@@ -99,7 +99,7 @@ function init_admin(){
 								});
 							} else {
 								var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[{"from":from,"to":to}],"id":"1"});
-								$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+								$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 								.done(function(data){
 									if (!data.error) {
 										$('.thumbs').masonry('remove',obj).masonry('layout');
@@ -110,7 +110,7 @@ function init_admin(){
 							}
 						} else { //Directory
 							var js = JSON.stringify({"jsonrpc":"2.0","method":method,"params":[{"from":from,"to":to}],"id":"1"});
-							$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+							$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 							.done(function(data){
 								if (!data.error) {
 									$(".menu").load(".?j=Men&f="+encodeURI(currentpath),function(){
