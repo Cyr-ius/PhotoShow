@@ -121,7 +121,6 @@ function init_hiders(){
 			});
 		}		
 	});	
-
 	
 	// On clicking img
 	$("#button_vieworig").unbind();		
@@ -135,9 +134,7 @@ function init_hiders(){
 	$("#button_downloadorig").click(function(){
 		window.location=$(location).attr('search')+"&t=BDl";
 	return false;
-	});		
-	
-	
+	});			
 	
 	$("#view-list").unbind();
 	$("#view-list").click(function(){

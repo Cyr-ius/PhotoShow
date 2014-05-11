@@ -270,6 +270,29 @@ class File
 	 	}
 	 	return $path;
 	 }
+	 
+	/**
+	 * Unik name
+	 * 
+	 * @param string $pathfile
+	 * @param string $path (check in $path if $pathfile exists)
+	 * @return unique name
+	 * @author Cédric Levasseur
+	 */
+	 public static function unikname($pathfile,$path=null){
+		if(!isset($path))
+			$path = dirname($pathfile);
+		$name =  basename($pathfile);
+		$info = pathinfo($name);
+		$base_name =  basename($pathfile,'.'.$info['extension']);
+
+		$i=1;
+		while(file_exists("$path/$name")){
+			$name=$base_name."-".$i.".".$info['extension'];
+			$i++;
+		}
+	return "$path/$name";
+	}	 
 
 }
 ?>

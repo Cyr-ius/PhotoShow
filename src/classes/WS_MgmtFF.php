@@ -84,6 +84,10 @@ class WS_MgmtFF
 		$ext = array('filters'=>array('mime_types'=>array($images,$videos,$files),'max_file_size'=>"100mb",'prevent_duplicates'=>false),'resize'=>$resize);
 		return $ext;
 	}
+	
+	public function checkmail($variables){
+		return EmailMessage::Check($variables['import']);
+	}
 
 }
 ?>

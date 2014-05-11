@@ -342,18 +342,7 @@ class Provider
 		
 		$rlt = Menu::list_files($folder);
 		foreach ($rlt as $item) {
-		
-			$info = pathinfo($item);
-			$base_name =  basename($item,'.'.$info['extension']);
-			$name =  basename($item);
-			
-			// Rename until this name isn't taken
-			$i=1;
-			while(file_exists("$path/$name")){
-				$name=$base_name."-".$i.".".$info['extension'];
-				$i++;
-			}
-			@rename($item,"$path/$name");
+			@rename($item,File::unikname($item,$path));
 			@unlink($item);
 		}
 		@rmdir($folder);

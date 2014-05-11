@@ -198,6 +198,29 @@ function init_admin(){
 		$.post('?t=Adm&a=DAl',{'cleanpath': $('span.currentpath').text()},function(data,info){
 			get_message(data.result,data.desc);
 		});
+	});	
+	
+	//Check receiver mail
+	var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_MgmtFF.checkmail","params":[],"id":"1"});
+	$.ajax({url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+	.done(function(data){
+			if (data.result.mail>0) {
+			$('#button_checkmail').css( "display", "block").html(data.result.mail+' mail(s)');}
+	});	
+
+	$("#button_checkmail").unbind();
+	$("#button_checkmail").click(function(){
+		var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_MgmtFF.checkmail","params":[{"import":"true"}],"id":"1"});
+		$.ajax({url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		.done(function(data){
+			if (!data.error) {
+				get_message(0,data.result.mail+' mail(s) check.'+data.result.attachments+' attachments imported');
+				$("#button_checkmail").hide();
+			} else {
+				get_message(1,data.error.data.fullMessage);
+			}
+		});
+	return false;			
 	});		
 	
 	//Reload Modal-body

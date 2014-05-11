@@ -175,7 +175,7 @@
 		echo "</div>\n";
 		echo "</fieldset>\n";                
 		/// Encode Video
-		echo "<legend>Video</legend>\n";
+		echo "<legend>Video (<i>Need install : ffmpeg</i>)</legend>\n";
 		echo "<fieldset>\n";
 		echo "<div class='control-group'>\n";
 		echo "<label class='checkbox'>";
@@ -203,7 +203,48 @@
 		echo "<label for='ffmpeg_option' class='control-label'>".Settings::_("settings","ffmpeg_option")."</label>";
 		echo "<div class='controls'><input id='ffmpeg_option' class='input-xxlarge' type='text' name='ffmpeg_option' value='".htmlentities(Settings::$ffmpeg_option, ENT_QUOTES ,'UTF-8')."'></div>\n";
 		echo "</div>\n";	
-		echo "</fieldset>\n";		
+		echo "</fieldset>\n";	
+		/// Mail Receiver
+		echo "<legend>Mail receiver (<i>Need install module : php5-imap</i>)</legend>\n";
+		echo "<fieldset>\n";
+		echo "<blockquote>
+			   <p class='muted'>Photoshow checks this mailbox and extract the attachments of mail in the album
+			   <br>The location of these photos must be informed in the email subject (do not specify the location of the root folder)</p>
+			    <small>Example : <cite title='Source Title'>Folder/Subfolder</cite></small>
+			    <small>Example incorrect : <cite title='Source Title'>".Settings::$photos_dir."/Folder/Subfolder</cite></small>
+			   </blockquote>";
+		echo "<div class='control-group'>\n";
+		echo "<label class='checkbox'>";
+		if(Settings::$mailreceiver_enable){echo "<input type='checkbox' name='mailreceiver_enable' checked>";}else{echo "<input type='checkbox' name='mailreceiver_enable'>";}		
+		echo Settings::_("settings","mailreceiver_enable")."</label>\n";
+		echo "</div>\n";	
+                       /// Server name
+		echo "<div class='control-group'>\n";		
+		echo "<label for='mailreceiver_server' class='control-label'>".Settings::_("settings","mailreceiver_server")."</label>";
+		echo "<div class='controls'><input id='mailreceiver_server' class='input-xxlarge' type='text' name='mailreceiver_server' value='".htmlentities(Settings::$mailreceiver_server, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";	
+                        /// Server port
+		echo "<div class='control-group'>\n";		
+		echo "<label for='mailreceiver_port' class='control-label'>".Settings::_("settings","mailreceiver_port")."</label>";
+		echo "<div class='controls'><input id='mailreceiver_port' class='input-small' type='text' name='mailreceiver_port' value='".htmlentities(Settings::$mailreceiver_port, ENT_QUOTES ,'UTF-8')."'> <small>(110/143/993)</small></div>\n";
+		echo "</div>\n";	
+			/// Server Certificat
+		echo "<div class='control-group'>\n";
+		echo "<label class='checkbox'>";
+		if(Settings::$mailreceiver_cert){echo "<input type='checkbox' name='mailreceiver_cert' checked>";}else{echo "<input type='checkbox' name='mailreceiver_cert'>";}		
+		echo Settings::_("settings","mailreceiver_cert")."</label>\n";
+		echo "</div>\n";		
+                        /// Server User
+		echo "<div class='control-group'>\n";		
+		echo "<label for='mailreceiver_username' class='control-label'>".Settings::_("settings","mailreceiver_username")."</label>";
+		echo "<div class='controls'><input id='mailreceiver_username' class='input-xxlarge' type='text' name='mailreceiver_username' value='".htmlentities(Settings::$mailreceiver_username, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";
+                        /// Server Password
+		echo "<div class='control-group'>\n";		
+		echo "<label for='mailreceiver_password' class='control-label'>".Settings::_("settings","mailreceiver_password")."</label>";
+		echo "<div class='controls'><input id='mailreceiver_password' class='input-xxlarge' type='password' name='mailreceiver_password' value='".htmlentities(Settings::$mailreceiver_password, ENT_QUOTES ,'UTF-8')."'></div>\n";
+		echo "</div>\n";		
+		echo "</fieldset>\n";	
 		echo "</form>\n";			
 		echo "</div>\n";
 	echo "</div>\n";

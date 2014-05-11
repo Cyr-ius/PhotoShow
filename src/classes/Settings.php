@@ -158,6 +158,15 @@ class Settings extends Page
 	
 	///FFMPEG Option
 	static public $ffmpeg_option	=	"-threads 4 -qmax 40 -acodec aac -ab 96k -vcodec libx264 -strict experimental -movflags faststart";	
+	
+	/*** Mail Receiver ***/
+	static public $mailreceiver_enable = false;
+	static public $mailreceiver_server = '';
+	static public $mailreceiver_port = '';
+	static public $mailreceiver_cert = true;
+	static public $mailreceiver_username = '';
+	static public $mailreceiver_password = '';
+
 
 
 	/**
@@ -304,6 +313,22 @@ class Settings extends Page
 			if(isset($admin_settings['ffmpeg_option'])){
 				Settings::$ffmpeg_option		=	$admin_settings['ffmpeg_option'];
 			}
+			/*** Mail REceiver ***/
+			Settings::$mailreceiver_enable			=	$admin_settings['mailreceiver_enable'];
+			if(isset($admin_settings['mailreceiver_server'])){
+				Settings::$mailreceiver_server		=	$admin_settings['mailreceiver_server'];
+			}
+			if(isset($admin_settings['mailreceiver_port'])){
+				Settings::$mailreceiver_port		=	$admin_settings['mailreceiver_port'];
+			}	
+			Settings::$mailreceiver_cert			=	$admin_settings['mailreceiver_cert'];	
+			if(isset($admin_settings['mailreceiver_username'])){
+				Settings::$mailreceiver_username		=	$admin_settings['mailreceiver_username'];
+			}	
+			if(isset($admin_settings['mailreceiver_password'])){
+				Settings::$mailreceiver_password		=	$admin_settings['mailreceiver_password'];
+			}
+			
 		}
 		// Create Array Extensions
 		Settings::$allowedExtensions 			=	 array_merge(Settings::$allowedExtImages,Settings::$allowedExtVideos,Settings::$allowedExtFiles);			
