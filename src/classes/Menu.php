@@ -56,10 +56,15 @@ class Menu implements HTMLObject
 	/// Array of Menu instances, one per directory inside $dir
 	private $items=array();
 	private $categories=array();
+	
+	/// Aray Menu
 	private $menu=array();
 	
 	/// Relative path to file
 	private $path = "";
+	
+	/// Token path
+	private $tokenpath;
 	
 	
 	
@@ -67,6 +72,7 @@ class Menu implements HTMLObject
 	
 	public function __construct($dir=null,$level=0){
 		$this->menu = $this->CsMenu();
+		if(CurrentUser::$token){$this->tokenpath=GuestToken::get_path(CurrentUser::$token);}
 	}
 	
 	public function toHTML(){
@@ -95,13 +101,13 @@ class Menu implements HTMLObject
 		try{
 			/// Check if selected dir is in $dir
 			File::a2r(CurrentUser::$path,$dir);
-			$selected 			="selected";
-			$actived 			="active";
+			$selected 	="selected";
+			$actived 		="active";
 			
 		}catch(Exception $e){
 			/// Selected dir not in $dir, or nothing is selected			
-			$selected 			="";
-			$actived 			="";
+			$selected 	="";
+			$actived 		="";
 		}
 
 		$this->categories[$level][] = array('title'=>$title,'categorie_id'=>$title,'parent_id'=>$item_prec,'path' => $apath ,'selected' => $selected,'active'=>$actived);
@@ -118,7 +124,6 @@ class Menu implements HTMLObject
 	}	
 	
 	private function ListFolder($parent, $niveau, $array) {
-			
 			$niveau_precedent = 0;
 			if (!$niveau && !$niveau_precedent) {
 				$html = "<a data-target='.nav-menu' data-toggle='collapse' class='btn btn-navbar btn-navbar-menu '>Menu</a>";				
@@ -132,7 +137,11 @@ class Menu implements HTMLObject
 					$html .= "<li class='submenu menu_title ".$item['selected']." ".$item['active']."'>";
 					$html .= "<span class='name hide'>".htmlentities($item['title'], ENT_QUOTES ,'UTF-8')."</span>";
 					$html .= "<span class='path hide'>".htmlentities($item['path'], ENT_QUOTES ,'UTF-8')."</span>";
-					$html .= "<a href='?f=".urlencode($item['path'])."'>".htmlentities($item['title'], ENT_QUOTES ,'UTF-8')."</a>";					
+					if ($this->tokenpath == $item['path']) {
+						$html .= "<a href='?f=".urlencode($item['path'])."&token=".CurrentUser::$token."'>".htmlentities($item['title'], ENT_QUOTES ,'UTF-8')."</a>";					
+					} else {
+						$html .= "<a href='?f=".urlencode($item['path'])."'>".htmlentities($item['title'], ENT_QUOTES ,'UTF-8')."</a>";					
+					}
 					$niveau_precedent = $niveau;
 					$html .= self::ListFolder($item['categorie_id'], ($niveau + 1), $array);
 				} 
@@ -179,11 +188,8 @@ class Menu implements HTMLObject
 				if($rec){
 					$list = array_merge($list,Menu::list_dirs($dir."/".$content,true));
 				}
-
 			}
-			
 		}
-
 		/// Return directories list
 		return $list;
 	}

@@ -91,15 +91,6 @@ function init_image_bar(){
 		},
 		//Go back panel (idem swipeup)
 		//~ click:function(event, target) { 
-			//~ if(slideshow_status == 1){
-				//~ stop_slideshow();
-			//~ } 
-			//~ $('img.lazy').lazyload().unbind();
-			//~ $(".bigpanel").hide("slide",{direction:"up"},600);
-			//~ $(".panel").show("slide",{direction:"down"},600,function(){	
-				//~ update_url($(".menu .selected:last a").attr("href"),$(".menu .selected:last a").text());
-				//~ init();
-			//~ });
 		//~ },
 		threshold:100,
 		allowPageScroll:"vertical"

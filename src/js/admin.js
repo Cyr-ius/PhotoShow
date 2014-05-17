@@ -204,7 +204,7 @@ function init_admin(){
 	var js = JSON.stringify({"jsonrpc":"2.0","method":"WS_MgmtFF.checkmail","params":[],"id":"1"});
 	$.ajax({url:'',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 	.done(function(data){
-			if (data.result.mail>0) {
+			if (!data.error && data.result.mail>0) {
 			$('#button_checkmail').css( "display", "block").html(data.result.mail+' mail(s)');}
 	});	
 

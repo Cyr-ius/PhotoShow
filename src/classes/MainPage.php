@@ -112,7 +112,7 @@ class MainPage extends Page
 	public function toHTML($menu=true){
 		//Navbar
 		echo "<div id='menubar'>\n";
-			if ($menu){ $this->menubar->toHTML();}
+			if ($menu){$this->menubar->toHTML();}
 		echo "</div>\n";
 		echo "<div id='content'>\n";
 				/// Start menu
@@ -130,7 +130,6 @@ class MainPage extends Page
 						$this->linear_panel->toHTML();
 					echo "</div>\n";
 				echo "</div>\n";
-				
 				///Panel (include boardheader(title+button) , album , images , videos , comments)
 				echo "<div class='panel $this->panel_visible'>\n";
 					echo "<div class='content_panel'>";

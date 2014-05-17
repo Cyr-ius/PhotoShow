@@ -59,6 +59,9 @@ class BoardItem implements HTMLObject
 	/// Number of items
 	private $count_items;
 	
+	/// Link item
+	private $hlink;
+	
 	/**
 	 * Construct BoardItem
 	 *
@@ -76,8 +79,10 @@ class BoardItem implements HTMLObject
 		if (isset($_GET["token"])) {
 			$this->token = $_GET["token"];
 			$this->filepath = "?t=Thb&f=".$this->file."&token=".$this->token;
+			$this->hlink = "?f=".$this->file."&token=".$this->token;
 		} else {
 			$this->filepath = "?t=Thb&f=".$this->file;
+			$this->hlink = "?f=".$this->file;
 		}
 		
 	}
@@ -96,12 +101,12 @@ class BoardItem implements HTMLObject
 			echo " selected ";
 			}
 		echo ">\n";
-		echo "\t\t<a class='thumbnail' href='?f=".$this->file."' rel='tooltip' data-html='true' data-placement='right' data-original-title='<img src=\"?t=Img&f=".$this->file."\">'>";
+		echo "\t\t<a class='thumbnail' href='".$this->hlink."' rel='tooltip' data-html='true' data-placement='right' data-original-title='<img src=\"?t=Img&f=".$this->file."\">'>";
 		echo "<img class='lazy' src='./inc/spacer.gif' data-original='".$this->filepath."'>";
 		echo "</a>\n";
 		echo 	"\t\t<span class='name hide'>".htmlentities(basename($this->path), ENT_QUOTES ,'UTF-8')."</span>\n";
 		echo 	"\t\t<span class='path hide'>".htmlentities(File::a2r($this->path), ENT_QUOTES ,'UTF-8')."</span>\n";
-		echo 	"\t\t<span class='pathd hide'>t=Thb&f=".$this->file."</span>\n";
+		//~ echo 	"\t\t<span class='pathd hide'>t=Thb&f=".$this->file."</span>\n";
 		echo "\t</li>\n";
 
 	}
