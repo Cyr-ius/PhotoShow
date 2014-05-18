@@ -119,16 +119,22 @@ class AdminFiles
 		$from_thumb = File::path2Thumb($from);
 		$to_thumb = File::path2Thumb($to);
 		
+		
 		if (is_file($from)){
 			$from_small = File::path2Thumb($from,'small');
 			$to_small = File::path2Thumb($to,'small');
 		}
+		
 
  		if($from == $to){	
 			throw new jsonRPCException('Source and Target are identically');
  		}
 
  		if($type == "rename"){
+			//~ var_dump(dirname($from)."/".$targetpath);
+			if(file_exists(dirname($from)."/".$targetpath)){	
+				throw new jsonRPCException('A file with the same name already exists');
+			}
  			rename($from,dirname($from)."/".$targetpath);
 			rename($from_thumb,dirname($from_thumb)."/".$targetpath);
 			rename($from_small,dirname($from_small)."/".$targetpath);

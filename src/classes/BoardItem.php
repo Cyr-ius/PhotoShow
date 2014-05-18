@@ -96,11 +96,11 @@ class BoardItem implements HTMLObject
 	public function toHTML(){
 
 		/// We display the image as a background
-		echo "\t<li class='item' ";
+		echo "\t<li class='item ";
 			if(CurrentUser::$path == $this->path){
-			echo " selected ";
+			echo " active selected ";
 			}
-		echo ">\n";
+		echo "'>\n";
 		echo "\t\t<a class='thumbnail' href='".$this->hlink."' rel='tooltip' data-html='true' data-placement='right' data-original-title='<img src=\"?t=Img&f=".$this->file."\">'>";
 		echo "<img class='lazy' src='./inc/spacer.gif' data-original='".$this->filepath."'>";
 		echo "</a>\n";

@@ -46,9 +46,13 @@ class AdminRename  implements HTMLObject
 	
 	public function toHTML(){
 		/// Folder name
-		echo "<div class='row-fluid'> \n
-		<form id='renamefolder-form' class='form-horizontal' action='WS_MgmtFF.rename' method='post'>\n
-		<fieldset>\n
+		echo "<div class='row-fluid'> \n";
+                if (File::Type(CurrentUser::$path)=='Folder') {
+		echo "<form id='renamefolder-form' class='form-horizontal' action='WS_MgmtFF.rename' method='post'>\n";
+                } else {
+                echo "<form id='renamefile-form' class='form-horizontal' action='WS_MgmtFF.rename' method='post'>\n";
+                }
+		echo "<fieldset>\n
 		<div class='control-group'>\n
 		<label for='folderrename' class='control-label'>".Settings::_("adminpanel","name")."</label>\n
 		<input type='hidden' name='pathFrom' value=\"".htmlentities(File::a2r(CurrentUser::$path), ENT_QUOTES ,'UTF-8')."\">
@@ -57,12 +61,9 @@ class AdminRename  implements HTMLObject
 		<div class='controls controls-row'>\n
 		<input class='btn btn-primary' type='submit' value='".Settings::_("adminpanel","rename")."'>
 		</div>\n					
-			
 		</fieldset>\n
 		</form>\n
 		</div>\n";
 	}
 }
-
-
 ?>

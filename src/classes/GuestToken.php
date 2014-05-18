@@ -189,18 +189,14 @@ class GuestToken extends Page
         
         // Check if the tokens file exists
         if(!file_exists(CurrentUser::$tokens_file)){
-                //~ throw new jsonRPCException('Token not exists');
 		return false;
         }
 
         $xml		=	simplexml_load_file(CurrentUser::$tokens_file);
-
         foreach( $xml as $token ){
             $new_token=array();
-
             $new_token['key']	= (string)$token->key;
             $new_token['path']	= (string)$token->path;
-
             $tokens[]=$new_token;
         }
         return $tokens;
@@ -219,7 +215,6 @@ class GuestToken extends Page
         
         // Check if the tokens file exists
         if(!file_exists(CurrentUser::$tokens_file)){
-                //~ throw new jsonRPCException('Token not exists');
 		return false;
         }
 
@@ -236,6 +231,30 @@ class GuestToken extends Page
         }
         return $tokens;
     }
+    
+    /**
+     * Returns an array containing all tokens
+     * contain in path
+     *
+     * @param string $path
+     * @return array $tokens, False if not found
+     * @author Franck Royer
+     */
+    public static function find_for_contain($path){
+        $tokens	=	array();
+        
+        // Check if the tokens file exists
+        if(!file_exists(CurrentUser::$tokens_file)){
+		return false;
+        }
+
+        foreach( self::findAll() as $token ){
+                if (dirname($token['path']) == $path || $token['path'] == $path){
+                    $tokens[]=$token;
+                }
+        }
+        return $tokens;
+    }    
 
     /**
      * Returns the allowed path of a guest token

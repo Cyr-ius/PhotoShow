@@ -42,10 +42,18 @@ class WS_MgmtFF
 	}
 
 	public function move($variables){
+		//purge guesttoken
+		foreach (GuestToken::find_for_contain($variables['from']) as $gt ){
+			GuestToken::delete($gt['key']);
+		}
 		return AdminFiles::move($variables['from'],$variables['to'],"move");
 	} 
 	
 	public function rename($variables){
+		//purge guesttoken
+		foreach (GuestToken::find_for_path($variables['pathFrom'],true) as $gt ){
+			GuestToken::delete($gt['key']);
+		}
 		return AdminFiles::move($variables['pathFrom'],$variables['pathTo'],"rename");
 	} 	
 

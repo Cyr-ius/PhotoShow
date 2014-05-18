@@ -291,6 +291,28 @@ function init_admin(){
 	return false;	
 	});	
 	
+ 	$('#renamefile-form').unbind();
+	$('#renamefile-form').submit(function(){
+		var js = JSON.stringify({"jsonrpc":"2.0","method":$(this).attr('action'),"params":[$(this).toObject()],"id":"1"});
+		$.ajax({	url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
+		.done(function(data){
+			if (!data.error) {
+				new_path = data.result.path;
+				$.get('?j=Item&f='+new_path,function(data){
+					update_url("?f="+new_path,'new_path');
+					var $boxes = $(data);
+					$(data).replaceAll(".item.active");
+					$('.item.active').parent().masonry('reloadItems').masonry('reload');
+					init();
+				});				
+			} else {
+				get_message(1,data.error.data.fullMessage);
+			}
+		});
+		$(target).modal('hide');
+	return false;	
+	});	
+	
 	//Json with ModalAdmin page
 	$('#adminrights-form').unbind();
 	$('#adminrights-form').change(function(){

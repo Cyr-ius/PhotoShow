@@ -273,12 +273,6 @@ $("document").ready(function(){
 	//Load init
 	init();
 	if ($(".menu .selected:last").length > 0) $(".menu").scrollTo($(".menu .selected:last"));
-	
-	//~ $(window).resize(function() {
-		//~ $('#video').css('max-width',$('#c_video').width());
-	//~ });
-	
-	
 });
 
 /****************** Function Jquery ***************/
