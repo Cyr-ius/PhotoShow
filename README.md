@@ -9,11 +9,19 @@ This is a Friendly fork of the original as the maintener is currently not active
 **PhotoShow Revolution **, *your* web gallery. **PhotoShow Revolution** is a *free* and *open source* web gallery, that you can very easily install on your web server. It doesn't even require a database !
 Multi format supported : images (library GD required) and videos (for encoding/streaming :binary ffmpeg or avconv required)
 
-Propulsed with Jquery 1.10 , BootStrap 2.3.2 , Webservice JSON-RPC.
+Required PHP 5.3 on Winfows or Linux web server
+Multi format supported : images (library GD required) and videos (for encoding :binary ffmpeg required)
+
+- Add photos by emailing or Drag and Drop
+- Drag and Drop to manage your pictures and albums
+- Responsive Design for Touch Device (mobli /tablet)
+
+
+Propulsed with HTML5/CSS3, Jquery 1.10 , BootStrap 2.3.2 , Webservice JSON-RPC.
 
 ## Demonstration
 
-http://photoshow-revolution.ipocus.net
+http://photoshow-evolution.ipocus.net
 user : demo
 pwd : demo123
 

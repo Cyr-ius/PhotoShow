@@ -65,6 +65,10 @@ class JS
 									$b->toHTML();
 								}
 								break;
+								
+				case "Content"	:	$c = new MainPage(CurrentUser::$path);
+								$c->toHTML('content_only');
+								break;
 
 				case "Men"	:	$m = new Menu();
 								$m->toHTML();

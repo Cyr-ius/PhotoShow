@@ -375,9 +375,10 @@ function init_textinfo(){
 		$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 		.done(function(data){
 			if (!data.error) {
-				$('.panel').load($(location).attr('search')+"&j=Pan",init);
 				$('.textinfo').show("slide",{direction:"down"},600);
-				$('.textinfoadmin').hide("slide",{direction:"up"},600);
+				$('.textinfoadmin').hide("slide",{direction:"up"},600,function(){
+						$('.content_panel').load($(location).attr('search')+"&j=Pan",init);
+					});
 			} else {
 				get_message(1,data.error.data.fullMessage);
 			}

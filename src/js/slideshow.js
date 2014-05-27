@@ -70,7 +70,7 @@ function stop_slideshow(){
 	$('.content_panel').css('overflow','');
 	$('#menubar').show("slide",{direction:"down"},600);
 	$('#linear_panel').show("slide",{direction:"up"},600);	
-	$('#menu').show("slide",{direction:"right"},600);
+	if (menuhide==0) { $('#menu').show("slide",{direction:"right"},600);}
 }
 
 function toggle_slideshow(){

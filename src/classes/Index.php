@@ -57,7 +57,7 @@ class Index
 		switch (CurrentUser::$action){
 
 			case "Judge":	// Same as page
-			case "Page":		$page = new MainBody();
+			case "Page":		$page = new MainPage();
 							$page->toHTML();
 							break;
 							
