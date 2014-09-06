@@ -71,6 +71,7 @@ abstract class Page implements HTMLObject
 		echo "<link rel='stylesheet' href='src/stylesheets/jquery.plupload.queue.css'>";
 		echo "<link rel='stylesheet' href='src/stylesheets/perso.css'>";
 		echo "<link rel='stylesheet' href='inc/bootstrap/css/bootstrap-responsive.min.css'>";
+		echo "<link rel='stylesheet' href='inc/video-js/video-js.css'>";
 		
 		/// Trick to hide "only-script" parts
 		echo "<noscript><style>.noscript_hidden { display: none; }</style></noscript>";

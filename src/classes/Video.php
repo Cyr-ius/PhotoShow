@@ -310,18 +310,15 @@ class Video implements HTMLObject
     //TODO: center the video on y axis
     public function VideoDiv($width='',$height='100%',$control=false){
 	$c = null;
-	//~ self::FastEncodeVideo($this->file);
 	$wh = ' height="'.$height.'" width="'.$width.'"';
         if ($control) {
-            $c = ' controls="controls" preload="none" autobuffer="autobuffer" poster="?t=Thb&f='.$this->fileweb.'"';
+            $c = ' autobuffer preload="none" poster="?t=Thb&f='.$this->fileweb.'"';
         }
-	//~ echo '<div class="videoUiWrapper">';
-        echo '<video id="video"'.$wh.$c.'><source src="?t=Vid&f='.$this->fileweb.'" type="video/'.Settings::$encode_type.'" />';
-        echo 'Your browser does not support the video tag.<br />';
-        echo 'Please upgrade your brower or Download the codec <a href="http://tools.google.com/dlpage/webmmf">Download</a>';
-        echo '</video>';
-        //~ echo '</div>';
-        //TODO: verify the message above works/do translations
+        echo '<video id="video"'.$wh.$c.' class="video-js vjs-default-skin vjs-big-play-centered">
+		<source src="?t=Vid&f='.$this->fileweb.'" type="video/'.Settings::$encode_type.'" />
+		Your browser does not support the video tag.<br />
+		Please upgrade your brower or Download the codec <a href="http://tools.google.com/dlpage/webmmf">Download</a>
+		</video>';
 	}	
 	
 	/**

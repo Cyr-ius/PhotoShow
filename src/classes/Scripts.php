@@ -40,18 +40,16 @@ class Scripts implements HTMLObject
 		<script src='inc/form2js/form2js.js'></script>
 		<script src='inc/form2js/js2form.js'></script>
 		<script src='inc/form2js/jquery.toObject.js'></script>
-		
-		<!-- JQuery plugin : MediaElement  
-		<script src='inc/mediaelement/mediaelement-and-player.min.js'></script>-->
+
+		<! Video-js -->
+		<script src='inc/video-js/video.js'></script>
+		<script>videojs.options.flash.swf = 'video-js.swf';</script>
 
 		<!-- History (BUG IE pushstate) -->
 		<script src='inc/history.min.js'></script>
 		
 		<!-- JQuery plugin : API Fullscreen for slideshow -->
 		<script src='inc/jquery.fullscreen.js'></script>
-		
-		<!-- JQuery plugin : Transition Effects 
-		<script src='inc/jquery.cycle2.min.js'></script>-->
 
 		<!-- JQuery plugin : ScrollStop  -->
 		<script src='inc/jquery.scrollstop.js'></script>
