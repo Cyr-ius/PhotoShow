@@ -51,9 +51,6 @@ function init_textinfo(){
 }
 
 function init_menu(){
-	
-	$('.menu').mCustomScrollbar('destroy');
-	scrollbar(".menu",false);
 
 	/**
 	* Clicking on an item in the menu
@@ -68,6 +65,7 @@ function init_menu(){
 		$(this).parent().addClass("active selected");	
 		url = $(this).attr("href");
 		update_url(url);
+		 //~ $.xhrPool.abortAll();
 		$('.bigpanel,.panel').hide();
 		$('.loading').show();
 		$('.panel .content_panel').load(url+"&j=Pan",function(){
@@ -87,6 +85,7 @@ function init_menu(){
 	$(".albums a").click(function(){
 		url = $(this).attr("href");
 		update_url(url);
+		 //~ $.xhrPool.abortAll();
 		$('.bigpanel,.panel').hide();
 		$('.loading').show();
 		$('.menu').load(url+"&j=Men",init_menu);

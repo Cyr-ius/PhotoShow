@@ -113,7 +113,7 @@ function init_admin(){
 							$.ajax({url:'/',data:js,type:'POST',dataType:"json",contentType: "application/json"})
 							.done(function(data){
 								if (!data.error) {
-									$(".menu").load(".?j=Men&f="+encodeURI(currentpath),function(){
+									$(".nav-menu").load(".?j=Men&f="+encodeURI(currentpath),function(){
 										init_menu();
 										$('.albums span:contains('+from+')').parent().remove();
 										$('.thumbs').masonry('layout');
@@ -264,7 +264,7 @@ function init_admin(){
 				$.get('?j=Album&f='+data.result.path,function(data){
 					var $boxes = $(data);
 					$('.albums .thumbs').append($boxes).masonry( 'appended', $boxes ).parent().show(init);
-					$(".menu").load(".?j=Men&f="+encodeURI(currentpath),init_menu);
+					$(".nav-menu").load(".?j=Men&f="+encodeURI(currentpath),init_menu);
 				});
 			} else {
 				get_message(1,data.error.data.fullMessage);
@@ -282,7 +282,7 @@ function init_admin(){
 			if (!data.error) {
 				update_url("?f="+data.result.path,'new_path');
 				$(".panel").load(".?j=Pan&f="+data.result.path,init);
-				$(".menu").load(".?j=Men&f="+data.result.path,init_menu);				
+				$(".nav-menu").load(".?j=Men&f="+data.result.path,init_menu);				
 			} else {
 				get_message(1,data.error.data.fullMessage);
 			}

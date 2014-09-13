@@ -195,6 +195,7 @@ function init_hiders(){
 	});
 
 }
+
 function init_actions() {
 	
 	$('#logins-form,#register-form').unbind();
@@ -269,13 +270,35 @@ function init() {
 		init_menu();
 		init_admin();
 	}
+	
+	
+	$.xhrPool = [];
+	$.xhrPool.abortAll = function() {
+	    $(this).each(function(idx, jqXHR) {
+		jqXHR.abort();
+	    });
+	    $.xhrPool = [];
+	};
+
+	$.ajaxSetup({
+	    beforeSend: function(jqXHR) {
+		$.xhrPool.push(jqXHR);
+	    },
+	    complete: function(jqXHR) {
+		var index = $.xhrPool.indexOf(jqXHR);
+		if (index > -1) {
+		    $.xhrPool.splice(index, 1);
+		}
+	    }
+	});	
 }
 
 $("document").ready(function(){
+	scrollbar(".menu",false);
 	scrollbar('.linear_panel',true);
 	//Load init
 	init();
-	if ($(".menu .selected:last").length > 0) $(".menu").scrollTo($(".menu .selected:last"));
+	if ($(".menu .selected:last").length > 0) {$(".menu").mCustomScrollbar("scrollTo",$(".menu .selected:last"));}
 });
 
 /****************** Function Jquery ***************/
@@ -304,3 +327,4 @@ $.fn.fillForm = function (data) {
 	});  
 	return true;
 }
+

@@ -157,7 +157,7 @@ class Provider
 		$webimg		=	dirname($basepath)."/".$basefile->name."_thumb.jpg";
 		$path 		=	Settings::$thumbs_dir.'/'.$webimg;
 
-		if(!file_exists($path) || filectime($file) > filectime($path) ){
+		if(!file_exists($path) || filemtime($file) > filemtime($path) ){
 
 			/// Create directories
 			if(!file_exists(dirname($path))){
